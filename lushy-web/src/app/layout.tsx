@@ -8,6 +8,9 @@ const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit' });
 export const metadata: Metadata = {
   title: 'Lushy - Book your best look',
   description: 'The easiest way to book high-quality beauty and wellness professionals.',
+  icons: {
+    icon: '/lushy-logo.png',
+  },
 };
 
 export default function RootLayout({
