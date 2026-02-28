@@ -1,0 +1,582 @@
+{
+    "name": "Lushy Booking Workflow (With Reminders)",
+    "nodes": [
+        {
+            "parameters": {
+                "path": "lushy-booking",
+                "httpMethod": "POST",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "id": "webhook-booking",
+            "name": "New Booking Webhook",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                0,
+                0
+            ],
+            "webhookId": "lushy-booking"
+        },
+        {
+            "parameters": {
+                "method": "GET",
+                "url": "=https://ehabinuyyasvahhxkhdw.supabase.co/rest/v1/bookings?id=eq.{{ $json.body?.booking_id || $json.booking_id }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoYWJpbnV5eWFzdmFoaHhraGR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNzU5OTAsImV4cCI6MjA4NDk1MTk5MH0.vr6TOMU1zAPLwp_T79B_NXTkkaIWUc5oFozn0h26Kd4"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoYWJpbnV5eWFzdmFoaHhraGR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNzU5OTAsImV4cCI6MjA4NDk1MTk5MH0.vr6TOMU1zAPLwp_T79B_NXTkkaIWUc5oFozn0h26Kd4"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "get-booking",
+            "name": "GET Booking",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                250,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "1",
+                            "name": "booking",
+                            "value": "={{ $json[0] }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "2",
+                            "name": "message",
+                            "value": "=New booking: {{ $json[0].service_name }} from {{ $json[0].client_name }} on {{ $json[0].booking_date }} at {{ $json[0].booking_time }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "format-notif",
+            "name": "Format Notification",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                500,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ { success: true, message: 'Professional notified', booking_id: $json.booking.id } }}",
+                "options": {}
+            },
+            "id": "respond-booking",
+            "name": "Respond to App",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.1,
+            "position": [
+                750,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "path": "lushy-booking-response",
+                "httpMethod": "POST",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "id": "webhook-response",
+            "name": "Pro Response Webhook",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                0,
+                300
+            ],
+            "webhookId": "lushy-booking-response"
+        },
+        {
+            "parameters": {
+                "method": "PATCH",
+                "url": "=https://ehabinuyyasvahhxkhdw.supabase.co/rest/v1/bookings?id=eq.{{ $json.body?.booking_id || $json.booking_id }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoYWJpbnV5eWFzdmFoaHhraGR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNzU5OTAsImV4cCI6MjA4NDk1MTk5MH0.vr6TOMU1zAPLwp_T79B_NXTkkaIWUc5oFozn0h26Kd4"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoYWJpbnV5eWFzdmFoaHhraGR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNzU5OTAsImV4cCI6MjA4NDk1MTk5MH0.vr6TOMU1zAPLwp_T79B_NXTkkaIWUc5oFozn0h26Kd4"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        },
+                        {
+                            "name": "Prefer",
+                            "value": "return=representation"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={{ { status: $json.body?.status || $json.status } }}",
+                "options": {}
+            },
+            "id": "patch-status",
+            "name": "Update Booking Status",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                250,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict"
+                    },
+                    "conditions": [
+                        {
+                            "id": "cond1",
+                            "leftValue": "={{ $json[0]?.status }}",
+                            "rightValue": "accepted",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "id": "check-status",
+            "name": "Is Accepted?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                500,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "1",
+                            "name": "result",
+                            "value": "=Booking {{ $json[0].id }} was ACCEPTED",
+                            "type": "string"
+                        },
+                        {
+                            "id": "2",
+                            "name": "status",
+                            "value": "accepted",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "accepted-msg",
+            "name": "Accepted Message",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                750,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "1",
+                            "name": "result",
+                            "value": "=Booking {{ $json[0].id }} was REJECTED",
+                            "type": "string"
+                        },
+                        {
+                            "id": "2",
+                            "name": "status",
+                            "value": "rejected",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "rejected-msg",
+            "name": "Rejected Message",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                750,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ { success: true, message: $json.result, status: $json.status } }}",
+                "options": {}
+            },
+            "id": "respond-final",
+            "name": "Respond to Pro App",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.1,
+            "position": [
+                1000,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "hours",
+                            "hoursInterval": 1
+                        }
+                    ]
+                }
+            },
+            "id": "schedule-check",
+            "name": "Hourly Check",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "method": "GET",
+                "url": "https://ehabinuyyasvahhxkhdw.supabase.co/rest/v1/bookings?status=eq.accepted&select=*",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoYWJpbnV5eWFzdmFoaHhraGR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNzU5OTAsImV4cCI6MjA4NDk1MTk5MH0.vr6TOMU1zAPLwp_T79B_NXTkkaIWUc5oFozn0h26Kd4"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoYWJpbnV5eWFzdmFoaHhraGR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNzU5OTAsImV4cCI6MjA4NDk1MTk5MH0.vr6TOMU1zAPLwp_T79B_NXTkkaIWUc5oFozn0h26Kd4"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "get-accepted",
+            "name": "GET Accepted Bookings",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                250,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "fieldToSplitOut": "={{ $json }}",
+                "options": {}
+            },
+            "id": "split-bookings",
+            "name": "Split Bookings",
+            "type": "n8n-nodes-base.splitOut",
+            "typeVersion": 1,
+            "position": [
+                500,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Calculate hours until appointment\nconst booking = $input.item.json;\nconst now = new Date();\n\n// Combine date and time\nconst appointmentDateTime = new Date(`${booking.booking_date}T${booking.booking_time}`);\nconst hoursUntil = (appointmentDateTime - now) / (1000 * 60 * 60);\n\n// Determine reminder type\nlet reminderType = null;\nif (hoursUntil >= 23 && hoursUntil <= 25) {\n  reminderType = '24hr';\n} else if (hoursUntil >= 2.5 && hoursUntil <= 3.5) {\n  reminderType = '3hr';\n}\n\nreturn {\n  ...booking,\n  hoursUntil: Math.round(hoursUntil),\n  reminderType: reminderType,\n  shouldRemind: reminderType !== null\n};"
+            },
+            "id": "calc-time",
+            "name": "Calculate Time Until",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                750,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "loose"
+                    },
+                    "conditions": [
+                        {
+                            "id": "cond1",
+                            "leftValue": "={{ $json.shouldRemind }}",
+                            "rightValue": true,
+                            "operator": {
+                                "type": "boolean",
+                                "operation": "equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "id": "should-remind",
+            "name": "Should Send Reminder?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                1000,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "1",
+                            "name": "clientMessage",
+                            "value": "=⏰ Reminder: Your {{ $json.service_name }} appointment with {{ $json.professional_name }} is {{ $json.reminderType === '24hr' ? 'tomorrow' : 'in 3 hours' }} at {{ $json.booking_time }}!",
+                            "type": "string"
+                        },
+                        {
+                            "id": "2",
+                            "name": "proMessage",
+                            "value": "=⏰ Reminder: {{ $json.service_name }} appointment with {{ $json.client_name }} is {{ $json.reminderType === '24hr' ? 'tomorrow' : 'in 3 hours' }} at {{ $json.booking_time }}!",
+                            "type": "string"
+                        },
+                        {
+                            "id": "3",
+                            "name": "clientPhone",
+                            "value": "={{ $json.client_phone }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "4",
+                            "name": "proPhone",
+                            "value": "={{ $json.professional_phone }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "5",
+                            "name": "bookingId",
+                            "value": "={{ $json.id }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "format-reminder",
+            "name": "Format Reminders",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1250,
+                500
+            ]
+        },
+        {
+            "parameters": {},
+            "id": "noop",
+            "name": "No Reminder Needed",
+            "type": "n8n-nodes-base.noOp",
+            "typeVersion": 1,
+            "position": [
+                1250,
+                700
+            ]
+        }
+    ],
+    "connections": {
+        "New Booking Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "GET Booking",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "GET Booking": {
+            "main": [
+                [
+                    {
+                        "node": "Format Notification",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Format Notification": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to App",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Pro Response Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "Update Booking Status",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update Booking Status": {
+            "main": [
+                [
+                    {
+                        "node": "Is Accepted?",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Is Accepted?": {
+            "main": [
+                [
+                    {
+                        "node": "Accepted Message",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Rejected Message",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Accepted Message": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to Pro App",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Rejected Message": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to Pro App",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Hourly Check": {
+            "main": [
+                [
+                    {
+                        "node": "GET Accepted Bookings",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "GET Accepted Bookings": {
+            "main": [
+                [
+                    {
+                        "node": "Split Bookings",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Split Bookings": {
+            "main": [
+                [
+                    {
+                        "node": "Calculate Time Until",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Calculate Time Until": {
+            "main": [
+                [
+                    {
+                        "node": "Should Send Reminder?",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Should Send Reminder?": {
+            "main": [
+                [
+                    {
+                        "node": "Format Reminders",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "No Reminder Needed",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    }
+}

@@ -1,0 +1,394 @@
+{
+    "name": "Lushy Booking Workflow - Enhanced",
+    "nodes": [
+        {
+            "parameters": {
+                "path": "lushy-booking",
+                "httpMethod": "POST",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "id": "webhook-new",
+            "name": "New Booking",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                0,
+                0
+            ],
+            "webhookId": "lushy-booking-new"
+        },
+        {
+            "parameters": {
+                "path": "lushy-booking-status",
+                "httpMethod": "POST",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "id": "webhook-status",
+            "name": "Update Status",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                0,
+                300
+            ],
+            "webhookId": "lushy-booking-status"
+        },
+        {
+            "parameters": {
+                "path": "lushy-bookings",
+                "httpMethod": "GET",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "id": "webhook-list",
+            "name": "List Bookings",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                0,
+                600
+            ],
+            "webhookId": "lushy-bookings-list"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "id-1",
+                            "name": "client_name",
+                            "value": "={{ $json.body?.clientName || $json.clientName || 'Unknown Client' }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-2",
+                            "name": "provider_name",
+                            "value": "={{ $json.body?.providerName || $json.providerName || 'Unknown Provider' }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-3",
+                            "name": "service_name",
+                            "value": "={{ $json.body?.serviceName || $json.serviceName || 'Service' }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-4",
+                            "name": "booking_date",
+                            "value": "={{ $json.body?.date || $json.date || $now.format('yyyy-MM-dd') }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-5",
+                            "name": "booking_time",
+                            "value": "={{ $json.body?.time || $json.time || '09:00' }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-6",
+                            "name": "price",
+                            "value": "={{ parseFloat(String($json.body?.price || $json.price || '0').replace('$', '').replace('R', '')) || 0 }}",
+                            "type": "number"
+                        },
+                        {
+                            "id": "id-7",
+                            "name": "location_type",
+                            "value": "={{ $json.body?.locationType || $json.locationType || 'salon_visit' }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-8",
+                            "name": "address",
+                            "value": "={{ $json.body?.address || $json.address || '' }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "extract-new",
+            "name": "Extract Booking Data",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                250,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://ehabinuyyasvahhxkhdw.supabase.co/rest/v1/bookings",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoYWJpbnV5eWFzdmFoaHhraGR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNzU5OTAsImV4cCI6MjA4NDk1MTk5MH0.vr6TOMU1zAPLwp_T79B_NXTkkaIWUc5oFozn0h26Kd4"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoYWJpbnV5eWFzdmFoaHhraGR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNzU5OTAsImV4cCI6MjA4NDk1MTk5MH0.vr6TOMU1zAPLwp_T79B_NXTkkaIWUc5oFozn0h26Kd4"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        },
+                        {
+                            "name": "Prefer",
+                            "value": "return=representation"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={{ { client_name: $json.client_name, provider_name: $json.provider_name, service_name: $json.service_name, booking_date: $json.booking_date, booking_time: $json.booking_time, price: $json.price, location_type: $json.location_type, address: $json.address, status: 'pending' } }}",
+                "options": {}
+            },
+            "id": "supabase-insert",
+            "name": "Save to Supabase",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                500,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ { success: true, message: 'Booking created successfully', booking: $json[0] } }}",
+                "options": {}
+            },
+            "id": "respond-new",
+            "name": "Respond New Booking",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.1,
+            "position": [
+                750,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "id-1",
+                            "name": "bookingId",
+                            "value": "={{ $json.body?.bookingId || $json.bookingId }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-2",
+                            "name": "newStatus",
+                            "value": "={{ $json.body?.status || $json.status || 'pending' }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "extract-status",
+            "name": "Extract Status Data",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                250,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "method": "PATCH",
+                "url": "={{ 'https://ehabinuyyasvahhxkhdw.supabase.co/rest/v1/bookings?id=eq.' + $json.bookingId }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoYWJpbnV5eWFzdmFoaHhraGR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNzU5OTAsImV4cCI6MjA4NDk1MTk5MH0.vr6TOMU1zAPLwp_T79B_NXTkkaIWUc5oFozn0h26Kd4"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoYWJpbnV5eWFzdmFoaHhraGR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNzU5OTAsImV4cCI6MjA4NDk1MTk5MH0.vr6TOMU1zAPLwp_T79B_NXTkkaIWUc5oFozn0h26Kd4"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        },
+                        {
+                            "name": "Prefer",
+                            "value": "return=representation"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={{ { status: $json.newStatus } }}",
+                "options": {}
+            },
+            "id": "supabase-update",
+            "name": "Update in Supabase",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                500,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ { success: true, message: 'Status updated to ' + $('Extract Status Data').item.json.newStatus, booking: $json[0] } }}",
+                "options": {}
+            },
+            "id": "respond-status",
+            "name": "Respond Status Update",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.1,
+            "position": [
+                750,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "method": "GET",
+                "url": "https://ehabinuyyasvahhxkhdw.supabase.co/rest/v1/bookings?select=*&order=created_at.desc",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoYWJpbnV5eWFzdmFoaHhraGR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNzU5OTAsImV4cCI6MjA4NDk1MTk5MH0.vr6TOMU1zAPLwp_T79B_NXTkkaIWUc5oFozn0h26Kd4"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoYWJpbnV5eWFzdmFoaHhraGR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNzU5OTAsImV4cCI6MjA4NDk1MTk5MH0.vr6TOMU1zAPLwp_T79B_NXTkkaIWUc5oFozn0h26Kd4"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "supabase-list",
+            "name": "Fetch from Supabase",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                250,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ { success: true, count: $json.length, bookings: $json } }}",
+                "options": {}
+            },
+            "id": "respond-list",
+            "name": "Respond Bookings List",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.1,
+            "position": [
+                500,
+                600
+            ]
+        }
+    ],
+    "connections": {
+        "New Booking": {
+            "main": [
+                [
+                    {
+                        "node": "Extract Booking Data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract Booking Data": {
+            "main": [
+                [
+                    {
+                        "node": "Save to Supabase",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Save to Supabase": {
+            "main": [
+                [
+                    {
+                        "node": "Respond New Booking",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update Status": {
+            "main": [
+                [
+                    {
+                        "node": "Extract Status Data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract Status Data": {
+            "main": [
+                [
+                    {
+                        "node": "Update in Supabase",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update in Supabase": {
+            "main": [
+                [
+                    {
+                        "node": "Respond Status Update",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "List Bookings": {
+            "main": [
+                [
+                    {
+                        "node": "Fetch from Supabase",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Fetch from Supabase": {
+            "main": [
+                [
+                    {
+                        "node": "Respond Bookings List",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    }
+}

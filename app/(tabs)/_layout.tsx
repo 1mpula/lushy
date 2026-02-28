@@ -1,35 +1,109 @@
-import { Tabs } from 'expo-router';
+import { Redirect, Tabs } from 'expo-router';
+import { Calendar as CalendarIcon, Home, MessageCircle, PieChart, User } from 'lucide-react-native';
 import React from 'react';
+import { ActivityIndicator, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
+import { useChat } from '@/context/ChatContext';
+import { useUser } from '@/context/UserContext';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { userRole, isAuthenticated, isLoading } = useUser();
+  const { totalUnread } = useChat();
+  const insets = useSafeAreaInsets();
+
+  // Account for navigation bar / safe area
+  const bottomInset = insets.bottom;
+
+  // Show loading while checking auth
+  if (isLoading) {
+    return (
+      <View className="flex-1 bg-white items-center justify-center">
+        <ActivityIndicator size="large" color="#FF4081" />
+      </View>
+    );
+  }
+
+  // Redirect to landing page if not authenticated
+  if (!isAuthenticated) {
+    return <Redirect href="/" />;
+  }
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: '#FF4081',
+        tabBarInactiveTintColor: '#757575',
         headerShown: false,
-        tabBarButton: HapticTab,
+        tabBarStyle: {
+          borderTopWidth: 0,
+          elevation: 10,
+          shadowColor: '#000',
+          shadowOpacity: 0.1,
+          shadowOffset: { width: 0, height: -2 },
+          height: 60 + bottomInset,
+          paddingBottom: 10 + bottomInset,
+          paddingTop: 10,
+          backgroundColor: '#ffffff',
+        }
       }}>
+
+      {/* Client Tabs */}
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'Explore',
+          tabBarIcon: ({ color }) => <Home size={24} color={color} />,
+          href: userRole === 'provider' ? null : undefined,
         }}
+        redirect={userRole === 'provider'}
       />
       <Tabs.Screen
-        name="explore"
+        name="bookings"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Bookings',
+          tabBarIcon: ({ color }) => <CalendarIcon size={24} color={color} />,
+          href: userRole === 'provider' ? null : undefined,
+        }}
+      />
+
+      {/* Provider Tabs */}
+      <Tabs.Screen
+        name="dashboard"
+        options={{
+          title: 'Dashboard',
+          tabBarIcon: ({ color }) => <PieChart size={24} color={color} />,
+          href: userRole === 'client' || !userRole ? null : undefined,
+        }}
+      />
+
+      {/* Messages Tab - Shared */}
+      <Tabs.Screen
+        name="messages"
+        options={{
+          title: 'Messages',
+          tabBarIcon: ({ color }) => <MessageCircle size={24} color={color} />,
+          tabBarBadge: totalUnread > 0 ? totalUnread : undefined,
+          tabBarBadgeStyle: {
+            backgroundColor: '#4A7C59',
+            fontSize: 10,
+            minWidth: 18,
+            height: 18,
+          },
+        }}
+      />
+
+      {/* Shared Tabs */}
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color }) => <User size={24} color={color} />,
         }}
       />
     </Tabs>
   );
 }
+

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lushy - Book Your Best Look</title>
+    <meta name="description"
+        content="Discover and book beauty services from top stylists. Hair, nails, lashes, wigs, and makeup - all in one app.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Floating Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo"><img src="lushy-logo.png" alt="Lushy" style="height: 32px;"></a>
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#testimonials" class="nav-link">Testimonials</a>
+                <a href="#download" class="btn btn-nav">Get the App</a>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#features" class="mobile-link">Features</a>
+        <a href="#how-it-works" class="mobile-link">How It Works</a>
+        <a href="#testimonials" class="mobile-link">Testimonials</a>
+        <a href="#download" class="btn btn-primary btn-full">Get the App</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge animate-fade-in">
+                    <span class="badge-icon">✨</span>
+                    <span>Trusted by 500+ Stylists</span>
+                </div>
+                <h1 class="hero-title animate-fade-in-up">
+                    Book Your<br>
+                    <span class="gradient-text">Best Look.</span>
+                </h1>
+                <p class="hero-subtitle animate-fade-in-up delay-1">
+                    Find it, book it. Discover and book beauty services from top stylists — hair, nails, lashes, wigs,
+                    and makeup, all in one place.
+                </p>
+                <div class="hero-cta animate-fade-in-up delay-2">
+                    <a href="#download" class="btn btn-primary btn-lg">
+                        <span>Get Started Free</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                    <a href="#how-it-works" class="btn btn-ghost">
+                        See How It Works
+                    </a>
+                </div>
+                <div class="hero-stats animate-fade-in-up delay-3">
+                    <div class="stat">
+                        <span class="stat-number">10K+</span>
+                        <span class="stat-label">Happy Clients</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Pro Stylists</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat">
+                        <span class="stat-number">4.9★</span>
+                        <span class="stat-label">App Rating</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual animate-fade-in-left delay-2">
+                <div class="phone-mockup">
+                    <div class="phone-frame">
+                        <div class="phone-screen">
+                            <div class="screen-header">
+                                <span class="screen-title">Discover</span>
+                            </div>
+                            <div class="masonry-preview">
+                                <div class="masonry-col">
+                                    <div class="preview-card" style="height: 140px;">
+                                        <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=300&q=80"
+                                            alt="Hair styling">
+                                        <div class="card-overlay">
+                                            <span class="card-price">$85</span>
+                                        </div>
+                                    </div>
+                                    <div class="preview-card" style="height: 100px;">
+                                        <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=300&q=80"
+                                            alt="Nail art">
+                                        <div class="card-overlay">
+                                            <span class="card-price">$45</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="masonry-col" style="margin-top: 20px;">
+                                    <div class="preview-card" style="height: 100px;">
+                                        <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=300&q=80"
+                                            alt="Makeup">
+                                        <div class="card-overlay">
+                                            <span class="card-price">$120</span>
+                                        </div>
+                                    </div>
+                                    <div class="preview-card" style="height: 140px;">
+                                        <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=300&q=80"
+                                            alt="Lashes">
+                                        <div class="card-overlay">
+                                            <span class="card-price">$65</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="floating-card card-1 animate-float">
+                    <div class="floating-avatar">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80"
+                            alt="Stylist">
+                    </div>
+                    <div class="floating-info">
+                        <span class="floating-name">Sarah M.</span>
+                        <span class="floating-role">Hair Stylist</span>
+                    </div>
+                    <span class="floating-rating">⭐ 4.9</span>
+                </div>
+                <div class="floating-card card-2 animate-float-delayed">
+                    <span class="notification-icon">📅</span>
+                    <span class="notification-text">Booking confirmed!</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-scroll-indicator">
+            <span>Scroll to explore</span>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- Categories Showcase -->
+    <section class="categories" id="categories">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag animate-on-scroll">Services</span>
+                <h2 class="section-title animate-on-scroll">Discover Beauty Services</h2>
+                <p class="section-subtitle animate-on-scroll">From braids to lashes, find the perfect service for your
+                    next look</p>
+            </div>
+            <div class="category-grid">
+                <div class="category-card animate-on-scroll" style="--delay: 0.1s">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&q=80" alt="Hair">
+                    </div>
+                    <div class="category-content">
+                        <h3>Hair</h3>
+                        <p>Braids, cuts, colors & more</p>
+                        <span class="category-count">200+ Stylists</span>
+                    </div>
+                </div>
+                <div class="category-card animate-on-scroll" style="--delay: 0.2s">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=500&q=80" alt="Nails">
+                    </div>
+                    <div class="category-content">
+                        <h3>Nails</h3>
+                        <p>Manicures, acrylics & designs</p>
+                        <span class="category-count">150+ Artists</span>
+                    </div>
+                </div>
+                <div class="category-card animate-on-scroll" style="--delay: 0.3s">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=500&q=80" alt="Lashes">
+                    </div>
+                    <div class="category-content">
+                        <h3>Lashes</h3>
+                        <p>Extensions, lifts & tints</p>
+                        <span class="category-count">100+ Experts</span>
+                    </div>
+                </div>
+                <div class="category-card animate-on-scroll" style="--delay: 0.4s">
+                    <div class="category-image">
+                        <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=500&q=80" alt="Makeup">
+                    </div>
+                    <div class="category-content">
+                        <h3>Makeup</h3>
+                        <p>Glam, bridal & everyday looks</p>
+                        <span class="category-count">80+ MUAs</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag animate-on-scroll">Why Lushy?</span>
+                <h2 class="section-title animate-on-scroll">Everything You Need</h2>
+                <p class="section-subtitle animate-on-scroll">Book beauty services with confidence and ease</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card animate-on-scroll" style="--delay: 0.1s">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="m21 21-4.35-4.35" />
+                        </svg>
+                    </div>
+                    <h3>Visual Discovery</h3>
+                    <p>Browse a Pinterest-style feed of stunning work from local stylists. Find inspiration and book
+                        what you love.</p>
+                </div>
+                <div class="feature-card animate-on-scroll" style="--delay: 0.2s">
+                    <div class="feature-icon icon-teal">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                            <line x1="16" y1="2" x2="16" y2="6" />
+                            <line x1="8" y1="2" x2="8" y2="6" />
+                            <line x1="3" y1="10" x2="21" y2="10" />
+                        </svg>
+                    </div>
+                    <h3>Instant Booking</h3>
+                    <p>See real-time availability and book appointments in seconds. No calls, no waiting.</p>
+                </div>
+                <div class="feature-card animate-on-scroll" style="--delay: 0.3s">
+                    <div class="feature-icon icon-purple">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                    </div>
+                    <h3>Verified Reviews</h3>
+                    <p>Real reviews from real clients. Make informed decisions based on authentic feedback.</p>
+                </div>
+                <div class="feature-card animate-on-scroll" style="--delay: 0.4s">
+                    <div class="feature-icon icon-gradient">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                        </svg>
+                    </div>
+                    <h3>Save Favorites</h3>
+                    <p>Heart your favorite looks and stylists. Build your beauty inspiration board.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag animate-on-scroll">Simple Process</span>
+                <h2 class="section-title animate-on-scroll">How Lushy Works</h2>
+                <p class="section-subtitle animate-on-scroll">Get your perfect look in 3 simple steps</p>
+            </div>
+            <div class="steps-container">
+                <div class="step-card animate-on-scroll" style="--delay: 0.1s">
+                    <div class="step-number">1</div>
+                    <div class="step-visual">
+                        <div class="step-icon-wrap">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <circle cx="11" cy="11" r="8" />
+                                <path d="m21 21-4.35-4.35" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h3>Discover</h3>
+                    <p>Browse through stunning galleries of hair, nails, lashes, and makeup services in your area.</p>
+                </div>
+                <div class="step-connector">
+                    <svg width="60" height="24" viewBox="0 0 60 24">
+                        <path d="M0 12h50M50 12l-8-8M50 12l-8 8" stroke="currentColor" stroke-width="2" fill="none"
+                            stroke-dasharray="4 4" />
+                    </svg>
+                </div>
+                <div class="step-card animate-on-scroll" style="--delay: 0.2s">
+                    <div class="step-number">2</div>
+                    <div class="step-visual">
+                        <div class="step-icon-wrap icon-teal">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                                <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h3>Book</h3>
+                    <p>Choose your stylist, pick a time that works, and confirm your appointment instantly.</p>
+                </div>
+                <div class="step-connector">
+                    <svg width="60" height="24" viewBox="0 0 60 24">
+                        <path d="M0 12h50M50 12l-8-8M50 12l-8 8" stroke="currentColor" stroke-width="2" fill="none"
+                            stroke-dasharray="4 4" />
+                    </svg>
+                </div>
+                <div class="step-card animate-on-scroll" style="--delay: 0.3s">
+                    <div class="step-number">3</div>
+                    <div class="step-visual">
+                        <div class="step-icon-wrap icon-purple">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <path
+                                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h3>Glow</h3>
+                    <p>Show up, get pampered, and leave feeling fabulous. Rate & review to help others!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag animate-on-scroll">Testimonials</span>
+                <h2 class="section-title animate-on-scroll">What Our Users Say</h2>
+                <p class="section-subtitle animate-on-scroll">Join thousands of happy clients and stylists</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card animate-on-scroll" style="--delay: 0.1s">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"Lushy changed how I book beauty services! Found an amazing braider
+                        through the app and I've been going back ever since."</p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&q=80"
+                            alt="Zara K.">
+                        <div>
+                            <span class="author-name">Zara K.</span>
+                            <span class="author-role">Client</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card featured animate-on-scroll" style="--delay: 0.2s">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"As a nail tech, Lushy has helped me double my bookings. The visual
+                        gallery lets my work speak for itself!"</p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&q=80"
+                            alt="Maya T.">
+                        <div>
+                            <span class="author-name">Maya T.</span>
+                            <span class="author-role">Nail Artist</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card animate-on-scroll" style="--delay: 0.3s">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"The app is so easy to use! I love being able to see the stylist's work
+                        before booking. No more surprises!"</p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=100&q=80"
+                            alt="Amara O.">
+                        <div>
+                            <span class="author-name">Amara O.</span>
+                            <span class="author-role">Client</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="download">
+        <div class="cta-bg-shapes">
+            <div class="cta-shape cta-shape-1"></div>
+            <div class="cta-shape cta-shape-2"></div>
+        </div>
+        <div class="container">
+            <div class="cta-content animate-on-scroll">
+                <h2>Ready to Find Your Next Look?</h2>
+                <p>Download Lushy and start exploring beauty services near you. Your perfect look is just a tap away.
+                </p>
+                <div class="cta-buttons">
+                    <a href="#" class="store-btn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
+                        </svg>
+                        <div>
+                            <span class="store-label">Download on the</span>
+                            <span class="store-name">App Store</span>
+                        </div>
+                    </a>
+                    <a href="#" class="store-btn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 0 1 0 1.73l-2.808 1.626L15.206 12l2.492-2.491zM5.864 2.658L16.8 9.049l-2.244 2.244L5.864 2.658z" />
+                        </svg>
+                        <div>
+                            <span class="store-label">Get it on</span>
+                            <span class="store-name">Google Play</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="footer-logo"><img src="lushy-logo.png" alt="Lushy" style="height: 28px;"></a>
+                    <p>Find it, book it. Your beauty, simplified.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Instagram">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="TikTok">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="Twitter">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Product</h4>
+                    <a href="#features">Features</a>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#download">Download</a>
+                    <a href="#">For Professionals</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <a href="#">About Us</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Contact</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Legal</h4>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Lushy. All rights reserved.</p>
+                <p>Made with 💖 for beauty lovers everywhere</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

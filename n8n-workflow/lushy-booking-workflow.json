@@ -1,0 +1,187 @@
+{
+    "name": "Lushy Booking Workflow",
+    "nodes": [
+        {
+            "parameters": {
+                "path": "lushy-booking",
+                "httpMethod": "POST",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "id": "webhook-1",
+            "name": "New Booking Webhook",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                0,
+                200
+            ],
+            "webhookId": "lushy-booking-webhook"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "id-1",
+                            "name": "bookingId",
+                            "value": "={{ $now.format('yyyyMMddHHmmss') + '-' + Math.random().toString(36).substring(2, 8) }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-2",
+                            "name": "clientName",
+                            "value": "={{ $json.body?.clientName || $json.clientName || 'Unknown Client' }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-3",
+                            "name": "providerName",
+                            "value": "={{ $json.body?.providerName || $json.providerName || 'Unknown Provider' }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-4",
+                            "name": "serviceName",
+                            "value": "={{ $json.body?.serviceName || $json.serviceName || 'Service' }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-5",
+                            "name": "date",
+                            "value": "={{ $json.body?.date || $json.date || '' }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-6",
+                            "name": "time",
+                            "value": "={{ $json.body?.time || $json.time || '' }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-7",
+                            "name": "price",
+                            "value": "={{ $json.body?.price || $json.price || '' }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-8",
+                            "name": "locationType",
+                            "value": "={{ $json.body?.locationType || $json.locationType || 'salon_visit' }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-9",
+                            "name": "address",
+                            "value": "={{ $json.body?.address || $json.address || '' }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-10",
+                            "name": "status",
+                            "value": "pending",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-11",
+                            "name": "createdAt",
+                            "value": "={{ $now.toISO() }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "extract-data-1",
+            "name": "Extract Booking Data",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                220,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "id-1",
+                            "name": "confirmationMessage",
+                            "value": "={{ 'Booking confirmed for ' + $json.serviceName + ' with ' + $json.providerName + ' on ' + $json.date + ' at ' + $json.time }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-2",
+                            "name": "reminderMessage",
+                            "value": "={{ 'Reminder: Your appointment for ' + $json.serviceName + ' is tomorrow at ' + $json.time + '!' }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "prepare-response-1",
+            "name": "Prepare Confirmation",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                440,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "options": {},
+                "respondWith": "json",
+                "responseBody": "={{ { success: true, bookingId: $('Extract Booking Data').item.json.bookingId, message: $json.confirmationMessage, booking: { clientName: $('Extract Booking Data').item.json.clientName, providerName: $('Extract Booking Data').item.json.providerName, serviceName: $('Extract Booking Data').item.json.serviceName, date: $('Extract Booking Data').item.json.date, time: $('Extract Booking Data').item.json.time, price: $('Extract Booking Data').item.json.price, status: 'pending' } } }}"
+            },
+            "id": "respond-1",
+            "name": "Respond to App",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.1,
+            "position": [
+                660,
+                200
+            ]
+        }
+    ],
+    "connections": {
+        "New Booking Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "Extract Booking Data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract Booking Data": {
+            "main": [
+                [
+                    {
+                        "node": "Prepare Confirmation",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Prepare Confirmation": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to App",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    }
+}

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF4081;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF80AB;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect x="0" y="0" width="1024" height="1024" fill="url(#grad1)" />
+  
+  <!-- Stylized L -->
+  <path d="M350 250 
+           L 350 750 
+           Q 350 820 420 820 
+           L 750 820 
+           L 750 720 
+           L 450 720 
+           L 450 250 
+           Z" 
+        fill="#FFFFFF" />
+        
+  <!-- Accent Dot or Sparkle -->
+  <circle cx="750" cy="250" r="40" fill="#FFFFFF" opacity="0.8" />
+</svg>

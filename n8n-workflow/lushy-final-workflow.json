@@ -1,0 +1,1118 @@
+{
+    "name": "Lushy Final Booking Workflow",
+    "nodes": [
+        {
+            "parameters": {
+                "path": "lushy-new-booking",
+                "httpMethod": "POST",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "id": "webhook-new-booking",
+            "name": "1. New Booking Webhook",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                0,
+                0
+            ],
+            "webhookId": "lushy-new-booking"
+        },
+        {
+            "parameters": {
+                "method": "GET",
+                "url": "=https://ehabinuyyasvahhxkhdw.supabase.co/rest/v1/bookings?id=eq.{{ $json.body.booking_id }}&select=*,client:client_id(id,full_name,push_token),professional:professional_id(id,business_name,user_id)",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "={{ $env.SUPABASE_ANON_KEY }}"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "get-booking-details",
+            "name": "2. Get Booking Details",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                250,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "method": "GET",
+                "url": "=https://ehabinuyyasvahhxkhdw.supabase.co/rest/v1/profiles?id=eq.{{ $json[0].professional.user_id }}&select=push_token",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "={{ $env.SUPABASE_ANON_KEY }}"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "get-pro-push-token",
+            "name": "3. Get Pro Push Token",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                500,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "booking",
+                            "name": "booking",
+                            "value": "={{ $('2. Get Booking Details').item.json[0] }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "proPushToken",
+                            "name": "proPushToken",
+                            "value": "={{ $json[0]?.push_token }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "clientPushToken",
+                            "name": "clientPushToken",
+                            "value": "={{ $('2. Get Booking Details').item.json[0]?.client?.push_token }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "prepare-data",
+            "name": "4. Prepare Notification Data",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                750,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "loose"
+                    },
+                    "conditions": [
+                        {
+                            "id": "has-push-token",
+                            "leftValue": "={{ $json.proPushToken }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "string",
+                                "operation": "notEmpty"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "id": "check-push-token",
+            "name": "5. Has Push Token?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                1000,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://exp.host/--/api/v2/push/send",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"to\": \"{{ $json.proPushToken }}\",\n  \"title\": \"🌿 New Booking Request!\",\n  \"body\": \"{{ $json.booking.client_name }} wants to book {{ $json.booking.service_name }} on {{ $json.booking.booking_date }} at {{ $json.booking.booking_time }}\",\n  \"data\": {\n    \"type\": \"new_booking\",\n    \"bookingId\": \"{{ $json.booking.id }}\"\n  },\n  \"sound\": \"default\",\n  \"badge\": 1,\n  \"priority\": \"high\"\n}",
+                "options": {}
+            },
+            "id": "send-pro-push",
+            "name": "6. Send Push to Professional",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                1250,
+                -100
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ { success: true, message: 'Professional notified', booking_id: $('4. Prepare Notification Data').item.json.booking.id } }}",
+                "options": {}
+            },
+            "id": "respond-success",
+            "name": "7. Respond Success",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.1,
+            "position": [
+                1500,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "path": "lushy-booking-response",
+                "httpMethod": "POST",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "id": "webhook-pro-response",
+            "name": "Pro Response Webhook",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                0,
+                400
+            ],
+            "webhookId": "lushy-booking-response"
+        },
+        {
+            "parameters": {
+                "method": "PATCH",
+                "url": "=https://ehabinuyyasvahhxkhdw.supabase.co/rest/v1/bookings?id=eq.{{ $json.body.booking_id }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "={{ $env.SUPABASE_ANON_KEY }}"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        },
+                        {
+                            "name": "Prefer",
+                            "value": "return=representation"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={{ { status: $json.body.status } }}",
+                "options": {}
+            },
+            "id": "update-booking-status",
+            "name": "Update Status in DB",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                250,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "method": "GET",
+                "url": "=https://ehabinuyyasvahhxkhdw.supabase.co/rest/v1/profiles?id=eq.{{ $json[0].client_id }}&select=push_token",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "={{ $env.SUPABASE_ANON_KEY }}"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "get-client-token",
+            "name": "Get Client Push Token",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                500,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "booking",
+                            "name": "booking",
+                            "value": "={{ $('Update Status in DB').item.json[0] }}",
+                            "type": "object"
+                        },
+                        {
+                            "id": "clientPushToken",
+                            "name": "clientPushToken",
+                            "value": "={{ $json[0]?.push_token }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "status",
+                            "name": "status",
+                            "value": "={{ $('Update Status in DB').item.json[0].status }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "prepare-response-data",
+            "name": "Prepare Response Data",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                750,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict"
+                    },
+                    "conditions": [
+                        {
+                            "id": "is-accepted",
+                            "leftValue": "={{ $json.status }}",
+                            "rightValue": "accepted",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "id": "check-accepted",
+            "name": "Was Accepted?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                1000,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://exp.host/--/api/v2/push/send",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"to\": \"{{ $json.clientPushToken }}\",\n  \"title\": \"✅ Booking Confirmed!\",\n  \"body\": \"{{ $json.booking.professional_name }} accepted your {{ $json.booking.service_name }} booking for {{ $json.booking.booking_date }} at {{ $json.booking.booking_time }}\",\n  \"data\": {\n    \"type\": \"booking_accepted\",\n    \"bookingId\": \"{{ $json.booking.id }}\"\n  },\n  \"sound\": \"default\",\n  \"priority\": \"high\"\n}",
+                "options": {}
+            },
+            "id": "push-accepted",
+            "name": "Push: Booking Accepted",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                1250,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://exp.host/--/api/v2/push/send",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"to\": \"{{ $json.clientPushToken }}\",\n  \"title\": \"❌ Booking Declined\",\n  \"body\": \"Unfortunately, {{ $json.booking.professional_name }} couldn't accept your {{ $json.booking.service_name }} request. Try another time or professional!\",\n  \"data\": {\n    \"type\": \"booking_rejected\",\n    \"bookingId\": \"{{ $json.booking.id }}\"\n  },\n  \"sound\": \"default\"\n}",
+                "options": {}
+            },
+            "id": "push-rejected",
+            "name": "Push: Booking Rejected",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                1250,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ { success: true, status: $json.status, booking_id: $json.booking.id } }}",
+                "options": {}
+            },
+            "id": "respond-to-pro",
+            "name": "Respond to Pro",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.1,
+            "position": [
+                1500,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "hours",
+                            "hoursInterval": 1
+                        }
+                    ]
+                }
+            },
+            "id": "schedule-reminders",
+            "name": "Hourly Reminder Check",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                800
+            ]
+        },
+        {
+            "parameters": {
+                "method": "GET",
+                "url": "https://ehabinuyyasvahhxkhdw.supabase.co/rest/v1/bookings?status=eq.accepted&select=*",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "={{ $env.SUPABASE_ANON_KEY }}"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "fetch-accepted-bookings",
+            "name": "Fetch Accepted Bookings",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                250,
+                800
+            ]
+        },
+        {
+            "parameters": {
+                "fieldToSplitOut": "={{ $json }}",
+                "options": {}
+            },
+            "id": "split-items",
+            "name": "Split Into Items",
+            "type": "n8n-nodes-base.splitOut",
+            "typeVersion": 1,
+            "position": [
+                500,
+                800
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Calculate hours until appointment\nconst booking = $input.item.json;\nconst now = new Date();\n\n// Parse booking date and time\nconst appointmentDateTime = new Date(`${booking.booking_date}T${booking.booking_time}`);\nconst hoursUntil = (appointmentDateTime - now) / (1000 * 60 * 60);\n\n// Determine reminder type (24hr or 3hr window)\nlet reminderType = null;\nif (hoursUntil >= 23 && hoursUntil <= 25) {\n  reminderType = '24hr';\n} else if (hoursUntil >= 2.5 && hoursUntil <= 3.5) {\n  reminderType = '3hr';\n}\n\nreturn {\n  ...booking,\n  hoursUntil: Math.round(hoursUntil),\n  reminderType,\n  shouldRemind: reminderType !== null\n};"
+            },
+            "id": "calc-reminder-time",
+            "name": "Calculate Reminder Time",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                750,
+                800
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "loose"
+                    },
+                    "conditions": [
+                        {
+                            "id": "should-remind",
+                            "leftValue": "={{ $json.shouldRemind }}",
+                            "rightValue": true,
+                            "operator": {
+                                "type": "boolean",
+                                "operation": "equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "id": "filter-reminders",
+            "name": "Should Send Reminder?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                1000,
+                800
+            ]
+        },
+        {
+            "parameters": {
+                "method": "GET",
+                "url": "=https://ehabinuyyasvahhxkhdw.supabase.co/rest/v1/profiles?id=eq.{{ $json.client_id }}&select=push_token",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "={{ $env.SUPABASE_ANON_KEY }}"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "get-reminder-tokens",
+            "name": "Get Push Tokens",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                1250,
+                700
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://exp.host/--/api/v2/push/send",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"to\": \"{{ $json[0]?.push_token }}\",\n  \"title\": \"⏰ Appointment Reminder\",\n  \"body\": \"{{ $('Calculate Reminder Time').item.json.reminderType === '24hr' ? 'Tomorrow' : 'In 3 hours' }}: {{ $('Calculate Reminder Time').item.json.service_name }} with {{ $('Calculate Reminder Time').item.json.professional_name }} at {{ $('Calculate Reminder Time').item.json.booking_time }}\",\n  \"data\": {\n    \"type\": \"reminder\",\n    \"bookingId\": \"{{ $('Calculate Reminder Time').item.json.id }}\"\n  },\n  \"sound\": \"default\"\n}",
+                "options": {}
+            },
+            "id": "send-reminder-push",
+            "name": "Send Reminder Push",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                1500,
+                700
+            ]
+        },
+        {
+            "parameters": {},
+            "id": "no-reminder",
+            "name": "No Reminder Needed",
+            "type": "n8n-nodes-base.noOp",
+            "typeVersion": 1,
+            "position": [
+                1250,
+                900
+            ]
+        },
+        {
+            "parameters": {
+                "path": "lushy-cancel-booking",
+                "httpMethod": "POST",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "id": "webhook-cancel",
+            "name": "Cancel Booking Webhook",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                0,
+                1200
+            ],
+            "webhookId": "lushy-cancel-booking"
+        },
+        {
+            "parameters": {
+                "method": "PATCH",
+                "url": "=https://ehabinuyyasvahhxkhdw.supabase.co/rest/v1/bookings?id=eq.{{ $json.body.booking_id }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "={{ $env.SUPABASE_ANON_KEY }}"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        },
+                        {
+                            "name": "Prefer",
+                            "value": "return=representation"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={ \"status\": \"cancelled\" }",
+                "options": {}
+            },
+            "id": "mark-cancelled",
+            "name": "Mark as Cancelled",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                250,
+                1200
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://exp.host/--/api/v2/push/send",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"to\": [\"{{ $json[0].client_id }}\", \"{{ $json[0].professional_id }}\"],\n  \"title\": \"📅 Booking Cancelled\",\n  \"body\": \"The {{ $json[0].service_name }} appointment on {{ $json[0].booking_date }} has been cancelled.\",\n  \"data\": {\n    \"type\": \"booking_cancelled\",\n    \"bookingId\": \"{{ $json[0].id }}\"\n  }\n}",
+                "options": {}
+            },
+            "id": "notify-cancellation",
+            "name": "Notify Both Parties",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                500,
+                1200
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ { success: true, message: 'Booking cancelled', booking_id: $json[0]?.id || $('Mark as Cancelled').item.json[0]?.id } }}",
+                "options": {}
+            },
+            "id": "respond-cancel",
+            "name": "Respond Cancel Success",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.1,
+            "position": [
+                750,
+                1200
+            ]
+        },
+        {
+            "parameters": {
+                "path": "lushy-complete-booking",
+                "httpMethod": "POST",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "id": "webhook-complete",
+            "name": "Complete Booking Webhook",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                0,
+                1500
+            ],
+            "webhookId": "lushy-complete-booking"
+        },
+        {
+            "parameters": {
+                "method": "PATCH",
+                "url": "=https://ehabinuyyasvahhxkhdw.supabase.co/rest/v1/bookings?id=eq.{{ $json.body.booking_id }}",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "={{ $env.SUPABASE_ANON_KEY }}"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        },
+                        {
+                            "name": "Prefer",
+                            "value": "return=representation"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={ \"status\": \"completed\" }",
+                "options": {}
+            },
+            "id": "mark-complete",
+            "name": "Mark as Completed",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                250,
+                1500
+            ]
+        },
+        {
+            "parameters": {
+                "method": "GET",
+                "url": "=https://ehabinuyyasvahhxkhdw.supabase.co/rest/v1/profiles?id=eq.{{ $json[0].client_id }}&select=push_token",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "={{ $env.SUPABASE_ANON_KEY }}"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "=Bearer {{ $env.SUPABASE_SERVICE_KEY }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "get-review-token",
+            "name": "Get Client Token for Review",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                500,
+                1500
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://exp.host/--/api/v2/push/send",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"to\": \"{{ $json[0]?.push_token }}\",\n  \"title\": \"⭐ How was your experience?\",\n  \"body\": \"Your {{ $('Mark as Completed').item.json[0].service_name }} with {{ $('Mark as Completed').item.json[0].professional_name }} is complete. Leave a review!\",\n  \"data\": {\n    \"type\": \"review_request\",\n    \"bookingId\": \"{{ $('Mark as Completed').item.json[0].id }}\",\n    \"professionalId\": \"{{ $('Mark as Completed').item.json[0].professional_id }}\"\n  },\n  \"sound\": \"default\"\n}",
+                "options": {}
+            },
+            "id": "request-review",
+            "name": "Request Review Push",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                750,
+                1500
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ { success: true, message: 'Booking completed', booking_id: $('Mark as Completed').item.json[0]?.id } }}",
+                "options": {}
+            },
+            "id": "respond-complete",
+            "name": "Respond Complete Success",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.1,
+            "position": [
+                1000,
+                1500
+            ]
+        }
+    ],
+    "connections": {
+        "1. New Booking Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "2. Get Booking Details",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "2. Get Booking Details": {
+            "main": [
+                [
+                    {
+                        "node": "3. Get Pro Push Token",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "3. Get Pro Push Token": {
+            "main": [
+                [
+                    {
+                        "node": "4. Prepare Notification Data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "4. Prepare Notification Data": {
+            "main": [
+                [
+                    {
+                        "node": "5. Has Push Token?",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "5. Has Push Token?": {
+            "main": [
+                [
+                    {
+                        "node": "6. Send Push to Professional",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "7. Respond Success",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "6. Send Push to Professional": {
+            "main": [
+                [
+                    {
+                        "node": "7. Respond Success",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Pro Response Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "Update Status in DB",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update Status in DB": {
+            "main": [
+                [
+                    {
+                        "node": "Get Client Push Token",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get Client Push Token": {
+            "main": [
+                [
+                    {
+                        "node": "Prepare Response Data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Prepare Response Data": {
+            "main": [
+                [
+                    {
+                        "node": "Was Accepted?",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Was Accepted?": {
+            "main": [
+                [
+                    {
+                        "node": "Push: Booking Accepted",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Push: Booking Rejected",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Push: Booking Accepted": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to Pro",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Push: Booking Rejected": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to Pro",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Hourly Reminder Check": {
+            "main": [
+                [
+                    {
+                        "node": "Fetch Accepted Bookings",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Fetch Accepted Bookings": {
+            "main": [
+                [
+                    {
+                        "node": "Split Into Items",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Split Into Items": {
+            "main": [
+                [
+                    {
+                        "node": "Calculate Reminder Time",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Calculate Reminder Time": {
+            "main": [
+                [
+                    {
+                        "node": "Should Send Reminder?",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Should Send Reminder?": {
+            "main": [
+                [
+                    {
+                        "node": "Get Push Tokens",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "No Reminder Needed",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get Push Tokens": {
+            "main": [
+                [
+                    {
+                        "node": "Send Reminder Push",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Cancel Booking Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "Mark as Cancelled",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Mark as Cancelled": {
+            "main": [
+                [
+                    {
+                        "node": "Notify Both Parties",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Notify Both Parties": {
+            "main": [
+                [
+                    {
+                        "node": "Respond Cancel Success",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Complete Booking Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "Mark as Completed",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Mark as Completed": {
+            "main": [
+                [
+                    {
+                        "node": "Get Client Token for Review",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get Client Token for Review": {
+            "main": [
+                [
+                    {
+                        "node": "Request Review Push",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Request Review Push": {
+            "main": [
+                [
+                    {
+                        "node": "Respond Complete Success",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "pinData": {}
+}
