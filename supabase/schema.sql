@@ -407,8 +407,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Unschedule any existing cron to avoid duplicates if re-running
-SELECT cron.unschedule('daily-subscription-sweep');
+-- (Safe setup: we skip unscheduling here to prevent first-time run errors)
 
 -- Schedule the cron job to run every day at midnight (00:00 UTC)
 SELECT cron.schedule(
