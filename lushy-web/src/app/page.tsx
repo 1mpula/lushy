@@ -1,3 +1,5 @@
+"use client";
+
 import { ArrowRight, CalendarCheck, MapPin, Sparkles, Star } from "lucide-react";
 import Link from "next/link";
 
@@ -44,11 +46,17 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button className="w-full sm:w-auto px-8 py-4 bg-charcoal text-white rounded-full font-bold text-lg flex items-center justify-center gap-2 hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/20">
+            <button
+              onClick={() => alert("Lushy is currently in Beta. The iOS app will be available on the App Store soon!")}
+              className="w-full sm:w-auto px-8 py-4 bg-charcoal text-white rounded-full font-bold text-lg flex items-center justify-center gap-2 hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/20"
+            >
               Download on iOS
               <ArrowRight size={20} />
             </button>
-            <button className="w-full sm:w-auto px-8 py-4 bg-white text-charcoal border border-slate-200/60 rounded-full font-bold text-lg flex items-center justify-center gap-2 hover:bg-slate-50 transition-all shadow-xl shadow-slate-200/50">
+            <button
+              onClick={() => alert("Lushy is currently in Beta. The Android app will be available on Google Play soon!")}
+              className="w-full sm:w-auto px-8 py-4 bg-white text-charcoal border border-slate-200/60 rounded-full font-bold text-lg flex items-center justify-center gap-2 hover:bg-slate-50 transition-all shadow-xl shadow-slate-200/50"
+            >
               Get it on Android
             </button>
           </div>
