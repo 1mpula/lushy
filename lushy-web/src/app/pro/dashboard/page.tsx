@@ -63,7 +63,8 @@ export default function Dashboard() {
             {/* Navbar */}
             <nav className="bg-white border-b border-slate-100 flex items-center justify-between px-6 py-4 sticky top-0 z-10">
                 <div className="flex items-center gap-2">
-                    <span className="font-bold text-xl text-charcoal">Lushy Pro</span>
+                    <img src="/lushy-logo.png" alt="Lushy Logo" className="h-8 w-auto object-contain drop-shadow-sm" />
+                    <span className="font-bold text-xl font-heading text-charcoal">Lushy Pro</span>
                 </div>
                 <button
                     onClick={handleLogout}

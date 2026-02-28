@@ -9,6 +9,8 @@
   /* Diamond White/Silver */
   --color-charcoal: #1E293B;
   --color-background: #F8FAFC;
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-outfit);
 }
 
 @layer base {

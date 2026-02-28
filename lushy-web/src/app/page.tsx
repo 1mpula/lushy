@@ -13,7 +13,8 @@ export default function Home() {
       {/* Header */}
       <header className="absolute top-0 left-0 right-0 px-6 py-6 lg:px-12 flex items-center justify-between z-50 w-full max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
-          <span className="text-2xl font-bold tracking-tight text-charcoal">Lushy</span>
+          <img src="/lushy-logo.png" alt="Lushy Logo" className="h-8 w-auto object-contain drop-shadow-sm" />
+          <span className="text-2xl font-bold tracking-tight font-heading text-charcoal">Lushy</span>
         </div>
         <nav className="flex items-center gap-4">
           <Link href="/login" className="text-charcoal font-medium hover:text-primary transition-colors hidden sm:block">
@@ -33,7 +34,7 @@ export default function Home() {
             <span className="text-sm font-semibold text-charcoal">The premier beauty booking app</span>
           </div>
 
-          <h1 className="text-5xl lg:text-7xl font-extrabold text-charcoal tracking-tight mb-8 leading-[1.1]">
+          <h1 className="text-5xl lg:text-7xl font-extrabold font-heading text-charcoal tracking-tight mb-8 leading-[1.1]">
             Book your <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-pink-400">best look.</span>
           </h1>
 
@@ -64,14 +65,14 @@ export default function Home() {
             <div className="w-12 h-12 bg-pink-100 rounded-2xl flex items-center justify-center mb-4">
               <MapPin className="text-primary" size={24} />
             </div>
-            <h3 className="font-bold text-lg text-charcoal mb-2">House Calls or Salons</h3>
+            <h3 className="font-bold font-heading text-lg text-charcoal mb-2">House Calls or Salons</h3>
             <p className="text-slate-500 text-sm">Professionals come to you, or you visit their workspace.</p>
           </div>
           <div className="bg-white/60 backdrop-blur-xl border border-white/50 p-6 rounded-3xl shadow-lg shadow-pink-100/20 flex flex-col items-center text-center">
             <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center mb-4">
               <CalendarCheck className="text-secondary" size={24} />
             </div>
-            <h3 className="font-bold text-lg text-charcoal mb-2">Instant Booking</h3>
+            <h3 className="font-bold font-heading text-lg text-charcoal mb-2">Instant Booking</h3>
             <p className="text-slate-500 text-sm">See live availability and book appointments in seconds.</p>
           </div>
           <div className="bg-white/60 backdrop-blur-xl border border-white/50 p-6 rounded-3xl shadow-lg shadow-pink-100/20 flex flex-col items-center text-center">
