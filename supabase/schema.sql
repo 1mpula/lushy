@@ -388,3 +388,31 @@ DROP TRIGGER IF EXISTS update_rating_on_insert ON public.ratings;
 CREATE TRIGGER update_rating_on_insert
     AFTER INSERT ON public.ratings
     FOR EACH ROW EXECUTE FUNCTION update_professional_rating();
+
+-- ============================================
+-- AUTOMATED BACKGROUND WORKER (pg_cron)
+-- Sweeps for expired professional subscriptions
+-- ============================================
+-- Note: Enable the pg_cron extension in your Supabase Dashboard -> Database -> Extensions
+CREATE EXTENSION IF NOT EXISTS pg_cron;
+
+CREATE OR REPLACE FUNCTION sweep_expired_subscriptions()
+RETURNS void AS $$
+BEGIN
+    -- Suspend any active trials or active subscriptions that have passed their due date
+    UPDATE public.professionals
+    SET subscription_status = 'past_due'
+    WHERE (subscription_status = 'active' OR subscription_status = 'trial')
+      AND subscription_due_date < NOW();
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Unschedule any existing cron to avoid duplicates if re-running
+SELECT cron.unschedule('daily-subscription-sweep');
+
+-- Schedule the cron job to run every day at midnight (00:00 UTC)
+SELECT cron.schedule(
+    'daily-subscription-sweep',
+    '0 0 * * *',
+    $$ SELECT sweep_expired_subscriptions(); $$
+);
