@@ -1,7 +1,7 @@
 "use client";
 
 import { supabase } from '@/utils/supabase';
-import { ArrowRight, Loader2, Lock, Mail, Sparkles } from 'lucide-react';
+import { ArrowRight, Loader2, Lock, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -43,9 +43,6 @@ export default function Login() {
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
 
             <Link href="/" className="absolute top-6 left-6 lg:left-12 flex items-center gap-2 mb-12 cursor-pointer z-10 transition-transform active:scale-95">
-                <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-pink-200">
-                    <Sparkles className="text-white" size={24} />
-                </div>
                 <span className="text-2xl font-bold tracking-tight text-charcoal">Lushy</span>
             </Link>
 

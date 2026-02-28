@@ -13,10 +13,6 @@ export default function Home() {
       {/* Header */}
       <header className="absolute top-0 left-0 right-0 px-6 py-6 lg:px-12 flex items-center justify-between z-50 w-full max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
-          {/* Logo Placeholder */}
-          <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-pink-200">
-            <Sparkles className="text-white" size={24} />
-          </div>
           <span className="text-2xl font-bold tracking-tight text-charcoal">Lushy</span>
         </div>
         <nav className="flex items-center gap-4">

@@ -1,7 +1,7 @@
 "use client";
 
 import { supabase } from '@/utils/supabase';
-import { AlertCircle, CheckCircle2, CreditCard, LogOut, Sparkles } from 'lucide-react';
+import { AlertCircle, CheckCircle2, CreditCard, LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -63,9 +63,6 @@ export default function Dashboard() {
             {/* Navbar */}
             <nav className="bg-white border-b border-slate-100 flex items-center justify-between px-6 py-4 sticky top-0 z-10">
                 <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                        <Sparkles className="text-white" size={16} />
-                    </div>
                     <span className="font-bold text-xl text-charcoal">Lushy Pro</span>
                 </div>
                 <button
