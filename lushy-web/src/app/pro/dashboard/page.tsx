@@ -75,28 +75,28 @@ export default function Dashboard() {
             </nav>
 
             <main className="max-w-4xl mx-auto p-6 py-12">
-                <div className="mb-10 text-center sm:text-left">
-                    <h1 className="text-3xl font-extrabold text-charcoal tracking-tight mb-2">
+                <div className="mb-10 text-center sm:text-left opacity-0 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+                    <h1 className="text-3xl font-extrabold font-heading text-charcoal tracking-tight mb-2">
                         Welcome back, {profile?.business_name || profile?.full_name || 'Professional'}
                     </h1>
                     <p className="text-slate-500 text-lg">Manage your Lushy subscription</p>
                 </div>
 
                 {isPro ? (
-                    <div className="bg-emerald-50 border border-emerald-100 p-8 rounded-[32px] flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl shadow-emerald-100/20">
+                    <div className="bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-100 p-8 rounded-[32px] flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl shadow-emerald-100/20 opacity-0 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                         <div className="flex items-center gap-6">
-                            <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center shrink-0">
+                            <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center shrink-0 shadow-inner">
                                 <CheckCircle2 className="text-emerald-500" size={40} />
                             </div>
                             <div>
-                                <h2 className="text-2xl font-bold text-emerald-900 mb-1">Active Subscription</h2>
+                                <h2 className="text-2xl font-bold font-heading text-emerald-900 mb-1">Active Subscription</h2>
                                 <p className="text-emerald-700">Your account is fully unlocked. You can accept bookings and add unlimited services in the app.</p>
                             </div>
                         </div>
                     </div>
                 ) : (
-                    <div className="bg-white p-8 sm:p-10 rounded-[32px] shadow-xl shadow-pink-100/40 border border-pink-50 text-center max-w-2xl mx-auto">
-                        <div className="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <div className="glass-card p-8 sm:p-10 rounded-[32px] text-center max-w-2xl mx-auto opacity-0 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                        <div className="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner ring-4 ring-red-50/50">
                             <AlertCircle className="text-red-500" size={48} strokeWidth={1.5} />
                         </div>
 
@@ -130,7 +130,7 @@ export default function Dashboard() {
                             href={DPO_PAYMENT_LINK}
                             target="_blank"
                             rel="noreferrer"
-                            className="w-full bg-primary hover:bg-pink-600 text-white font-bold py-5 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-xl shadow-pink-200 text-lg"
+                            className="w-full bg-gradient-to-r from-primary to-pink-500 text-white font-bold py-5 rounded-2xl flex items-center justify-center gap-2 hover:-translate-y-1 hover:shadow-2xl transition-all shadow-xl shadow-pink-300 text-lg active:scale-95"
                         >
                             <CreditCard size={24} />
                             Subscribe Securely via DPO
