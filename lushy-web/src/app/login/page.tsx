@@ -27,6 +27,18 @@ export default function Login() {
             if (error) throw error;
 
             if (data.user) {
+                // Verify they are actually a professional, not just a standard client
+                const { data: proData, error: proError } = await supabase
+                    .from('professionals')
+                    .select('id')
+                    .eq('id', data.user.id)
+                    .single();
+
+                if (proError || !proData) {
+                    await supabase.auth.signOut();
+                    throw new Error("This portal is reserved for Lushy Professionals. Please use the mobile app for client accounts.");
+                }
+
                 // Redirect to professional dashboard
                 router.push('/pro/dashboard');
             }
