@@ -31,7 +31,7 @@ export default function Login() {
                 const { data: proData, error: proError } = await supabase
                     .from('professionals')
                     .select('id')
-                    .eq('id', data.user.id)
+                    .eq('user_id', data.user.id)
                     .single();
 
                 if (proError || !proData) {

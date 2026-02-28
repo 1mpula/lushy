@@ -27,7 +27,7 @@ export default function Dashboard() {
             const { data, error } = await supabase
                 .from('professionals')
                 .select('*')
-                .eq('id', user.id)
+                .eq('user_id', user.id)
                 .single();
 
             if (error && error.code !== 'PGRST116') throw error;
