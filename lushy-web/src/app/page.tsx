@@ -11,7 +11,7 @@ export default function Home() {
       <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-secondary/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3 pointer-events-none" />
 
       {/* Header */}
-      <header className="absolute top-0 left-0 right-0 px-6 py-6 lg:px-12 flex items-center justify-between z-10 w-full max-w-7xl mx-auto">
+      <header className="absolute top-0 left-0 right-0 px-6 py-6 lg:px-12 flex items-center justify-between z-50 w-full max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
           {/* Logo Placeholder */}
           <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-pink-200">
