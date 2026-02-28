@@ -13,8 +13,7 @@ export default function Home() {
       {/* Header */}
       <header className="absolute top-0 left-0 right-0 px-6 py-6 lg:px-12 flex items-center justify-between z-50 w-full max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
-          <img src="/lushy-logo.png" alt="Lushy Logo" className="h-8 w-auto object-contain drop-shadow-sm" />
-          <span className="text-2xl font-bold tracking-tight font-heading text-charcoal">Lushy</span>
+          <img src="/lushy-logo.png" alt="Lushy Logo" className="h-12 sm:h-16 w-auto object-contain drop-shadow-sm" />
         </div>
         <nav className="flex items-center gap-4">
           <Link href="/login" className="text-charcoal font-medium hover:text-primary transition-colors hidden sm:block">

@@ -43,8 +43,7 @@ export default function Login() {
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
 
             <Link href="/" className="absolute top-6 left-6 lg:left-12 flex items-center gap-2 mb-12 cursor-pointer z-10 transition-transform active:scale-95">
-                <img src="/lushy-logo.png" alt="Lushy Logo" className="h-8 w-auto object-contain drop-shadow-sm" />
-                <span className="text-2xl font-bold tracking-tight font-heading text-charcoal">Lushy</span>
+                <img src="/lushy-logo.png" alt="Lushy Logo" className="h-12 sm:h-16 w-auto object-contain drop-shadow-sm" />
             </Link>
 
             <div className="w-full max-w-md bg-white/80 backdrop-blur-xl border border-white p-8 rounded-[32px] shadow-2xl shadow-pink-100/50 relative z-10 mt-12">
