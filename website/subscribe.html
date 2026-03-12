@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lushy Pro — Professional Portal</title>
+    <meta name="description" content="Sign in and manage your Lushy Professional subscription.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* ==========================================
+           Portal-specific styles
+           ========================================== */
+        body.portal-page {
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .portal-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        /* --- Views --- */
+        .portal-view {
+            display: none;
+            width: 100%;
+            max-width: 460px;
+            animation: portalFadeUp 0.45s ease forwards;
+        }
+
+        .portal-view.active {
+            display: block;
+        }
+
+        @keyframes portalFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- Glass Card --- */
+        .portal-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 25px 60px rgba(255, 64, 129, 0.08), 0 8px 24px rgba(0, 0, 0, 0.05);
+            border-radius: 28px;
+            padding: 2.5rem;
+        }
+
+        /* --- Logo area --- */
+        .portal-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .portal-logo img {
+            height: 36px;
+        }
+
+        .portal-logo-label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--primary, #FF4081);
+            background: rgba(255, 64, 129, 0.08);
+            padding: 0.25rem 0.65rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 64, 129, 0.15);
+        }
+
+        /* --- Heading --- */
+        .portal-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .portal-subtitle {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-bottom: 1.75rem;
+            line-height: 1.5;
+        }
+
+        /* --- Form --- */
+        .portal-field {
+            margin-bottom: 1rem;
+        }
+
+        .portal-field label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.4rem;
+        }
+
+        .portal-field input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1.5px solid #E5E7EB;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+            background: #fff;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .portal-field input:focus {
+            outline: none;
+            border-color: #FF4081;
+            box-shadow: 0 0 0 3px rgba(255, 64, 129, 0.1);
+        }
+
+        /* --- Button --- */
+        .portal-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.9rem 1.5rem;
+            background: linear-gradient(135deg, #FF4081, #E91E63);
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 20px rgba(255, 64, 129, 0.3);
+            margin-top: 0.5rem;
+        }
+
+        .portal-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(255, 64, 129, 0.4);
+        }
+
+        .portal-btn:active {
+            transform: translateY(0);
+        }
+
+        .portal-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .portal-btn.secondary {
+            background: #f1f5f9;
+            color: #475569;
+            box-shadow: none;
+        }
+
+        .portal-btn.secondary:hover:not(:disabled) {
+            background: #e2e8f0;
+            box-shadow: none;
+        }
+
+        /* --- Error alert --- */
+        .portal-alert {
+            display: none;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .portal-alert.error {
+            background: #FEE2E2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+        }
+
+        .portal-alert.success {
+            background: #DCFCE7;
+            color: #16A34A;
+            border: 1px solid #BBF7D0;
+        }
+
+        .portal-alert.info {
+            background: #EFF6FF;
+            color: #2563EB;
+            border: 1px solid #BFDBFE;
+        }
+
+        .portal-alert.show {
+            display: block;
+        }
+
+        /* --- Status badge --- */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .status-badge .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-active {
+            background: #DCFCE7;
+            color: #16A34A;
+        }
+
+        .status-active .dot {
+            background: #16A34A;
+            animation: pulse 2s infinite;
+        }
+
+        .status-trial {
+            background: #EFF6FF;
+            color: #2563EB;
+        }
+
+        .status-trial .dot {
+            background: #2563EB;
+        }
+
+        .status-suspended {
+            background: #FEF2F2;
+            color: #DC2626;
+        }
+
+        .status-suspended .dot {
+            background: #DC2626;
+        }
+
+        .status-past_due {
+            background: #FFFBEB;
+            color: #D97706;
+        }
+
+        .status-past_due .dot {
+            background: #D97706;
+        }
+
+        /* --- Plan card --- */
+        .plan-card {
+            background: linear-gradient(135deg, #FF4081 0%, #C2185B 100%);
+            border-radius: 20px;
+            padding: 1.75rem;
+            color: white;
+            margin: 1.25rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plan-card::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+        }
+
+        .plan-price {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .plan-price span {
+            font-size: 1rem;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        .plan-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            opacity: 0.85;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-top: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .plan-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .plan-features li::before {
+            content: '✓';
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* --- Profile strip --- */
+        .profile-strip {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 14px;
+            margin-bottom: 1.25rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .profile-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF4081, #C2185B);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            font-family: 'Outfit', sans-serif;
+            flex-shrink: 0;
+        }
+
+        .profile-info strong {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .profile-info span {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        /* --- Spinner --- */
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2.5px solid rgba(255, 255, 255, 0.4);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* --- Verify view --- */
+        .verify-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem;
+            font-size: 2.25rem;
+        }
+
+        .verify-icon.loading {
+            background: #EFF6FF;
+            animation: pulse 1.5s ease infinite;
+        }
+
+        .verify-icon.success {
+            background: #DCFCE7;
+        }
+
+        .verify-icon.error {
+            background: #FEF2F2;
+        }
+
+        /* --- Divider --- */
+        .portal-divider {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1.25rem 0;
+        }
+
+        .portal-divider::before,
+        .portal-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #E5E7EB;
+        }
+
+        .portal-divider span {
+            font-size: 0.8rem;
+            color: #9CA3AF;
+            white-space: nowrap;
+        }
+
+        /* --- Bg blobs --- */
+        .portal-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .portal-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+        }
+
+        .blob-1 {
+            width: 50vw;
+            height: 50vw;
+            top: -15%;
+            left: -10%;
+            background: radial-gradient(circle, rgba(255, 64, 129, 0.25) 0%, transparent 70%);
+        }
+
+        .blob-2 {
+            width: 55vw;
+            height: 55vw;
+            bottom: -15%;
+            right: -10%;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.18) 0%, transparent 70%);
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 500px) {
+            .portal-card {
+                padding: 1.75rem 1.25rem;
+            }
+
+            .portal-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="portal-page">
+    <!-- Background blobs -->
+    <div class="portal-bg">
+        <div class="portal-blob blob-1"></div>
+        <div class="portal-blob blob-2"></div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="navbar scrolled" style="position:relative;box-shadow:none;border-bottom:1px solid rgba(0,0,0,0.05);">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="lushy-logo.png" alt="Lushy" style="height:32px;">
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">← Back to Website</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Portal content -->
+    <div class="portal-wrap">
+
+        <!-- ==================== VIEW 1: SIGN IN ==================== -->
+        <div id="viewSignIn" class="portal-view active">
+            <div class="portal-card">
+                <div class="portal-logo">
+                    <img src="lushy-logo.png" alt="Lushy">
+                    <span class="portal-logo-label">Pro Portal</span>
+                </div>
+
+                <h1 class="portal-title">Welcome back,<br>Professional</h1>
+                <p class="portal-subtitle">Sign in with the same email and password you use in the Lushy app.</p>
+
+                <div id="signinAlert" class="portal-alert error"></div>
+
+                <form id="signinForm">
+                    <div class="portal-field">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="you@example.com" required autocomplete="email">
+                    </div>
+                    <div class="portal-field">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="••••••••" required
+                            autocomplete="current-password">
+                    </div>
+
+                    <button type="submit" class="portal-btn" id="signinBtn">
+                        Sign In to My Account
+                    </button>
+                </form>
+
+                <p style="text-align:center;font-size:0.8rem;color:#94a3b8;margin-top:1.5rem;">
+                    Don't have a professional account yet?
+                    <a href="index.html#for-professionals" style="color:#FF4081;font-weight:600;">Learn more →</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 2: DASHBOARD ==================== -->
+        <div id="viewDashboard" class="portal-view">
+            <div class="portal-card">
+                <div class="portal-logo">
+                    <img src="lushy-logo.png" alt="Lushy">
+                    <span class="portal-logo-label">Pro Portal</span>
+                </div>
+
+                <!-- Profile strip -->
+                <div class="profile-strip">
+                    <div class="profile-avatar" id="avatarInitial">A</div>
+                    <div class="profile-info">
+                        <strong id="dashName">Loading...</strong>
+                        <span id="dashEmail"></span>
+                    </div>
+                </div>
+
+                <!-- Status row -->
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;">
+                    <span style="font-size:0.85rem;font-weight:600;color:#64748b;">Subscription Status</span>
+                    <span class="status-badge" id="statusBadge">
+                        <span class="dot"></span>
+                        <span id="statusText">Loading</span>
+                    </span>
+                </div>
+
+                <div id="statusMessage" style="font-size:0.875rem;color:#64748b;margin-bottom:1rem;line-height:1.5;">
+                </div>
+
+                <div id="dueDate" style="font-size:0.8rem;color:#9CA3AF;margin-bottom:1.25rem;"></div>
+
+                <!-- Plan card -->
+                <div class="plan-card">
+                    <div class="plan-name">Lushy Pro Monthly</div>
+                    <div class="plan-price">P29.99 <span>/ month</span></div>
+                    <ul class="plan-features">
+                        <li>Accept unlimited client bookings</li>
+                        <li>Portfolio &amp; services visible to clients</li>
+                        <li>In-app messaging with clients</li>
+                        <li>Calendar management &amp; availability</li>
+                        <li>Verified Professional badge</li>
+                    </ul>
+                </div>
+
+                <div id="dashAlert" class="portal-alert error"></div>
+
+                <!-- Pay button (shown when not active) -->
+                <button class="portal-btn" id="payBtn" onclick="initiatePayment()">
+                    💳 Pay &amp; Activate My Account
+                </button>
+
+                <!-- Divider + sign out -->
+                <div class="portal-divider"><span>or</span></div>
+
+                <button class="portal-btn secondary" onclick="signOut()">Sign Out</button>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 3: VERIFYING PAYMENT ==================== -->
+        <div id="viewVerify" class="portal-view">
+            <div class="portal-card" style="text-align:center;">
+                <div class="verify-icon loading" id="verifyIcon">⏳</div>
+                <h2 class="portal-title" id="verifyTitle" style="margin-bottom:0.5rem;">Verifying Payment</h2>
+                <p class="portal-subtitle" id="verifyMsg">Hold on while we confirm your transaction…</p>
+                <button class="portal-btn secondary" id="verifyBackBtn" style="display:none;" onclick="showDashboard()">
+                    ← Back to Dashboard
+                </button>
+            </div>
+        </div>
+
+    </div><!-- /portal-wrap -->
+
+    <script>
+        // =============================================
+        //  CONFIG — using same credentials as the app
+        // =============================================
+        const SUPABASE_URL = 'https://ehabinuyyasvahhxkhdw.supabase.co';
+        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVoYWJpbnV5eWFzdmFoaHhraGR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNzU5OTAsImV4cCI6MjA4NDk1MTk5MH0.vr6TOMU1zAPLwp_T79B_NXTkkaIWUc5oFozn0h26Kd4';
+
+        const { createClient } = supabase;
+        const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+        // Monthly subscription amount in BWP
+        const SUBSCRIPTION_AMOUNT = 29.99;
+        const SUBSCRIPTION_CURRENCY = 'BWP';
+
+        // State
+        let currentUser = null;
+        let currentPro = null;
+        let pendingToken = null;
+        let pendingRef = null;
+
+        // ============================
+        //  View switching
+        // ============================
+        function showView(id) {
+            document.querySelectorAll('.portal-view').forEach(v => v.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showDashboard() { showView('viewDashboard'); }
+        function showVerify() { showView('viewVerify'); }
+
+        // ============================
+        //  Alerts
+        // ============================
+        function showAlert(id, msg, type = 'error') {
+            const el = document.getElementById(id);
+            el.textContent = msg;
+            el.className = `portal-alert ${type} show`;
+        }
+
+        function hideAlert(id) {
+            document.getElementById(id).className = 'portal-alert';
+        }
+
+        // ============================
+        //  Sign In
+        // ============================
+        document.getElementById('signinForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('signinBtn');
+            const email = document.getElementById('email').value.trim();
+            const pass = document.getElementById('password').value;
+
+            hideAlert('signinAlert');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Signing in…';
+
+            try {
+                const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+                if (error) throw error;
+
+                currentUser = data.user;
+                await loadProfessional();
+            } catch (err) {
+                showAlert('signinAlert', err.message || 'Sign in failed. Please try again.');
+                btn.disabled = false;
+                btn.textContent = 'Sign In to My Account';
+            }
+        });
+
+        // ============================
+        //  Load professional profile
+        // ============================
+        async function loadProfessional() {
+            try {
+                // Check the user has a provider role
+                const { data: profile, error: pErr } = await sb
+                    .from('profiles')
+                    .select('role, full_name, email')
+                    .eq('id', currentUser.id)
+                    .single();
+
+                if (pErr) throw pErr;
+
+                if (profile.role !== 'provider') {
+                    showAlert('signinAlert', 'This portal is for beauty professionals only. Please sign in with a professional account.');
+                    await sb.auth.signOut();
+                    const btn = document.getElementById('signinBtn');
+                    btn.disabled = false;
+                    btn.textContent = 'Sign In to My Account';
+                    return;
+                }
+
+                // Fetch professional row
+                const { data: pro, error: proErr } = await sb
+                    .from('professionals')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .single();
+
+                if (proErr) throw proErr;
+
+                currentPro = pro;
+                renderDashboard(profile, pro);
+                showView('viewDashboard');
+
+            } catch (err) {
+                showAlert('signinAlert', err.message || 'Could not load your profile.');
+                const btn = document.getElementById('signinBtn');
+                btn.disabled = false;
+                btn.textContent = 'Sign In to My Account';
+            }
+        }
+
+        // ============================
+        //  Render dashboard
+        // ============================
+        function renderDashboard(profile, pro) {
+            const name = pro.business_name || profile.full_name || 'Professional';
+            const email = profile.email || currentUser.email;
+            const status = pro.subscription_status || 'trial';
+
+            document.getElementById('dashName').textContent = name;
+            document.getElementById('dashEmail').textContent = email;
+            document.getElementById('avatarInitial').textContent = name.charAt(0).toUpperCase();
+
+            // Status badge
+            const badge = document.getElementById('statusBadge');
+            const statusEl = document.getElementById('statusText');
+            badge.className = `status-badge status-${status}`;
+            badge.innerHTML = `<span class="dot"></span><span>${formatStatus(status)}</span>`;
+
+            // Status message
+            const msgEl = document.getElementById('statusMessage');
+            const dueEl = document.getElementById('dueDate');
+
+            const dueDate = pro.subscription_due_date
+                ? new Date(pro.subscription_due_date).toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' })
+                : null;
+
+            if (status === 'active') {
+                msgEl.textContent = '✅ Your account is active! Your profile and services are visible to clients.';
+                dueEl.textContent = dueDate ? `Renews on ${dueDate}` : '';
+            } else if (status === 'trial') {
+                msgEl.textContent = '🎉 You are on a free trial. Pay to keep your account active after the trial ends.';
+                dueEl.textContent = dueDate ? `Trial ends ${dueDate}` : '';
+            } else if (status === 'suspended') {
+                msgEl.textContent = '🔴 Your account is suspended. Your profile is hidden from clients. Pay now to reactivate.';
+                dueEl.textContent = '';
+            } else if (status === 'past_due') {
+                msgEl.textContent = '⚠️ Your payment is overdue. Pay now to avoid suspension.';
+                dueEl.textContent = dueDate ? `Was due ${dueDate}` : '';
+            }
+
+            // Show/hide pay button
+            const payBtn = document.getElementById('payBtn');
+            if (status === 'active') {
+                payBtn.textContent = '🔄 Renew Subscription';
+            } else {
+                payBtn.textContent = '💳 Pay & Activate My Account';
+            }
+            payBtn.style.display = 'flex';
+        }
+
+        function formatStatus(s) {
+            return { active: 'Active', trial: 'Free Trial', suspended: 'Suspended', past_due: 'Past Due' }[s] || s;
+        }
+
+        // ============================
+        //  Initiate DPO payment
+        // ============================
+        async function initiatePayment() {
+            if (!currentPro) return;
+            hideAlert('dashAlert');
+
+            const btn = document.getElementById('payBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner" style="border-top-color:white;"></span> Creating secure payment…';
+
+            try {
+                const res = await fetch(`${SUPABASE_URL}/functions/v1/dpo-payment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${SUPABASE_ANON}`,
+                    },
+                    body: JSON.stringify({
+                        action: 'createToken',
+                        professionalId: currentPro.id,
+                        email: currentUser.email,
+                        amount: SUBSCRIPTION_AMOUNT,
+                    }),
+                });
+
+                const data = await res.json();
+
+                if (!data.transToken) {
+                    throw new Error(data.explanation || data.error || 'Could not create payment session.');
+                }
+
+                pendingToken = data.transToken;
+                pendingRef = data.companyRef;
+
+                // Save pending session to sessionStorage so the verify view can pick it up on redirect
+                sessionStorage.setItem('lushy_pending_token', pendingToken);
+                sessionStorage.setItem('lushy_pending_ref', pendingRef);
+                sessionStorage.setItem('lushy_pro_id', currentPro.id);
+
+                // Redirect to DPO payment page (it redirects back to this page with ?paid=1)
+                const returnUrl = encodeURIComponent(window.location.href.split('?')[0] + `?verify=1&token=${pendingToken}&ref=${pendingRef}`);
+                const dpoUrl = `https://secure.3gdirectpay.com/payv3.php?ID=${pendingToken}`;
+
+                window.location.href = dpoUrl;
+
+            } catch (err) {
+                showAlert('dashAlert', err.message || 'Payment initiation failed. Please try again.');
+                btn.disabled = false;
+                btn.textContent = '💳 Pay & Activate My Account';
+            }
+        }
+
+        // ============================
+        //  Verify payment on return
+        // ============================
+        async function verifyPayment(token, ref, proId) {
+            showView('viewVerify');
+
+            document.getElementById('verifyIcon').className = 'verify-icon loading';
+            document.getElementById('verifyIcon').textContent = '⏳';
+            document.getElementById('verifyTitle').textContent = 'Verifying Payment';
+            document.getElementById('verifyMsg').textContent = 'Hold on while we confirm your transaction…';
+            document.getElementById('verifyBackBtn').style.display = 'none';
+
+            try {
+                const res = await fetch(`${SUPABASE_URL}/functions/v1/dpo-payment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${SUPABASE_ANON}`,
+                    },
+                    body: JSON.stringify({
+                        action: 'verifyToken',
+                        transactionToken: token,
+                        companyRef: ref,
+                        professionalId: proId,
+                    }),
+                });
+
+                const data = await res.json();
+
+                if (data.isPaid) {
+                    // Clear pending session
+                    sessionStorage.removeItem('lushy_pending_token');
+                    sessionStorage.removeItem('lushy_pending_ref');
+                    sessionStorage.removeItem('lushy_pro_id');
+
+                    document.getElementById('verifyIcon').className = 'verify-icon success';
+                    document.getElementById('verifyIcon').textContent = '🎉';
+                    document.getElementById('verifyTitle').textContent = 'You\'re All Set!';
+                    document.getElementById('verifyMsg').textContent =
+                        'Payment confirmed! Your Lushy Pro account is now active. Open the app — your profile and services are now visible to clients.';
+                } else {
+                    throw new Error(data.explanation || 'Payment not completed. Please try again.');
+                }
+            } catch (err) {
+                document.getElementById('verifyIcon').className = 'verify-icon error';
+                document.getElementById('verifyIcon').textContent = '❌';
+                document.getElementById('verifyTitle').textContent = 'Verification Failed';
+                document.getElementById('verifyMsg').textContent = err.message;
+                document.getElementById('verifyBackBtn').style.display = 'flex';
+            }
+
+            // If we have a session, reload the dashboard data
+            if (currentUser) {
+                await loadProfessional();
+            }
+        }
+
+        // ============================
+        //  Sign Out
+        // ============================
+        async function signOut() {
+            await sb.auth.signOut();
+            currentUser = currentPro = null;
+            showView('viewSignIn');
+        }
+
+        // ============================
+        //  Boot: check session + URL params
+        // ============================
+        async function boot() {
+            // Check if returning from DPO payment page
+            const params = new URLSearchParams(window.location.search);
+
+            if (params.get('verify') === '1') {
+                const token = params.get('token') || sessionStorage.getItem('lushy_pending_token');
+                const ref = params.get('ref') || sessionStorage.getItem('lushy_pending_ref');
+                const proId = sessionStorage.getItem('lushy_pro_id');
+
+                // Remove ?verify params from URL without reload
+                history.replaceState({}, '', window.location.pathname);
+
+                if (token && ref && proId) {
+                    // Try to restore session first
+                    const { data: { session } } = await sb.auth.getSession();
+                    if (session) currentUser = session.user;
+
+                    await verifyPayment(token, ref, proId);
+                    return;
+                }
+            }
+
+            // Check existing session
+            const { data: { session } } = await sb.auth.getSession();
+            if (session?.user) {
+                currentUser = session.user;
+                await loadProfessional();
+            }
+        }
+
+        boot();
+    </script>
+</body>
+
+</html>

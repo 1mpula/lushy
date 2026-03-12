@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initMobileMenu();
     initScrollAnimations();
     initSmoothScroll();
+    initAppShowcase();
+    initFAQ();
+    initMagneticButtons();
 });
 
 /**
@@ -118,6 +121,106 @@ function initSmoothScroll() {
                 top: offsetPosition,
                 behavior: 'smooth'
             });
+        });
+    });
+}
+
+/**
+ * App Showcase Carousel
+ */
+function initAppShowcase() {
+    const steps = document.querySelectorAll('.showcase-step');
+    const screens = document.querySelectorAll('.screen-img');
+    
+    if (!steps.length || !screens.length) return;
+
+    let currentIndex = 0;
+    let interval;
+
+    const activateStep = (index) => {
+        steps.forEach(s => s.classList.remove('active'));
+        screens.forEach(s => s.classList.remove('active'));
+        
+        steps[index].classList.add('active');
+        screens[index].classList.add('active');
+        currentIndex = index;
+    };
+
+    const nextStep = () => {
+        const nextIndex = (currentIndex + 1) % steps.length;
+        activateStep(nextIndex);
+    };
+
+    const startCarousel = () => {
+        interval = setInterval(nextStep, 5000);
+    };
+
+    const stopCarousel = () => {
+        clearInterval(interval);
+    };
+
+    steps.forEach((step, index) => {
+        step.addEventListener('click', () => {
+            stopCarousel();
+            activateStep(index);
+            startCarousel();
+        });
+    });
+
+    // Pause on hover
+    const showcaseContainer = document.querySelector('.showcase-container');
+    if (showcaseContainer) {
+        showcaseContainer.addEventListener('mouseenter', stopCarousel);
+        showcaseContainer.addEventListener('mouseleave', startCarousel);
+    }
+
+    startCarousel();
+}
+
+/**
+ * FAQ Accordion
+ */
+function initFAQ() {
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    if (!faqItems.length) return;
+
+    faqItems.forEach(item => {
+        const btn = item.querySelector('.faq-btn');
+        btn.addEventListener('click', () => {
+            const isActive = item.classList.contains('active');
+            
+            // Close all other items
+            faqItems.forEach(otherItem => {
+                otherItem.classList.remove('active');
+            });
+
+            // Toggle current item
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        });
+    });
+}
+
+/**
+ * Magnetic Buttons Effect
+ */
+function initMagneticButtons() {
+    const btns = document.querySelectorAll('.btn-primary, .btn-ghost, .store-btn');
+    
+    btns.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            
+            // Apply subtle magnetic pull
+            btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+        });
+
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = 'translate(0px, 0px)';
         });
     });
 }
