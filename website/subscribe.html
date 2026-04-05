@@ -429,58 +429,6 @@
             background: #FEF2F2;
         }
 
-        /* --- Plan Selector --- */
-        .plan-options {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-            background: #f1f5f9;
-            padding: 0.35rem;
-            border-radius: 12px;
-        }
-
-        .plan-option {
-            flex: 1;
-            text-align: center;
-            padding: 0.75rem 0.5rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            color: #64748b;
-            transition: all 0.2s ease;
-        }
-
-        .plan-option.active {
-            background: white;
-            color: #FF4081;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .save-badge {
-            background: #DCFCE7;
-            color: #166534;
-            font-size: 0.65rem;
-            padding: 0.15rem 0.4rem;
-            border-radius: 6px;
-            margin-left: 0.25rem;
-            vertical-align: middle;
-        }
-
-        /* --- Legal Text --- */
-        .legal-text {
-            font-size: 0.75rem;
-            color: #64748b;
-            text-align: center;
-            margin-bottom: 1.25rem;
-            line-height: 1.4;
-        }
-
-        .legal-text a {
-            color: #FF4081;
-            text-decoration: underline;
-        }
-
         /* --- Divider --- */
         .portal-divider {
             display: flex;
@@ -601,50 +549,7 @@
 
                 <p style="text-align:center;font-size:0.8rem;color:#94a3b8;margin-top:1.5rem;">
                     Don't have a professional account yet?
-                    <a href="javascript:void(0)" onclick="showView('viewSignUp')" style="color:#FF4081;font-weight:600;">Apply Now →</a>
-                </p>
-            </div>
-        </div>
-
-        <!-- ==================== VIEW 1B: SIGN UP ==================== -->
-        <div id="viewSignUp" class="portal-view">
-            <div class="portal-card">
-                <div class="portal-logo">
-                    <img src="lushy-logo.png" alt="Lushy">
-                    <span class="portal-logo-label">Early Access</span>
-                </div>
-
-                <h1 class="portal-title">Join the<br>Lushy Network</h1>
-                <p class="portal-subtitle">Create your professional account today. It takes less than 2 minutes.</p>
-
-                <div id="signupAlert" class="portal-alert error"></div>
-
-                <form id="signupForm">
-                    <div class="portal-field">
-                        <label for="signupName">Full Name</label>
-                        <input type="text" id="signupName" placeholder="Your Name" required>
-                    </div>
-                    <div class="portal-field">
-                        <label for="signupEmail">Email Address</label>
-                        <input type="email" id="signupEmail" placeholder="you@example.com" required autocomplete="email">
-                    </div>
-                    <div class="portal-field">
-                        <label for="signupBusiness">Business Name</label>
-                        <input type="text" id="signupBusiness" placeholder="E.g., Glam Nails by Sarah" required>
-                    </div>
-                    <div class="portal-field">
-                        <label for="signupPassword">Create Password</label>
-                        <input type="password" id="signupPassword" placeholder="••••••••" required autocomplete="new-password">
-                    </div>
-
-                    <button type="submit" class="portal-btn" id="signupBtn">
-                        Create My Pro Account
-                    </button>
-                </form>
-
-                <p style="text-align:center;font-size:0.8rem;color:#94a3b8;margin-top:1.5rem;">
-                    Already have an account?
-                    <a href="javascript:void(0)" onclick="showView('viewSignIn')" style="color:#FF4081;font-weight:600;">Sign In ←</a>
+                    <a href="index.html#for-professionals" style="color:#FF4081;font-weight:600;">Learn more →</a>
                 </p>
             </div>
         </div>
@@ -680,20 +585,10 @@
 
                 <div id="dueDate" style="font-size:0.8rem;color:#9CA3AF;margin-bottom:1.25rem;"></div>
 
-                <!-- Plan options toggle -->
-                <div class="plan-options" id="planOptions" style="display: none;">
-                    <div class="plan-option active" id="monthlyBtn" onclick="selectPlan('monthly')">
-                        Monthly
-                    </div>
-                    <div class="plan-option" id="annualBtn" onclick="selectPlan('annual')">
-                        Annually <span class="save-badge">Save P298</span>
-                    </div>
-                </div>
-
                 <!-- Plan card -->
                 <div class="plan-card">
-                    <div class="plan-name" id="planNameDisplay">Lushy Pro Monthly</div>
-                    <div class="plan-price" id="planPriceDisplay">P149 <span>/ month</span></div>
+                    <div class="plan-name">Lushy Pro Monthly</div>
+                    <div class="plan-price">P29.99 <span>/ month</span></div>
                     <ul class="plan-features">
                         <li>Accept unlimited client bookings</li>
                         <li>Portfolio &amp; services visible to clients</li>
@@ -701,11 +596,6 @@
                         <li>Calendar management &amp; availability</li>
                         <li>Verified Professional badge</li>
                     </ul>
-                </div>
-
-                <div class="legal-text" id="legalText" style="display: none;">
-                    By confirming payment, you agree to our <a href="../docs/lushy-privacy-policy.html" target="_blank">Privacy Policy</a> and <a href="../docs/lushy-cancellation-refund-policy.html" target="_blank">Cancellation Policy</a>.
-                    <br>Your subscription will automatically renew. You may easily cancel your subscription at any time via your account settings.
                 </div>
 
                 <div id="dashAlert" class="portal-alert error"></div>
@@ -746,11 +636,9 @@
         const { createClient } = supabase;
         const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-        // Subscription configurations
-        const PLAN_MONTHLY_PRICE = 149;
-        const PLAN_ANNUAL_PRICE = 1490;
+        // Monthly subscription amount in BWP
+        const SUBSCRIPTION_AMOUNT = 29.99;
         const SUBSCRIPTION_CURRENCY = 'BWP';
-        let selectedPlan = 'monthly';
 
         // State
         let currentUser = null;
@@ -782,73 +670,6 @@
         function hideAlert(id) {
             document.getElementById(id).className = 'portal-alert';
         }
-
-        // ============================
-        //  Sign Up
-        // ============================
-        document.getElementById('signupForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('signupBtn');
-            const name = document.getElementById('signupName').value.trim();
-            const email = document.getElementById('signupEmail').value.trim();
-            const business = document.getElementById('signupBusiness').value.trim();
-            const pass = document.getElementById('signupPassword').value;
-
-            hideAlert('signupAlert');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spinner"></span> Creating Account…';
-
-            try {
-                // 1. Sign up the user
-                const { data, error } = await sb.auth.signUp({
-                    email,
-                    password: pass,
-                    options: {
-                        data: {
-                            full_name: name,
-                        }
-                    }
-                });
-
-                if (error) throw error;
-                if (!data.user) throw new Error('Signup failed. Please try again.');
-
-                // 2. Create the profile record (role = provider)
-                const { error: pErr } = await sb
-                    .from('profiles')
-                    .insert([{
-                        id: data.user.id,
-                        full_name: name,
-                        email: email,
-                        role: 'provider'
-                    }]);
-
-                if (pErr) throw pErr;
-
-                // 3. Create the professional record
-                const { error: proErr } = await sb
-                    .from('professionals')
-                    .insert([{
-                        user_id: data.user.id,
-                        business_name: business,
-                        subscription_status: 'trial' // Default to trial
-                    }]);
-
-                if (proErr) throw proErr;
-
-                // Success!
-                showAlert('signupAlert', 'Account created! Please check your email for a verification link.', 'success');
-                btn.textContent = 'Account Created ✅';
-                
-                // Switch back to sign in after a delay
-                setTimeout(() => showView('viewSignIn'), 3000);
-
-            } catch (err) {
-                showAlert('signupAlert', err.message || 'Registration failed. Please try again.');
-                btn.disabled = false;
-                btn.textContent = 'Create My Pro Account';
-            }
-        });
 
         // ============================
         //  Sign In
@@ -949,23 +770,15 @@
             if (status === 'active') {
                 msgEl.textContent = '✅ Your account is active! Your profile and services are visible to clients.';
                 dueEl.textContent = dueDate ? `Renews on ${dueDate}` : '';
-                document.getElementById('planOptions').style.display = 'none';
-                document.getElementById('legalText').style.display = 'none';
             } else if (status === 'trial') {
-                msgEl.textContent = '🎉 You are currently enjoying your 14-day free trial. Secure your subscription below to prevent service interruption when the trial ends.';
+                msgEl.textContent = '🎉 You are on a free trial. Pay to keep your account active after the trial ends.';
                 dueEl.textContent = dueDate ? `Trial ends ${dueDate}` : '';
-                document.getElementById('planOptions').style.display = 'flex';
-                document.getElementById('legalText').style.display = 'block';
             } else if (status === 'suspended') {
                 msgEl.textContent = '🔴 Your account is suspended. Your profile is hidden from clients. Pay now to reactivate.';
                 dueEl.textContent = '';
-                document.getElementById('planOptions').style.display = 'flex';
-                document.getElementById('legalText').style.display = 'block';
             } else if (status === 'past_due') {
                 msgEl.textContent = '⚠️ Your payment is overdue. Pay now to avoid suspension.';
                 dueEl.textContent = dueDate ? `Was due ${dueDate}` : '';
-                document.getElementById('planOptions').style.display = 'flex';
-                document.getElementById('legalText').style.display = 'block';
             }
 
             // Show/hide pay button
@@ -979,27 +792,7 @@
         }
 
         function formatStatus(s) {
-            return { active: 'Active', trial: '14-Day Free Trial', suspended: 'Suspended', past_due: 'Past Due' }[s] || s;
-        }
-
-        // ============================
-        //  Handle Plan Selection
-        // ============================
-        function selectPlan(plan) {
-            selectedPlan = plan;
-            
-            // Toggle active classes
-            document.getElementById('monthlyBtn').classList.toggle('active', plan === 'monthly');
-            document.getElementById('annualBtn').classList.toggle('active', plan === 'annual');
-            
-            // Update UI card
-            if (plan === 'monthly') {
-                document.getElementById('planNameDisplay').textContent = 'Lushy Pro Monthly';
-                document.getElementById('planPriceDisplay').innerHTML = `P${PLAN_MONTHLY_PRICE} <span>/ month</span>`;
-            } else {
-                document.getElementById('planNameDisplay').textContent = 'Lushy Pro Annually';
-                document.getElementById('planPriceDisplay').innerHTML = `P${PLAN_ANNUAL_PRICE} <span>/ year</span>`;
-            }
+            return { active: 'Active', trial: 'Free Trial', suspended: 'Suspended', past_due: 'Past Due' }[s] || s;
         }
 
         // ============================
@@ -1024,7 +817,7 @@
                         action: 'createToken',
                         professionalId: currentPro.id,
                         email: currentUser.email,
-                        amount: selectedPlan === 'monthly' ? PLAN_MONTHLY_PRICE : PLAN_ANNUAL_PRICE,
+                        amount: SUBSCRIPTION_AMOUNT,
                     }),
                 });
 
