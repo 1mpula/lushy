@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lushy | Pitch Deck</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            pink: '#FF4081',
+                            darkpink: '#E91E63',
+                            lightpink: '#FF80AB',
+                            teal: '#009688',
+                            purple: '#8A2BE2',
+                            charcoal: '#333333',
+                            gray: '#757575',
+                            offwhite: '#F5F5F5',
+                            white: '#FFFFFF',
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['Outfit', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'gradient-primary': 'linear-gradient(135deg, #FF4081 0%, #E91E63 50%, #8A2BE2 100%)',
+                        'gradient-radial-glow': 'radial-gradient(circle at 50% 50%, rgba(255, 64, 129, 0.08) 0%, transparent 60%)',
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.05)',
+                        'glow': '0 0 40px rgba(255, 64, 129, 0.15)',
+                        'xl-soft': '0 20px 40px rgba(0,0,0,0.04)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f5f5f5; }
+        ::-webkit-scrollbar-thumb { background: #FF80AB; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #FF4081; }
+
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(135deg, #FF4081 0%, #8A2BE2 100%);
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .float-anim { animation: float 6s ease-in-out infinite; }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .float-anim-delayed { animation: float-delayed 7s ease-in-out infinite; }
+        @keyframes float-delayed {
+            0% { transform: translateY(-5px); }
+            50% { transform: translateY(10px); }
+            100% { transform: translateY(-5px); }
+        }
+
+        /* Animation classes for IntersectionObserver */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .delay-1 { transition-delay: 100ms; }
+        .delay-2 { transition-delay: 200ms; }
+        .delay-3 { transition-delay: 300ms; }
+
+        @media print {
+            html, body {
+                height: auto !important;
+                overflow: visible !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .slide-section {
+                height: 100vh !important;
+                page-break-after: always;
+                break-inside: avoid;
+                opacity: 1 !important;
+                transform: none !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: center !important;
+                align-items: center !important;
+                position: relative !important;
+            }
+            .reveal-up {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            .fixed {
+                display: none !important;
+                position: absolute !important;
+            }
+            .ambient-bg {
+                position: absolute !important;
+                height: 100vh !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-brand-offwhite text-brand-charcoal font-body antialiased h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-mandatory relative selection:bg-brand-pink selection:text-white">
+    
+    <!-- Ambient Background -->
+    <div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
+        <div class="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] rounded-full bg-gradient-radial-glow blur-3xl opacity-80"></div>
+        <div class="absolute top-[40%] -right-[20%] w-[60vw] h-[60vw] rounded-full bg-gradient-radial-glow blur-3xl opacity-70" style="background-image: radial-gradient(circle at 50% 50%, rgba(138, 43, 226, 0.08) 0%, transparent 60%)"></div>
+    </div>
+
+    <!-- Navigation Dots (Optional visual indicator) -->
+    <div class="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
+        <div class="w-2 h-2 rounded-full bg-brand-pink/20 transition-all duration-300 nav-dot" id="dot-0"></div>
+        <div class="w-2 h-2 rounded-full bg-brand-pink/20 transition-all duration-300 nav-dot" id="dot-1"></div>
+        <div class="w-2 h-2 rounded-full bg-brand-pink/20 transition-all duration-300 nav-dot" id="dot-2"></div>
+        <div class="w-2 h-2 rounded-full bg-brand-pink/20 transition-all duration-300 nav-dot" id="dot-3"></div>
+        <div class="w-2 h-2 rounded-full bg-brand-pink/20 transition-all duration-300 nav-dot" id="dot-4"></div>
+        <div class="w-2 h-2 rounded-full bg-brand-pink/20 transition-all duration-300 nav-dot" id="dot-5"></div>
+        <div class="w-2 h-2 rounded-full bg-brand-pink/20 transition-all duration-300 nav-dot" id="dot-6"></div>
+    </div>
+
+    <!-- Slide 1: Hero -->
+    <section class="h-screen w-full snap-start flex items-center justify-center relative slide-section" id="slide-0">
+        <div class="max-w-7xl mx-auto px-6 w-full flex flex-col items-center justify-center text-center">
+            <div class="inline-block px-4 py-1.5 rounded-full bg-brand-pink/10 border border-brand-pink/20 text-brand-pink text-sm font-semibold tracking-wide uppercase mb-8 reveal-up">
+                Pitch Deck 2026
+            </div>
+            <h1 class="text-7xl md:text-9xl font-heading font-black tracking-tight mb-4 reveal-up delay-1 text-gradient drop-shadow-sm">
+                Lushy
+            </h1>
+            <p class="text-xl md:text-3xl font-heading font-medium text-brand-charcoal mb-4 reveal-up delay-2">
+                The Premium Beauty & Grooming Platform
+            </p>
+            <p class="text-lg md:text-xl text-brand-gray max-w-2xl mx-auto reveal-up delay-3">
+                Connecting elite professionals with discerning clients through a flawless, data-driven ecosystem.
+            </p>
+            <div class="mt-12 animate-bounce opacity-50 text-brand-pink text-3xl">↓</div>
+        </div>
+    </section>
+
+    <!-- Slide 2: The Core Problem & Solution (How It Works) -->
+    <section class="h-screen w-full snap-start flex items-center justify-center relative slide-section" id="slide-1">
+        <div class="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="order-2 lg:order-1 relative flex justify-center float-anim reveal-up">
+                <!-- Glowing backdrop behind phone -->
+                <div class="absolute inset-0 bg-brand-pink/10 blur-[60px] rounded-full scale-110 -z-10"></div>
+                <img src="file:///Users/atanglekolwane/.gemini/antigravity/brain/49192586-0361-4e86-8108-f8e43dc53ef9/lushy_app_mockup_light_1774458107306.png" 
+                     class="w-[300px] lg:w-[350px] object-cover rounded-[40px] shadow-2xl border-4 border-white/50" 
+                     alt="Lushy App UI">
+            </div>
+            
+            <div class="order-1 lg:order-2">
+                <div class="inline-block px-4 py-1.5 rounded-full bg-brand-purple/10 text-brand-purple text-xs font-bold tracking-wider uppercase mb-6 reveal-up">
+                    The Two-Sided Market
+                </div>
+                <h2 class="text-4xl md:text-5xl font-heading font-bold text-brand-charcoal mb-8 leading-tight reveal-up delay-1">
+                    How The <span class="text-gradient">Ecosystem</span> Works
+                </h2>
+                
+                <div class="space-y-8">
+                    <div class="glass-panel p-6 rounded-2xl shadow-xl-soft reveal-up delay-2 hover:border-brand-pink/30 transition-colors">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-full bg-brand-pink/10 flex items-center justify-center shrink-0">
+                                <span class="text-2xl">✨</span>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-heading font-bold text-brand-charcoal mb-2">For Clients</h3>
+                                <p class="text-brand-gray text-sm leading-relaxed">
+                                    Discover top-tier hair stylists, nail technicians, and makeup artists. Book appointments instantly with a visually stunning UI.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-2xl shadow-xl-soft reveal-up delay-3 hover:border-brand-purple/30 transition-colors">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-full bg-brand-purple/10 flex items-center justify-center shrink-0">
+                                <span class="text-2xl">📈</span>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-heading font-bold text-brand-charcoal mb-2">For Professionals</h3>
+                                <p class="text-brand-gray text-sm leading-relaxed">
+                                    A powerful CRM in your pocket. Manage bookings, establish your portfolio, and scale your independent business effortlessly.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 3: Monetization -->
+    <section class="h-screen w-full snap-start flex items-center justify-center relative slide-section" id="slide-2">
+        <div class="max-w-5xl mx-auto px-6 w-full text-center flex flex-col items-center justify-center">
+            <div class="inline-block px-4 py-1.5 rounded-full bg-brand-teal/10 text-brand-teal text-xs font-bold tracking-wider uppercase mb-6 reveal-up">
+                Business Model
+            </div>
+            <h2 class="text-4xl md:text-6xl font-heading font-bold text-brand-charcoal mb-6 reveal-up delay-1">
+                Monetization Engine
+            </h2>
+            <p class="text-lg text-brand-gray max-w-2xl mx-auto mb-16 reveal-up delay-2">
+                Lushy generates recurring revenue through high-value monthly subscriptions exclusively for beauty professionals.
+            </p>
+
+            <!-- Pricing Card -->
+            <div class="glass-panel w-full max-w-lg mx-auto rounded-3xl p-1 relative overflow-hidden reveal-up delay-3 shadow-glow float-anim-delayed">
+                <div class="absolute inset-0 bg-gradient-to-br from-brand-pink via-brand-purple to-brand-teal opacity-20"></div>
+                <div class="bg-white rounded-[22px] p-10 relative z-10">
+                    <div class="w-full flex justify-between items-start mb-6">
+                        <div class="text-left">
+                            <h3 class="font-heading font-bold text-2xl text-brand-charcoal">Lushy Pro</h3>
+                            <p class="text-brand-gray text-sm mt-1">For independent tech & stylists</p>
+                        </div>
+                        <div class="px-3 py-1 bg-brand-pink/10 text-brand-pink text-xs font-bold rounded-full">
+                            POPULAR
+                        </div>
+                    </div>
+                    
+                    <div class="text-left border-b border-gray-100 pb-8 mb-8">
+                        <div class="flex items-baseline gap-1">
+                            <span class="text-5xl font-heading font-black text-brand-charcoal">P300</span>
+                            <span class="text-brand-gray font-medium">/ month</span>
+                        </div>
+                    </div>
+
+                    <ul class="space-y-4 text-left">
+                        <li class="flex items-center gap-3 text-brand-charcoal font-medium">
+                            <div class="w-5 h-5 rounded-full bg-brand-teal/20 text-brand-teal flex justify-center items-center text-xs">✓</div>
+                            Unlimited client bookings
+                        </li>
+                        <li class="flex items-center gap-3 text-brand-charcoal font-medium">
+                            <div class="w-5 h-5 rounded-full bg-brand-teal/20 text-brand-teal flex justify-center items-center text-xs">✓</div>
+                            Priority placement in search
+                        </li>
+                        <li class="flex items-center gap-3 text-brand-charcoal font-medium">
+                            <div class="w-5 h-5 rounded-full bg-brand-teal/20 text-brand-teal flex justify-center items-center text-xs">✓</div>
+                            Advanced analytics dashboard
+                        </li>
+                        <li class="flex items-center gap-3 text-brand-charcoal font-medium">
+                            <div class="w-5 h-5 rounded-full bg-brand-teal/20 text-brand-teal flex justify-center items-center text-xs">✓</div>
+                            Automated SMS reminders
+                        </li>
+                    </ul>
+                    
+                    <button class="w-full mt-10 py-4 rounded-xl font-bold text-white bg-gradient-primary shadow-lg shadow-brand-pink/30 hover:shadow-brand-pink/50 transition-all hover:-translate-y-1">
+                        Start Growing
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 4: Marketing - Creators -->
+    <section class="h-screen w-full snap-start flex items-center justify-center relative slide-section" id="slide-3">
+        <div class="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+                <div class="inline-block px-4 py-1.5 rounded-full bg-brand-pink/10 text-brand-pink text-xs font-bold tracking-wider uppercase mb-6 reveal-up">
+                    Growth Engine 01
+                </div>
+                <h2 class="text-4xl md:text-5xl font-heading font-bold text-brand-charcoal mb-6 leading-tight reveal-up delay-1">
+                    Influencers & <br><span class="text-gradient">Content Creators</span>
+                </h2>
+                <p class="text-brand-gray text-lg mb-10 reveal-up delay-2">
+                    We leverage the viral nature of beauty transformations through high-profile local influencers on TikTok and Instagram.
+                </p>
+                
+                <ul class="space-y-6 reveal-up delay-3">
+                    <li class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center shrink-0 border border-gray-100 text-xl">🎁</div>
+                        <div>
+                            <strong class="text-brand-charcoal block mb-1">Sponsored Experiences</strong>
+                            <span class="text-brand-gray text-sm">Providing top creators with credits to book high-end services via Lushy, covering their costs in exchange for exposure.</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center shrink-0 border border-gray-100 text-xl">🎥</div>
+                        <div>
+                            <strong class="text-brand-charcoal block mb-1">Authentic GRWM Reviews</strong>
+                            <span class="text-brand-gray text-sm">Creators post organic transformation videos, documenting the seamless booking process from launch to finish.</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center shrink-0 border border-gray-100 text-xl">🎟️</div>
+                        <div>
+                            <strong class="text-brand-charcoal block mb-1">Affiliate Promos</strong>
+                            <span class="text-brand-gray text-sm">Trackable discount codes for first-time bookers to incentivize rapid onboarding of new clients.</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="relative flex justify-center reveal-up delay-2 float-anim text-center">
+                <div class="bg-white p-6 rounded-[32px] shadow-xl-soft border border-gray-100 w-full max-w-sm relative z-10">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-full p-[2px] bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500">
+                            <div class="w-full h-full bg-white rounded-full border-2 border-white overflow-hidden bg-gray-200"></div>
+                        </div>
+                        <div class="text-left">
+                            <p class="font-bold text-brand-charcoal text-sm">@beautyguru_bw</p>
+                            <p class="text-xs text-brand-gray font-medium">Sponsored</p>
+                        </div>
+                    </div>
+                    <div class="bg-brand-offwhite rounded-2xl h-64 w-full flex flex-col items-center justify-center text-brand-gray/50 border-2 border-dashed border-gray-200">
+                        <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <p class="text-sm font-medium">Transformation Video Reel</p>
+                    </div>
+                    <div class="mt-4 text-left">
+                        <p class="text-sm text-brand-charcoal font-medium">Just booked my nail tech through <span class="text-brand-pink">@lushyapp</span>! Smoothest experience ever. 💅✨</p>
+                    </div>
+                </div>
+                <!-- Decoration -->
+                <div class="absolute -right-10 -bottom-10 w-32 h-32 bg-brand-purple/10 rounded-full blur-2xl -z-10"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 5: Marketing - Direct -->
+    <section class="h-screen w-full snap-start flex items-center justify-center relative slide-section" id="slide-4">
+        <div class="max-w-7xl mx-auto px-6 w-full flex flex-col items-center">
+            <div class="inline-block px-4 py-1.5 rounded-full bg-brand-darkpink/10 text-brand-darkpink text-xs font-bold tracking-wider uppercase mb-6 reveal-up">
+                Growth Engine 02
+            </div>
+            <h2 class="text-4xl md:text-5xl font-heading font-bold text-brand-charcoal mb-4 text-center reveal-up delay-1">
+                Direct Professional Outreach
+            </h2>
+            <p class="text-lg text-brand-gray max-w-2xl text-center mx-auto mb-16 reveal-up delay-2">
+                Building an elite supply side with targeted, aggressive onboarding of top-tier talent.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
+                <div class="glass-panel p-8 rounded-[32px] relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300 reveal-up delay-2 shadow-xl-soft">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <svg class="w-24 h-24 text-brand-pink" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    </div>
+                    <div class="w-16 h-16 rounded-2xl bg-brand-pink/10 flex items-center justify-center mb-6">
+                        <span class="text-2xl">📱</span>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold text-brand-charcoal mb-3">Social DMs</h3>
+                    <p class="text-brand-gray leading-relaxed">
+                        Identifying top-rated independent hair and nail techs on Instagram. We send personalized DMs highlighting the immense revenue potential and ease of joining Lushy first.
+                    </p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-[32px] relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300 reveal-up delay-3 shadow-xl-soft">
+                     <div class="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <svg class="w-24 h-24 text-brand-purple" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z"/></svg>
+                    </div>
+                    <div class="w-16 h-16 rounded-2xl bg-brand-purple/10 flex items-center justify-center mb-6">
+                        <span class="text-2xl">🤝</span>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold text-brand-charcoal mb-3">In-Person Visits</h3>
+                    <p class="text-brand-gray leading-relaxed">
+                        Deploying ground reps to premium local salons with branded collateral to pitch Lushy Pro directly to stylists, establishing immediate credibility and trust.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 6: Projections -->
+    <section class="h-screen w-full snap-start flex items-center justify-center relative slide-section" id="slide-5">
+         <div class="max-w-7xl mx-auto px-6 w-full flex flex-col items-center">
+            <div class="inline-block px-4 py-1.5 rounded-full bg-brand-teal/10 text-brand-teal text-xs font-bold tracking-wider uppercase mb-6 reveal-up">
+                Financial Forecast
+            </div>
+            <h2 class="text-4xl md:text-5xl font-heading font-bold text-brand-charcoal mb-4 text-center reveal-up delay-1">
+                Projected Revenue
+            </h2>
+            <p class="text-lg text-brand-gray max-w-2xl text-center mx-auto mb-16 reveal-up delay-2">
+                First 3 months post-launch based exclusively on the <strong class="text-brand-charcoal">P149/mo</strong> subscription fee, fueled by aggressive direct outreach and escalating creator campaigns.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+                <!-- Month 1 -->
+                <div class="bg-white rounded-[32px] p-8 text-center border border-gray-100 shadow-glass relative overflow-hidden reveal-up delay-1 hover:-translate-y-2 transition-transform">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-brand-gray/20"></div>
+                    <h4 class="font-heading font-bold text-xl text-brand-charcoal mb-6">Month 1</h4>
+                    <div class="text-5xl font-heading font-black text-brand-charcoal mb-2">P15,000</div>
+                    <div class="text-sm font-bold text-brand-pink mb-8">MRR</div>
+                    
+                    <div class="space-y-3 pt-6 border-t border-gray-50">
+                        <div class="text-sm text-brand-gray flex justify-between">
+                            <span>Subscribed Pros</span>
+                            <span class="font-bold text-brand-charcoal">50</span>
+                        </div>
+                        <div class="text-sm text-brand-gray flex justify-between">
+                            <span>Active Clients</span>
+                            <span class="font-bold text-brand-charcoal">500</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Month 2 -->
+                <div class="bg-white rounded-[32px] p-8 text-center border border-gray-100 shadow-glass relative overflow-hidden reveal-up delay-2 hover:-translate-y-2 transition-transform md:-translate-y-4">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-brand-purple"></div>
+                    <div class="absolute -top-10 -right-10 w-24 h-24 bg-brand-purple/5 rounded-full blur-xl"></div>
+                    <h4 class="font-heading font-bold text-xl text-brand-charcoal mb-6">Month 2</h4>
+                    <div class="text-5xl font-heading font-black text-brand-purple mb-2">P45,000</div>
+                    <div class="text-sm font-bold text-brand-pink mb-8">MRR</div>
+                    
+                    <div class="space-y-3 pt-6 border-t border-gray-50">
+                        <div class="text-sm text-brand-gray flex justify-between">
+                            <span>Subscribed Pros</span>
+                            <span class="font-bold text-brand-charcoal">150</span>
+                        </div>
+                        <div class="text-sm text-brand-gray flex justify-between">
+                            <span>Active Clients</span>
+                            <span class="font-bold text-brand-charcoal">2,000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Month 3 -->
+                <div class="bg-white rounded-[32px] p-8 text-center border border-brand-pink/20 shadow-xl-soft relative overflow-hidden reveal-up delay-3 hover:-translate-y-2 transition-transform md:-translate-y-8">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-gradient-primary"></div>
+                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-brand-pink/10 rounded-full blur-2xl"></div>
+                    
+                    <div class="inline-block px-3 py-1 bg-brand-pink/10 text-brand-pink text-[10px] font-bold rounded-full mb-4">
+                        BREAKEVEN TARGET
+                    </div>
+                    
+                    <h4 class="font-heading font-bold text-xl text-brand-charcoal mb-2">Month 3</h4>
+                    <div class="text-5xl md:text-6xl font-heading font-black text-brand-pink mb-2">P150k</div>
+                    <div class="text-sm font-bold text-brand-purple mb-8">MRR</div>
+                    
+                    <div class="space-y-3 pt-6 border-t border-gray-50">
+                        <div class="text-sm text-brand-gray flex justify-between">
+                            <span>Subscribed Pros</span>
+                            <span class="font-bold text-brand-charcoal">500</span>
+                        </div>
+                        <div class="text-sm text-brand-gray flex justify-between">
+                            <span>Active Clients</span>
+                            <span class="font-bold text-brand-charcoal">5,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <p class="text-xs text-brand-gray mt-10 opacity-70">
+                *Projections represent Monthly Recurring Revenue (MRR) strictly from Lushy Pro subscriptions.
+            </p>
+         </div>
+    </section>
+
+    <!-- Slide 7: Outro -->
+    <section class="h-screen w-full snap-start flex items-center justify-center relative slide-section" id="slide-6">
+        <div class="text-center relative z-10 p-12 glass-panel rounded-full reveal-up shadow-glow float-anim border border-white/80">
+            <!-- Decorative rings -->
+            <div class="absolute inset-0 border-2 border-brand-pink/20 rounded-full scale-[1.15] -z-10"></div>
+            <div class="absolute inset-0 border border-brand-purple/10 rounded-full scale-[1.3] -z-10"></div>
+            
+            <h1 class="text-6xl md:text-8xl font-heading font-black text-brand-charcoal mb-4">
+                Join <span class="text-gradient">Lushy</span>
+            </h1>
+            <p class="text-xl md:text-2xl font-medium text-brand-gray">
+                The Beauty Revolution starts now.
+            </p>
+        </div>
+    </section>
+
+    <!-- Intersection Observer for Animations & Dot Nav -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.3
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Animate elements inside the section
+                        const animatables = entry.target.querySelectorAll('.reveal-up');
+                        animatables.forEach((el) => {
+                            el.classList.add('active');
+                        });
+
+                        // Update Dot Navigation
+                        const slideId = entry.target.id;
+                        const index = slideId.split('-')[1];
+                        
+                        document.querySelectorAll('.nav-dot').forEach(dot => {
+                            dot.classList.remove('bg-brand-pink', 'scale-150');
+                            dot.classList.add('bg-brand-pink/20');
+                        });
+                        
+                        const activeDot = document.getElementById('dot-' + index);
+                        if (activeDot) {
+                            activeDot.classList.remove('bg-brand-pink/20');
+                            activeDot.classList.add('bg-brand-pink', 'scale-150');
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            const sections = document.querySelectorAll('.slide-section');
+            sections.forEach(sec => observer.observe(sec));
+            
+            // Allow dots to click and scroll
+            document.querySelectorAll('.nav-dot').forEach((dot, idx) => {
+                dot.style.cursor = 'pointer';
+                dot.addEventListener('click', () => {
+                    document.getElementById('slide-' + idx).scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
