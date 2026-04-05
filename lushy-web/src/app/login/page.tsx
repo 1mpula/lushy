@@ -40,7 +40,7 @@ export default function Login() {
                 }
 
                 // Redirect to professional dashboard
-                router.push('/pro/dashboard');
+                router.push('/subscribe');
             }
         } catch (err: any) {
             setError(err.message || 'Invalid login credentials');
