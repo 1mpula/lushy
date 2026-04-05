@@ -5,6 +5,7 @@ import { useUser } from '@/context/UserContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { useTheme } from '@/context/ThemeContext';
 
 interface MessageBubbleProps {
     content: string;
@@ -15,6 +16,7 @@ interface MessageBubbleProps {
 
 export function MessageBubble({ content, senderId, createdAt, isRead }: MessageBubbleProps) {
     const { user } = useUser();
+    const { theme } = useTheme();
     const isOwn = senderId === user?.id;
 
     // Format time
@@ -50,12 +52,19 @@ export function MessageBubble({ content, senderId, createdAt, isRead }: MessageB
 
     return (
         <View style={[styles.container, styles.otherContainer]}>
-            <View style={[styles.bubble, styles.otherBubble]}>
-                <Text style={[styles.content, styles.otherContent]}>
+            <View style={[
+                styles.bubble, 
+                styles.otherBubble, 
+                { 
+                    backgroundColor: theme === 'dark' ? '#2A2A2A' : '#F5F5F5',
+                    borderColor: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.04)'
+                }
+            ]}>
+                <Text style={[styles.content, { color: theme === 'dark' ? '#FFFFFF' : '#333333' }]}>
                     {content}
                 </Text>
                 <View style={styles.meta}>
-                    <Text style={[styles.time, styles.otherTime]}>
+                    <Text style={[styles.time, { color: theme === 'dark' ? '#9CA3AF' : '#757575' }]}>
                         {formatTime(createdAt)}
                     </Text>
                 </View>
@@ -90,10 +99,8 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 6,
     },
     otherBubble: {
-        backgroundColor: '#F5F5F5',
         borderBottomLeftRadius: 6,
         borderWidth: 1,
-        borderColor: 'rgba(0, 0, 0, 0.04)',
     },
     content: {
         fontSize: 16,
@@ -102,9 +109,6 @@ const styles = StyleSheet.create({
     },
     ownContent: {
         color: '#FFFFFF',
-    },
-    otherContent: {
-        color: '#333333',
     },
     meta: {
         flexDirection: 'row',
@@ -119,9 +123,6 @@ const styles = StyleSheet.create({
     },
     ownTime: {
         color: 'rgba(255, 255, 255, 0.75)',
-    },
-    otherTime: {
-        color: '#757575',
     },
     readStatus: {
         fontSize: 11,

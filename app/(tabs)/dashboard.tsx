@@ -3,6 +3,7 @@ import { DatePickerModule } from '@/components/molecules/DatePickerModule';
 import { Header } from '@/components/molecules/Header';
 import { useProfessionals } from '@/context/ProfessionalContext';
 import { useUser } from '@/context/UserContext';
+import { useTheme } from '@/context/ThemeContext';
 import { getBlockedDates, toggleBlockedDate } from '@/lib/availability';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Location from 'expo-location';
@@ -16,6 +17,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function DashboardScreen() {
     const router = useRouter();
     const { user } = useUser();
+    const { theme } = useTheme();
     const { getProfessionalByUserId, refreshProfessionals, updateLocation } = useProfessionals();
     const professional = getProfessionalByUserId(user?.id || '');
 
@@ -95,7 +97,7 @@ export default function DashboardScreen() {
 
     if (!professional) {
         return (
-            <View className="flex-1 bg-white">
+            <View className="flex-1" style={{ backgroundColor: theme === 'dark' ? '#121212' : '#FFFFFF' }}>
                 <Header title="Dashboard" showBack={false} />
                 <View className="p-6 gap-6">
                     <View className="flex-row gap-4">
@@ -110,13 +112,13 @@ export default function DashboardScreen() {
     }
 
     return (
-        <View className="flex-1 bg-slate-50">
+        <View className="flex-1" style={{ backgroundColor: theme === 'dark' ? '#121212' : '#FFFFFF' }}>
             {/* Dynamic Background Header */}
             <LinearGradient
                 colors={['#FF4081', '#FF80AB', 'transparent']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
-                style={{ width: '100%', height: 280, position: 'absolute', top: 0, left: 0, opacity: 0.15 }}
+                style={{ width: '100%', height: 280, position: 'absolute', top: 0, left: 0, opacity: theme === 'dark' ? 0.08 : 0.15 }}
             />
 
             <SafeAreaView className="flex-1" edges={['top']}>
@@ -124,8 +126,12 @@ export default function DashboardScreen() {
                     title="Dashboard"
                     showBack={false}
                     rightElement={
-                        <TouchableOpacity onPress={() => router.push('/(tabs)/profile')} className="p-2 rounded-full bg-white/80 backdrop-blur-md shadow-sm border border-white">
-                            <Settings size={20} color="#333" />
+                        <TouchableOpacity 
+                            onPress={() => router.push('/(tabs)/profile')} 
+                            className="p-2 rounded-full backdrop-blur-md shadow-sm border border-border"
+                            style={{ backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.8)' }}
+                        >
+                            <Settings size={20} color={theme === 'dark' ? '#FFF' : '#333'} />
                         </TouchableOpacity>
                     }
                     variant="overlay"
@@ -143,7 +149,7 @@ export default function DashboardScreen() {
                         className="mb-8"
                     >
                         <Text className="text-sm font-body text-mediumGray mb-1">Welcome back,</Text>
-                        <Text className="text-3xl font-bold font-heading text-charcoal">
+                        <Text className="text-3xl font-bold font-heading text-foreground">
                             {professional.businessName || 'Professional'}
                         </Text>
                     </MotiView>
@@ -151,11 +157,23 @@ export default function DashboardScreen() {
                     {/* Stats Grid */}
                     <View className="flex-row gap-4 mb-8">
                         {stats.map((stat, index) => (
-                            <View key={index} className="flex-1 bg-white p-5 rounded-3xl shadow-xl shadow-pink-100/40 border border-white">
-                                <View className="w-12 h-12 bg-pink-50 rounded-full items-center justify-center mb-4">
+                            <View 
+                                key={index} 
+                                className="flex-1 p-5 rounded-3xl border"
+                                style={{ 
+                                    backgroundColor: theme === 'dark' ? '#1A1A1A' : '#FFFFFF',
+                                    borderColor: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)',
+                                    shadowColor: '#FF4081',
+                                    shadowOffset: { width: 0, height: 4 },
+                                    shadowOpacity: theme === 'dark' ? 0.05 : 0.08,
+                                    shadowRadius: 10,
+                                    elevation: 3
+                                }}
+                            >
+                                <View className={`w-12 h-12 rounded-full items-center justify-center mb-4 ${theme === 'dark' ? 'bg-pink-900/20' : 'bg-pink-50'}`}>
                                     {stat.icon}
                                 </View>
-                                <Text className="text-3xl font-bold font-heading text-charcoal mb-1">{stat.value}</Text>
+                                <Text className="text-3xl font-bold font-heading text-foreground mb-1">{stat.value}</Text>
                                 <Text className="text-sm text-mediumGray font-body">{stat.title}</Text>
                             </View>
                         ))}
@@ -163,36 +181,58 @@ export default function DashboardScreen() {
 
                     {/* Quick Actions */}
                     <View className="mb-8">
-                        <Text className="text-lg font-bold font-heading text-charcoal mb-4">Quick Actions</Text>
+                        <Text className="text-lg font-bold font-heading text-foreground mb-4">Quick Actions</Text>
                         <View className="flex-row gap-4">
                             <TouchableOpacity
                                 onPress={() => router.push('/pro/add-service')}
-                                className="flex-1 bg-primary p-5 rounded-3xl shadow-xl shadow-pink-200/50 items-center justify-center border border-pink-400"
+                                className="flex-1 bg-primary p-5 rounded-3xl items-center justify-center border border-pink-400"
+                                style={{
+                                    shadowColor: '#FF4081',
+                                    shadowOffset: { width: 0, height: 8 },
+                                    shadowOpacity: theme === 'dark' ? 0.25 : 0.35,
+                                    shadowRadius: 15,
+                                    elevation: 8
+                                }}
                             >
                                 <Plus size={28} color="white" className="mb-2" />
                                 <Text className="text-white font-bold font-body text-center">Add Service</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={() => router.push('/(tabs)/bookings')}
-                                className="flex-1 bg-white p-5 rounded-3xl shadow-xl shadow-gray-200/50 items-center justify-center border border-white"
+                                className="flex-1 p-5 rounded-3xl items-center justify-center border border-border"
+                                style={{ 
+                                    backgroundColor: theme === 'dark' ? '#1A1A1A' : '#FFFFFF',
+                                    shadowColor: '#000',
+                                    shadowOffset: { width: 0, height: 4 },
+                                    shadowOpacity: theme === 'dark' ? 0.05 : 0.05,
+                                    shadowRadius: 10,
+                                    elevation: 3
+                                }}
                             >
-                                <Users size={24} color="#333" className="mb-2" />
-                                <Text className="text-charcoal font-bold text-center">Bookings</Text>
+                                <Users size={24} color={theme === 'dark' ? '#FFF' : '#333'} className="mb-2" />
+                                <Text className="text-foreground font-bold text-center">Bookings</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
 
                     {/* Salon Location */}
                     <View className="mb-8">
-                        <Text className="text-lg font-bold font-heading text-charcoal mb-4">Salon Location</Text>
-                        <View className="bg-white p-5 rounded-3xl shadow-xl shadow-pink-100/40 border border-white">
+                        <Text className="text-lg font-bold font-heading text-foreground mb-4">Salon Location</Text>
+                        <View className="p-5 rounded-3xl border border-border" style={{ 
+                            backgroundColor: theme === 'dark' ? '#1A1A1A' : '#FFFFFF',
+                            shadowColor: '#FF4081',
+                            shadowOffset: { width: 0, height: 4 },
+                            shadowOpacity: theme === 'dark' ? 0.03 : 0.05,
+                            shadowRadius: 10,
+                            elevation: 2
+                        }}>
                             {isEditingLocation ? (
                                 <View>
                                     <TextInput
                                         value={locationInput}
                                         onChangeText={setLocationInput}
                                         placeholder="Enter your salon address..."
-                                        className="bg-gray-50 p-4 rounded-xl text-charcoal border border-gray-200 mb-3"
+                                        className="bg-card p-4 rounded-xl text-foreground border border-border mb-3"
                                         placeholderTextColor="#9CA3AF"
                                         autoFocus
                                     />
@@ -232,9 +272,9 @@ export default function DashboardScreen() {
                                     <View className="flex-row gap-3">
                                         <TouchableOpacity
                                             onPress={() => setIsEditingLocation(false)}
-                                            className="flex-1 py-3 rounded-xl bg-gray-100 items-center"
+                                            className="flex-1 py-3 rounded-xl bg-card items-center"
                                         >
-                                            <Text className="font-bold text-charcoal">Cancel</Text>
+                                            <Text className="font-bold text-foreground">Cancel</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity
                                             onPress={async () => {
@@ -269,11 +309,11 @@ export default function DashboardScreen() {
                                     }}
                                     className="flex-row items-center"
                                 >
-                                    <View className="w-10 h-10 bg-pink-50 rounded-full items-center justify-center mr-3">
+                                    <View className={`w-10 h-10 rounded-full items-center justify-center mr-3 ${theme === 'dark' ? 'bg-pink-900/20' : 'bg-pink-50'}`}>
                                         <MapPin size={20} color="#FF4081" />
                                     </View>
                                     <View className="flex-1">
-                                        <Text className="text-sm font-bold text-charcoal">
+                                        <Text className="text-sm font-bold text-foreground">
                                             {professional?.location || 'No location set'}
                                         </Text>
                                         <Text className="text-xs text-mediumGray">
@@ -289,11 +329,18 @@ export default function DashboardScreen() {
                     {/* Availability Calendar */}
                     <View className="mb-8">
                         <View className="flex-row items-center justify-between mb-4">
-                            <Text className="text-lg font-bold font-heading text-charcoal">Availability</Text>
+                            <Text className="text-lg font-bold font-heading text-foreground">Availability</Text>
                             {isSavingAvailability && <Skeleton width={64} height={20} radius={10} />}
                         </View>
 
-                        <View className="bg-white rounded-3xl shadow-xl shadow-pink-100/40 border border-white overflow-hidden">
+                        <View className="rounded-3xl border border-border overflow-hidden" style={{ 
+                            backgroundColor: theme === 'dark' ? '#1A1A1A' : '#FFFFFF',
+                            shadowColor: '#000',
+                            shadowOffset: { width: 0, height: 10 },
+                            shadowOpacity: theme === 'dark' ? 0.06 : 0.08,
+                            shadowRadius: 20,
+                            elevation: 5
+                        }}>
                             {isLoadingAvailability ? (
                                 <View className="p-8">
                                     <Skeleton width="100%" height={280} />
@@ -304,13 +351,13 @@ export default function DashboardScreen() {
                                         onDateSelect={onDateSelect}
                                         markedDates={markedDates}
                                     />
-                                    <View className="p-4 bg-gray-50 border-t border-gray-100 flex-row items-center gap-4">
+                                    <View className="p-4 border-t border-border flex-row items-center gap-4" style={{ backgroundColor: theme === 'dark' ? '#121212' : '#F9FAFB' }}>
                                         <View className="flex-row items-center">
                                             <View className="w-3 h-3 bg-gray-400 rounded-full mr-2" />
                                             <Text className="text-xs text-mediumGray">Blocked</Text>
                                         </View>
                                         <View className="flex-row items-center">
-                                            <View className="w-3 h-3 bg-white border border-gray-300 rounded-full mr-2" />
+                                            <View className="w-3 h-3 bg-background border border-gray-300 rounded-full mr-2" />
                                             <Text className="text-xs text-mediumGray">Available</Text>
                                         </View>
                                         <Text className="ml-auto text-xs text-mediumGray italic">

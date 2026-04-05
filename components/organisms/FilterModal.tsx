@@ -107,7 +107,7 @@ export function FilterModal({ visible, onClose, filters, onApply }: FilterModalP
             onPress={onPress}
             className={`px-4 py-2.5 rounded-full border mr-2 mb-2 ${selected
                 ? 'bg-primary border-primary'
-                : 'bg-gray-50 border-gray-200'
+                : 'bg-card border-border'
                 }`}
         >
             <Text
@@ -127,12 +127,12 @@ export function FilterModal({ visible, onClose, filters, onApply }: FilterModalP
             onRequestClose={onClose}
             onShow={handleOpen}
         >
-            <SafeAreaView className="flex-1 bg-white" edges={['top']}>
+            <SafeAreaView className="flex-1 bg-background" edges={['top']}>
                 {/* Header */}
-                <View className="flex-row items-center justify-between px-6 py-4 border-b border-gray-100">
+                <View className="flex-row items-center justify-between px-6 py-4 border-b border-border">
                     <TouchableOpacity
                         onPress={onClose}
-                        className="w-10 h-10 bg-gray-50 rounded-full items-center justify-center"
+                        className="w-10 h-10 bg-card rounded-full items-center justify-center"
                     >
                         <X size={20} color="#333" />
                     </TouchableOpacity>
@@ -141,7 +141,7 @@ export function FilterModal({ visible, onClose, filters, onApply }: FilterModalP
 
                     <TouchableOpacity
                         onPress={handleReset}
-                        className="flex-row items-center gap-1.5 px-3 py-2 rounded-full bg-gray-50"
+                        className="flex-row items-center gap-1.5 px-3 py-2 rounded-full bg-card"
                     >
                         <RotateCcw size={14} color="#FF4081" />
                         <Text className="text-xs font-bold text-primary">Reset</Text>
@@ -194,10 +194,10 @@ export function FilterModal({ visible, onClose, filters, onApply }: FilterModalP
                                     onPress={() => setLocalFilters({ ...localFilters, sortBy: option.id })}
                                     className={`flex-row items-center p-4 rounded-2xl border ${localFilters.sortBy === option.id
                                         ? 'bg-primary/5 border-primary/30'
-                                        : 'bg-gray-50 border-gray-100'
+                                        : 'bg-card border-border'
                                         }`}
                                 >
-                                    <View className={`w-8 h-8 rounded-full items-center justify-center mr-3 ${localFilters.sortBy === option.id ? 'bg-primary/10' : 'bg-white'
+                                    <View className={`w-8 h-8 rounded-full items-center justify-center mr-3 ${localFilters.sortBy === option.id ? 'bg-primary/10' : 'bg-background'
                                         }`}>
                                         {option.icon}
                                     </View>
@@ -292,7 +292,7 @@ export function FilterModal({ visible, onClose, filters, onApply }: FilterModalP
                 </ScrollView>
 
                 {/* Footer */}
-                <View className="px-6 py-4 border-t border-gray-100">
+                <View className="px-6 py-4 border-t border-border">
                     <SafeAreaView edges={['bottom']}>
                         <Button
                             title={isFilterActive ? 'Apply Filters' : 'Show All Results'}

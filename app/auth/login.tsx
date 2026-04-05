@@ -1,6 +1,8 @@
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { getProfile, signIn } from '@/lib/auth';
+import { useTheme } from '@/context/ThemeContext';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useRouter } from 'expo-router';
 import { ArrowLeft } from 'lucide-react-native';
 import { useState } from 'react';
@@ -9,6 +11,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Login() {
     const router = useRouter();
+    const { theme } = useTheme();
     const [loading, setLoading] = useState(false);
     const insets = useSafeAreaInsets();
     const bottomPadding = insets.bottom;
@@ -44,11 +47,14 @@ export default function Login() {
         }
     };
 
+    const { colorScheme } = useColorScheme();
+    const isDark = colorScheme === 'dark';
+
     return (
-        <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
-            <View className="px-6 py-4 border-b border-gray-50">
+        <SafeAreaView className="flex-1" edges={['top', 'left', 'right']} style={{ backgroundColor: theme === 'dark' ? '#121212' : '#FFFFFF' }}>
+            <View className="px-6 py-4 border-b border-border">
                 <TouchableOpacity onPress={() => router.back()} className="w-10 h-10 items-center justify-center -ml-2">
-                    <ArrowLeft color="#333" size={24} />
+                    <ArrowLeft color={theme === 'dark' ? '#FFF' : '#333'} size={24} />
                 </TouchableOpacity>
             </View>
 
@@ -58,7 +64,7 @@ export default function Login() {
                 style={{ paddingBottom: bottomPadding }}
             >
                 <View className="mb-10">
-                    <Text className="text-3xl font-bold font-heading text-charcoal mb-2">Welcome Back</Text>
+                    <Text className="text-3xl font-bold font-heading text-foreground mb-2">Welcome Back</Text>
                     <Text className="text-mediumGray font-body text-base">Enter your email and password to log in.</Text>
                 </View>
 
@@ -92,7 +98,7 @@ export default function Login() {
                     loading={loading}
                     variant="primary"
                     size="lg"
-                    className="mb-6 shadow-lg shadow-pink-200"
+                    className="mb-6"
                 />
 
                 <TouchableOpacity onPress={() => router.push('/auth/role-selection')} className="items-center">

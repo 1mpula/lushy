@@ -17,9 +17,8 @@ import { ProfessionalProvider } from '@/context/ProfessionalContext';
 import { RatingProvider } from '@/context/RatingContext';
 import { SavedPostsProvider } from '@/context/SavedPostsContext';
 import { ServiceProvider } from '@/context/ServiceContext';
-import { SubscriptionProvider } from '@/context/SubscriptionContext';
+import { ThemeProvider as CustomThemeProvider, useTheme } from '@/context/ThemeContext';
 import { UserProvider } from '@/context/UserContext';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -29,7 +28,6 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
-  const { colorScheme } = useColorScheme();
   const [loaded] = useFonts({
     Outfit_400Regular,
     Outfit_700Bold,
@@ -49,15 +47,27 @@ export default function RootLayout() {
   }
 
   return (
-    <UserProvider>
-      <ProfessionalProvider>
-        <ServiceProvider>
-          <RatingProvider>
-            <SavedPostsProvider>
-              <BookingProvider>
-                <ChatProvider>
-                  <SubscriptionProvider>
-                    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <CustomThemeProvider>
+      <RootLayoutContent />
+    </CustomThemeProvider>
+  );
+}
+
+import { Text, View } from 'react-native';
+
+function RootLayoutContent() {
+  const { theme } = useTheme();
+
+  return (
+    <View className={`flex-1 ${theme}`}>
+      <UserProvider>
+        <ProfessionalProvider>
+          <ServiceProvider>
+            <RatingProvider>
+              <SavedPostsProvider>
+                <BookingProvider>
+                  <ChatProvider>
+                    <ThemeProvider value={theme === 'dark' ? DarkTheme : DefaultTheme}>
                       <Stack>
                         <Stack.Screen name="index" options={{ headerShown: false }} />
                         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -66,16 +76,16 @@ export default function RootLayout() {
                         <Stack.Screen name="chat/[conversationId]" options={{ headerShown: false }} />
                         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
                       </Stack>
-                      <StatusBar style="auto" />
+                      <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
                     </ThemeProvider>
-                  </SubscriptionProvider>
-                </ChatProvider>
-              </BookingProvider>
-            </SavedPostsProvider>
-          </RatingProvider>
-        </ServiceProvider>
-      </ProfessionalProvider>
-    </UserProvider>
+                  </ChatProvider>
+                </BookingProvider>
+              </SavedPostsProvider>
+            </RatingProvider>
+          </ServiceProvider>
+        </ProfessionalProvider>
+      </UserProvider>
+    </View>
   );
 }
 

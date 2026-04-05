@@ -7,6 +7,7 @@ import { Image } from 'expo-image';
 import { MotiView } from 'moti';
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
+import { useTheme } from '@/context/ThemeContext';
 
 const DEFAULT_AVATAR = 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=256&h=256&fit=crop';
 
@@ -18,6 +19,7 @@ interface ConversationCardProps {
 
 export function ConversationCard({ conversation, onPress, index = 0 }: ConversationCardProps) {
     const { userRole } = useUser();
+    const { theme } = useTheme();
 
     // Show the other party's name
     const displayName = userRole === 'client'
@@ -68,36 +70,48 @@ export function ConversationCard({ conversation, onPress, index = 0 }: Conversat
             <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={onPress}
-                className={`flex-row items-center p-5 rounded-3xl bg-white shadow-xl border ${hasUnread ? 'border-primary/40 shadow-pink-200/50 bg-pink-50/80' : 'border-white shadow-pink-100/40'}`}
+                className={`flex-row items-center p-5 rounded-3xl border shadow-xl`}
+                style={{ 
+                    backgroundColor: hasUnread 
+                        ? (theme === 'dark' ? '#2D1F24' : '#FFF0F5') 
+                        : (theme === 'dark' ? '#1A1A1A' : '#FFFFFF'),
+                    borderColor: hasUnread 
+                        ? 'rgba(255, 64, 129, 0.4)' 
+                        : (theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.06)'),
+                    shadowColor: hasUnread ? '#FF4081' : '#000',
+                    shadowOpacity: hasUnread ? 0.15 : 0.04
+                }}
             >
                 {/* Avatar */}
                 <View className="relative shadow-md shadow-pink-200">
-                    <View className={`p-0.5 rounded-full ${hasUnread ? 'bg-primary/20' : 'bg-slate-100'}`}>
+                    <View className={`p-0.5 rounded-full`} style={{ backgroundColor: hasUnread ? 'rgba(255, 64, 129, 0.2)' : (theme === 'dark' ? '#333333' : '#F3F4F6') }}>
                         <Image
                             source={{ uri: DEFAULT_AVATAR }}
-                            className={`w-14 h-14 rounded-full ${hasUnread ? 'border-[3px] border-primary' : 'border-2 border-white'}`}
+                            className={`w-14 h-14 rounded-full border-2`}
+                            style={{ borderColor: hasUnread ? '#FF4081' : (theme === 'dark' ? '#444444' : '#E5E7EB') }}
                         />
                     </View>
                     {/* Online indicator */}
-                    <View className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-emerald-400 border-[3px] border-white shadow-sm" />
+                    <View className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-emerald-400 border-[3px] shadow-sm" style={{ borderColor: theme === 'dark' ? '#1A1A1A' : '#FFFFFF' }} />
                 </View>
 
                 {/* Content */}
                 <View className="flex-1 ml-4">
                     <View className="flex-row justify-between items-center mb-1">
                         <Text
-                            className={`text-base flex-1 mr-2 ${hasUnread ? 'font-bold text-charcoal' : 'font-semibold text-charcoal'}`}
+                            className={`text-base flex-1 mr-2 ${hasUnread ? 'font-bold' : 'font-semibold'}`}
                             numberOfLines={1}
+                            style={{ color: theme === 'dark' ? '#FFFFFF' : '#1F2937' }}
                         >
                             {displayName}
                         </Text>
-                        <Text className={`text-xs ${hasUnread ? 'text-primary font-bold' : 'text-mediumGray'}`}>
+                        <Text className={`text-xs ${hasUnread ? 'font-bold' : ''}`} style={{ color: hasUnread ? '#FF4081' : (theme === 'dark' ? '#9CA3AF' : '#6B7280') }}>
                             {formatDate(conversation.lastMessageAt)}
                         </Text>
                     </View>
                     <View className="flex-row items-center justify-between">
                         <Text
-                            className={`text-sm flex-1 mr-2 ${hasUnread ? 'text-charcoal font-medium' : 'text-mediumGray'}`}
+                            className={`text-sm flex-1 mr-2 ${hasUnread ? 'text-foreground font-medium' : 'text-mediumGray'}`}
                             numberOfLines={1}
                         >
                             {conversation.lastMessage || 'Tap to start chatting'}

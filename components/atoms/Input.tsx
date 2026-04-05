@@ -19,7 +19,7 @@ export function Input({
     return (
         <View className={twMerge("w-full mb-4", containerClassName)}>
             {label && (
-                <Text className="mb-1 text-sm font-bodyMedium text-charcoal">
+                <Text className="mb-1 text-sm font-bodyMedium text-foreground">
                     {label}
                 </Text>
             )}
@@ -32,7 +32,7 @@ export function Input({
                 <TextInput
                     placeholderTextColor="#9CA3AF"
                     className={twMerge(
-                        "w-full px-4 py-3 bg-white border border-gray-200 rounded-md font-body text-charcoal focus:border-primary focus:border-2",
+                        "w-full px-4 py-3 bg-background border border-border rounded-xl font-body text-foreground focus:border-primary focus:border-2",
                         className,
                         leftIcon && "pl-12",
                         error && "border-red-500"

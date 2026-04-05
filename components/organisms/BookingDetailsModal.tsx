@@ -43,8 +43,8 @@ export function BookingDetailsModal({
             case 'accepted': return { bg: 'bg-blue-100', text: 'text-blue-800', label: '✓ Confirmed' };
             case 'rejected': return { bg: 'bg-red-100', text: 'text-red-800', label: '✗ Declined' };
             case 'completed': return { bg: 'bg-emerald-100', text: 'text-emerald-800', label: '✓ Completed' };
-            case 'cancelled': return { bg: 'bg-gray-100', text: 'text-gray-800', label: 'Cancelled' };
-            default: return { bg: 'bg-gray-100', text: 'text-gray-800', label: status };
+            case 'cancelled': return { bg: 'bg-card', text: 'text-gray-800', label: 'Cancelled' };
+            default: return { bg: 'bg-card', text: 'text-gray-800', label: status };
         }
     };
 
@@ -71,14 +71,14 @@ export function BookingDetailsModal({
                 <View className="bg-offWhite h-[85%] rounded-t-3xl overflow-hidden">
 
                     {/* Header */}
-                    <View className="flex-row items-center justify-between p-6 bg-white border-b border-gray-100">
+                    <View className="flex-row items-center justify-between p-6 bg-background border-b border-border">
                         <View>
-                            <Text className="text-2xl font-bold font-heading text-charcoal">Booking Details</Text>
+                            <Text className="text-2xl font-bold font-heading text-foreground">Booking Details</Text>
                             <View className={`px-3 py-1 rounded-full mt-2 self-start ${statusStyle.bg}`}>
                                 <Text className={`text-sm font-bold ${statusStyle.text}`}>{statusStyle.label}</Text>
                             </View>
                         </View>
-                        <TouchableOpacity onPress={onClose} className="p-2 bg-gray-50 rounded-full">
+                        <TouchableOpacity onPress={onClose} className="p-2 bg-card rounded-full">
                             <X size={24} color="#333" />
                         </TouchableOpacity>
                     </View>
@@ -86,14 +86,14 @@ export function BookingDetailsModal({
                     <ScrollView className="flex-1 p-6">
 
                         {/* Service Info */}
-                        <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
+                        <View className="bg-background rounded-2xl p-4 shadow-sm mb-4">
                             <Text className="text-xs font-bold text-secondary uppercase tracking-wider mb-2">Service</Text>
-                            <Text className="text-xl font-bold text-charcoal font-heading">{booking.serviceName}</Text>
+                            <Text className="text-xl font-bold text-foreground font-heading">{booking.serviceName}</Text>
                             <Text className="text-2xl font-bold text-primary mt-2">P{booking.price}</Text>
                         </View>
 
                         {/* Date & Time */}
-                        <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
+                        <View className="bg-background rounded-2xl p-4 shadow-sm mb-4">
                             <Text className="text-xs font-bold text-secondary uppercase tracking-wider mb-3">Appointment</Text>
                             <View className="flex-row gap-6">
                                 <View className="flex-row items-center">
@@ -102,7 +102,7 @@ export function BookingDetailsModal({
                                     </View>
                                     <View className="ml-3">
                                         <Text className="text-xs text-mediumGray">Date</Text>
-                                        <Text className="text-base font-bold text-charcoal">{booking.date}</Text>
+                                        <Text className="text-base font-bold text-foreground">{booking.date}</Text>
                                     </View>
                                 </View>
                                 <View className="flex-row items-center">
@@ -111,14 +111,14 @@ export function BookingDetailsModal({
                                     </View>
                                     <View className="ml-3">
                                         <Text className="text-xs text-mediumGray">Time</Text>
-                                        <Text className="text-base font-bold text-charcoal">{booking.time}</Text>
+                                        <Text className="text-base font-bold text-foreground">{booking.time}</Text>
                                     </View>
                                 </View>
                             </View>
                         </View>
 
                         {/* Location */}
-                        <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
+                        <View className="bg-background rounded-2xl p-4 shadow-sm mb-4">
                             <Text className="text-xs font-bold text-secondary uppercase tracking-wider mb-3">Location</Text>
 
                             <View className="flex-row items-center mb-3">
@@ -126,7 +126,7 @@ export function BookingDetailsModal({
                                     {isHouseCall ? <Home size={18} color="#3B82F6" /> : <Store size={18} color="#FF4081" />}
                                 </View>
                                 <View className="ml-3">
-                                    <Text className="text-base font-bold text-charcoal">
+                                    <Text className="text-base font-bold text-foreground">
                                         {isHouseCall ? 'House Call' : 'Salon Visit'}
                                     </Text>
                                     <Text className="text-sm text-mediumGray">
@@ -136,9 +136,9 @@ export function BookingDetailsModal({
                             </View>
 
                             {booking.address && (
-                                <View className="bg-gray-50 p-3 rounded-xl flex-row items-start">
+                                <View className="bg-card p-3 rounded-xl flex-row items-start">
                                     <MapPin size={16} color="#FF4081" className="mt-0.5" />
-                                    <Text className="flex-1 text-sm text-charcoal ml-2">{booking.address}</Text>
+                                    <Text className="flex-1 text-sm text-foreground ml-2">{booking.address}</Text>
                                 </View>
                             )}
 
@@ -158,7 +158,7 @@ export function BookingDetailsModal({
                         </View>
 
                         {/* Contact Info */}
-                        <View className="bg-white rounded-2xl p-4 shadow-sm mb-4">
+                        <View className="bg-background rounded-2xl p-4 shadow-sm mb-4">
                             <Text className="text-xs font-bold text-secondary uppercase tracking-wider mb-3">
                                 {isProvider ? 'Client' : 'Professional'}
                             </Text>
@@ -169,7 +169,7 @@ export function BookingDetailsModal({
                                     className="w-14 h-14 rounded-full"
                                 />
                                 <View className="ml-3 flex-1">
-                                    <Text className="text-lg font-bold text-charcoal">
+                                    <Text className="text-lg font-bold text-foreground">
                                         {isProvider ? booking.clientName : booking.professionalName}
                                     </Text>
                                     {!isProvider && pro && pro.rating > 0 && (
@@ -201,7 +201,7 @@ export function BookingDetailsModal({
                     </ScrollView>
 
                     {/* Action Buttons */}
-                    <View className="absolute bottom-0 left-0 right-0 p-6 bg-white border-t border-gray-100 safe-bottom">
+                    <View className="absolute bottom-0 left-0 right-0 p-6 bg-background border-t border-border safe-bottom">
                         {/* Provider: Accept/Reject pending bookings */}
                         {isProvider && booking.status === 'pending' && (
                             <View className="flex-row gap-3">

@@ -1,6 +1,8 @@
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { signUpAsProvider } from '@/lib/auth';
+import { useTheme } from '@/context/ThemeContext';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useRouter } from 'expo-router';
 import { ArrowLeft, Check, ChevronRight } from 'lucide-react-native';
 import { useState } from 'react';
@@ -9,6 +11,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function ProSignup() {
     const router = useRouter();
+    const { theme } = useTheme();
     const insets = useSafeAreaInsets();
     const bottomPadding = insets.bottom;
     const [step, setStep] = useState(1);
@@ -86,10 +89,10 @@ export default function ProSignup() {
     };
 
     return (
-        <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
-            <View className="px-6 py-4 border-b border-gray-50 flex-row justify-between items-center">
+        <SafeAreaView className="flex-1" edges={['top', 'left', 'right']} style={{ backgroundColor: theme === 'dark' ? '#121212' : '#FFFFFF' }}>
+            <View className="px-6 py-4 border-b border-border flex-row justify-between items-center">
                 <TouchableOpacity onPress={handleBack} className="w-10 h-10 items-center justify-center -ml-2">
-                    <ArrowLeft color="#333" size={24} />
+                    <ArrowLeft color={theme === 'dark' ? '#FFF' : '#333'} size={24} />
                 </TouchableOpacity>
                 <Text className="font-bold text-mediumGray">Step {step} of 2</Text>
             </View>
@@ -141,7 +144,7 @@ export default function ProSignup() {
                             />
 
                             <View>
-                                <Text className="mb-2 text-sm font-bold text-charcoal font-bodyMedium">Expertise</Text>
+                                <Text className="mb-2 text-sm font-bold text-foreground font-bodyMedium">Expertise</Text>
                                 <View className="flex-row flex-wrap gap-2">
                                     {['Hair', 'Nails', 'Wigs', 'Makeup', 'Lashes'].map((item) => {
                                         const selected = expertise.includes(item);
@@ -149,10 +152,11 @@ export default function ProSignup() {
                                             <TouchableOpacity
                                                 key={item}
                                                 onPress={() => toggleExpertise(item)}
-                                                className={`px-4 py-2 rounded-full border flex-row items-center ${selected ? 'bg-primary border-primary' : 'bg-white border-gray-200'}`}
+                                                className={`px-4 py-2 rounded-full border flex-row items-center ${selected ? 'bg-primary border-primary' : (theme === 'dark' ? 'border-border' : 'bg-background border-border')}`}
+                                                style={{ backgroundColor: selected ? '#FF4081' : (theme === 'dark' ? '#1A1A1A' : '#FFFFFF') }}
                                             >
                                                 {selected && <Check size={12} color="white" className="mr-1" />}
-                                                <Text className={`${selected ? 'text-white' : 'text-charcoal'} font-bodyMedium`}>{item}</Text>
+                                                <Text className={`${selected ? 'text-white' : 'text-foreground'} font-bodyMedium`}>{item}</Text>
                                             </TouchableOpacity>
                                         )
                                     })}
@@ -169,10 +173,10 @@ export default function ProSignup() {
 
                             {/* Terms Checkbox */}
                             <TouchableOpacity
-                                onPress={() => setTermsAccepted(!termsAccepted)}
+                                onPress={() => termsAccepted && setTermsAccepted(!termsAccepted)}
                                 className="flex-row items-start mt-4"
                             >
-                                <View className={`w-6 h-6 rounded border-2 items-center justify-center mr-3 mt-0.5 ${termsAccepted ? 'bg-primary border-primary' : 'border-gray-300 bg-white'}`}>
+                                <View className={`w-6 h-6 rounded border-2 items-center justify-center mr-3 mt-0.5 ${termsAccepted ? 'bg-primary border-primary' : 'border-gray-300'}`} style={{ backgroundColor: termsAccepted ? '#FF4081' : (theme === 'dark' ? '#1A1A1A' : '#FFFFFF') }}>
                                     {termsAccepted && <Check size={14} color="white" />}
                                 </View>
                                 <Text className="flex-1 text-sm text-mediumGray leading-relaxed">
@@ -201,7 +205,7 @@ export default function ProSignup() {
                         loading={loading}
                         variant="primary"
                         size="lg"
-                        className="mb-6 shadow-xl shadow-pink-200"
+                        className="mb-6"
                         icon={step === 1 ? <ChevronRight size={20} color="white" /> : undefined}
                     />
 

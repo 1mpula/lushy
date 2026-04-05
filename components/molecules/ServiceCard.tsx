@@ -50,7 +50,7 @@ export const ServiceCard = ({
             <TouchableOpacity
                 onPress={onPress}
                 activeOpacity={0.9}
-                className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100"
+                className="bg-background rounded-3xl overflow-hidden shadow-sm border border-border"
             >
                 <View className="relative">
                     <Image
@@ -59,15 +59,15 @@ export const ServiceCard = ({
                         style={{ width: '100%', aspectRatio }}
                         contentFit="cover"
                         transition={300}
-                        className="bg-gray-50"
+                        className="bg-card"
                     />
-                    <View className="absolute top-2.5 right-2.5 bg-white/95 px-2.5 py-1 rounded-full shadow-sm">
+                    <View className="absolute top-2.5 right-2.5 bg-background/95 px-2.5 py-1 rounded-full shadow-sm">
                         <Text className="text-primary font-bold text-xs">P{price}</Text>
                     </View>
                 </View>
 
                 <View className="p-3">
-                    <Text className="font-bold text-charcoal text-[13px] leading-tight mb-1" numberOfLines={2}>
+                    <Text className="font-bold text-foreground text-[13px] leading-tight mb-1" numberOfLines={2}>
                         {title}
                     </Text>
                     <View className="flex-row items-center justify-between mt-1">
@@ -76,7 +76,7 @@ export const ServiceCard = ({
                                 {duration}
                             </Text>
                         )}
-                        <View className="bg-gray-50 p-1.5 rounded-full border border-gray-100">
+                        <View className="bg-card p-1.5 rounded-full border border-border">
                             <ChevronRight size={10} color="#94A3B8" />
                         </View>
                     </View>

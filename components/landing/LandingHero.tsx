@@ -13,7 +13,7 @@ interface LandingHeroProps {
 
 export function LandingHero({ heading, subheading }: LandingHeroProps) {
     return (
-        <View className="absolute top-0 left-0 right-0 h-[65%] overflow-hidden rounded-b-[60px] bg-white z-0">
+        <View className="absolute top-0 left-0 right-0 h-[65%] overflow-hidden rounded-b-[60px] bg-background z-0">
             {/* Background Image with absolute positioning */}
             <MotiView
                 from={{ scale: 1.1 }}
@@ -40,7 +40,7 @@ export function LandingHero({ heading, subheading }: LandingHeroProps) {
                     from={{ opacity: 0, translateY: 20 }}
                     animate={{ opacity: 1, translateY: 0 }}
                     transition={{ delay: 300, type: 'timing', duration: 800 }}
-                    className="text-5xl font-heading font-extrabold text-charcoal text-center leading-[1.1] mb-4"
+                    className="text-5xl font-heading font-extrabold text-foreground text-center leading-[1.1] mb-4"
                 >
                     {heading}
                 </MotiText>

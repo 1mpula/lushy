@@ -54,7 +54,7 @@ export default function PersonalInfoScreen() {
     };
 
     return (
-        <View className="flex-1 bg-gray-50">
+        <View className="flex-1 bg-card">
             <Header title="Personal Information" />
 
             <ScrollView className="flex-1 p-6" contentContainerStyle={{ paddingBottom: 60 }}>

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lushy – Privacy Policy</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            font-size: 11pt;
+            line-height: 1.7;
+            color: #1a1a2e;
+            background: #ffffff;
+        }
+
+        .page {
+            max-width: 794px;
+            margin: 0 auto;
+            padding: 60px 72px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 24px;
+            border-bottom: 3px solid #c9a96e;
+            margin-bottom: 36px;
+        }
+
+        .logo-block .brand {
+            font-size: 28pt;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #1a1a2e;
+        }
+
+        .logo-block .tagline {
+            font-size: 9pt;
+            color: #7a7a9a;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        .doc-badge {
+            background: linear-gradient(135deg, #c9a96e 0%, #e8c98a 100%);
+            color: #1a1a2e;
+            font-size: 8pt;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: 20px;
+        }
+
+        /* Title Section */
+        .title-section {
+            margin-bottom: 32px;
+        }
+
+        .doc-title {
+            font-size: 20pt;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .meta-row {
+            display: flex;
+            gap: 24px;
+            font-size: 9pt;
+            color: #7a7a9a;
+        }
+
+        .meta-row span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Intro box */
+        .intro-box {
+            background: #f9f5ee;
+            border-left: 4px solid #c9a96e;
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 36px;
+            font-size: 10.5pt;
+            color: #3a3a5c;
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 28px;
+        }
+
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: #c9a96e;
+            color: #1a1a2e;
+            font-size: 9pt;
+            font-weight: 700;
+            border-radius: 50%;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-size: 13pt;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        p {
+            font-size: 10.5pt;
+            color: #3a3a5c;
+            margin-bottom: 10px;
+            padding-left: 34px;
+            line-height: 1.75;
+        }
+
+        ul {
+            padding-left: 54px;
+            margin-bottom: 10px;
+        }
+
+        li {
+            font-size: 10.5pt;
+            color: #3a3a5c;
+            margin-bottom: 6px;
+            line-height: 1.65;
+        }
+
+        li::marker {
+            color: #c9a96e;
+        }
+
+        .highlight-box {
+            background: #fff8e6;
+            border: 1px solid #e8c98a;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 12px 0 10px 34px;
+            font-size: 10pt;
+            color: #5a4a1a;
+        }
+
+        .highlight-box strong {
+            color: #1a1a2e;
+        }
+
+        .data-table {
+            width: calc(100% - 34px);
+            margin-left: 34px;
+            border-collapse: collapse;
+            margin-bottom: 12px;
+            font-size: 10pt;
+        }
+
+        .data-table th {
+            background: #1a1a2e;
+            color: #c9a96e;
+            font-weight: 600;
+            text-align: left;
+            padding: 10px 14px;
+            font-size: 9.5pt;
+            letter-spacing: 0.3px;
+        }
+
+        .data-table td {
+            padding: 9px 14px;
+            border-bottom: 1px solid #ece8df;
+            color: #3a3a5c;
+            vertical-align: top;
+        }
+
+        .data-table tr:nth-child(even) td {
+            background: #fafaf5;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #ece8df;
+            margin: 28px 0;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 48px;
+            padding-top: 20px;
+            border-top: 2px solid #ece8df;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-brand {
+            font-size: 9pt;
+            font-weight: 700;
+            color: #c9a96e;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-text {
+            font-size: 8.5pt;
+            color: #aaaacc;
+        }
+
+        .contact-block {
+            background: #1a1a2e;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 12px 0 0 34px;
+        }
+
+        .contact-block p {
+            padding-left: 0;
+            color: #ccc;
+            margin-bottom: 4px;
+        }
+
+        .contact-block a {
+            color: #c9a96e;
+            text-decoration: none;
+        }
+
+        .rights-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-left: 34px;
+            margin-bottom: 12px;
+        }
+
+        .right-card {
+            background: #f9f5ee;
+            border-radius: 8px;
+            padding: 12px 14px;
+            border-top: 2px solid #c9a96e;
+        }
+
+        .right-card strong {
+            display: block;
+            font-size: 9.5pt;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+        }
+
+        .right-card span {
+            font-size: 9pt;
+            color: #6a6a8a;
+        }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .page {
+                padding: 40px 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-block">
+                <div class="brand">Lushy</div>
+                <div class="tagline">Beauty &amp; Wellness Services Platform</div>
+            </div>
+            <div class="doc-badge">Legal Document</div>
+        </div>
+
+        <!-- Title -->
+        <div class="title-section">
+            <div class="doc-title">Privacy Policy</div>
+            <div class="meta-row">
+                <span><strong>Effective Date:</strong> 10 March 2026</span>
+                <span><strong>Version:</strong> 1.0</span>
+                <span><strong>Jurisdiction:</strong> Republic of Botswana</span>
+            </div>
+        </div>
+
+        <!-- Intro -->
+        <div class="intro-box">
+            <strong>Lushy</strong> ("we", "our", or "us") is committed to protecting the privacy of every person who
+            uses our platform. This Privacy Policy explains what personal information we collect, how we use it, and
+            your rights in relation to it. By using the Lushy app or website, you consent to the practices described in
+            this policy.
+        </div>
+
+        <!-- Section 1 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">1</span>
+                <h2>Who We Are</h2>
+            </div>
+            <p>
+                Lushy is a digital marketplace connecting clients with independent beauty and wellness professionals in
+                Botswana. Our platform operates as a <strong>mobile application</strong> and <strong>web
+                    portal</strong>, facilitating service discovery, booking, and payment.
+            </p>
+            <p>
+                For the purposes of data protection, Lushy acts as the <strong>Data Controller</strong> for personal
+                data collected through our platform.
+            </p>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Section 2 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">2</span>
+                <h2>Information We Collect</h2>
+            </div>
+            <p>We collect the following categories of personal data:</p>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Data Category</th>
+                        <th>Examples</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Identity Data</strong></td>
+                        <td>Full name, profile photo, Omang/ID number (professionals only)</td>
+                        <td>Account creation &amp; verification</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Contact Data</strong></td>
+                        <td>Email address, phone number</td>
+                        <td>Communication &amp; notifications</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Location Data</strong></td>
+                        <td>GPS coordinates (when using location features)</td>
+                        <td>Service discovery near you</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Transaction Data</strong></td>
+                        <td>Payment method type, amount, booking ID</td>
+                        <td>Processing payments &amp; refunds</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Usage Data</strong></td>
+                        <td>Pages visited, features used, search queries</td>
+                        <td>App improvement &amp; analytics</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Communications Data</strong></td>
+                        <td>In-app messages between clients and professionals</td>
+                        <td>Platform functionality &amp; dispute resolution</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Device Data</strong></td>
+                        <td>Device type, OS version, app version</td>
+                        <td>Technical support &amp; debugging</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="highlight-box">
+                <strong>We do not collect or store full card numbers.</strong> Payment card data is handled exclusively
+                by our PCI-DSS compliant payment processor (DPO Group).
+            </div>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Section 3 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">3</span>
+                <h2>How We Use Your Information</h2>
+            </div>
+            <p>We use your personal data for the following purposes:</p>
+            <ul>
+                <li>To <strong>create and manage</strong> your Lushy account</li>
+                <li>To <strong>process bookings and payments</strong> and send confirmations</li>
+                <li>To <strong>connect clients with professionals</strong> based on location and preferences</li>
+                <li>To <strong>communicate</strong> with you regarding your account, bookings, and support enquiries
+                </li>
+                <li>To <strong>resolve disputes</strong> and enforce our Terms of Service</li>
+                <li>To <strong>send marketing communications</strong> (you may opt out at any time)</li>
+                <li>To <strong>improve and develop</strong> our platform through analytics and user feedback</li>
+                <li>To <strong>comply with legal obligations</strong> applicable under Botswana law</li>
+            </ul>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Section 4 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">4</span>
+                <h2>Legal Basis for Processing</h2>
+            </div>
+            <p>We process your personal data on the following lawful grounds:</p>
+            <ul>
+                <li><strong>Contract performance</strong> – to deliver the services you have booked</li>
+                <li><strong>Legitimate interests</strong> – to improve our platform and prevent fraud</li>
+                <li><strong>Consent</strong> – for marketing emails and location access</li>
+                <li><strong>Legal obligation</strong> – to comply with tax, financial, and regulatory requirements</li>
+            </ul>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Section 5 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">5</span>
+                <h2>Sharing Your Information</h2>
+            </div>
+            <p>We may share your data with:</p>
+            <ul>
+                <li><strong>Service Professionals</strong> – limited profile data shared to facilitate your booking</li>
+                <li><strong>Payment Processors</strong> – DPO Group receives transaction data to process payments
+                    securely</li>
+                <li><strong>Cloud Infrastructure</strong> – Supabase (database) and Expo (app delivery infrastructure)
+                </li>
+                <li><strong>Analytics Providers</strong> – aggregated, anonymised data only</li>
+                <li><strong>Legal Authorities</strong> – where required by law or court order</li>
+            </ul>
+            <div class="highlight-box">
+                <strong>We do not sell your personal data</strong> to third parties for advertising or commercial
+                purposes.
+            </div>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Section 6 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">6</span>
+                <h2>Data Retention</h2>
+            </div>
+            <p>
+                We retain your personal data for as long as your account is active or as needed to provide services.
+                Specifically:
+            </p>
+            <ul>
+                <li><strong>Account data</strong>: Retained for the lifetime of your account plus 3 years post-closure
+                </li>
+                <li><strong>Transaction records</strong>: Retained for 7 years to comply with financial regulations</li>
+                <li><strong>Marketing preferences</strong>: Until you withdraw consent</li>
+                <li><strong>Support communications</strong>: 2 years from last interaction</li>
+            </ul>
+            <p>
+                After retention periods expire, data is securely deleted or anonymised.
+            </p>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Section 7 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">7</span>
+                <h2>Your Privacy Rights</h2>
+            </div>
+            <p>You have the following rights regarding your personal data:</p>
+            <div class="rights-grid">
+                <div class="right-card">
+                    <strong>Right of Access</strong>
+                    <span>Request a copy of your personal data we hold</span>
+                </div>
+                <div class="right-card">
+                    <strong>Right to Rectification</strong>
+                    <span>Correct inaccurate or incomplete data</span>
+                </div>
+                <div class="right-card">
+                    <strong>Right to Erasure</strong>
+                    <span>Request deletion of your personal data ("right to be forgotten")</span>
+                </div>
+                <div class="right-card">
+                    <strong>Right to Restrict Processing</strong>
+                    <span>Limit how we use your data in certain circumstances</span>
+                </div>
+                <div class="right-card">
+                    <strong>Right to Data Portability</strong>
+                    <span>Receive your data in a structured, machine-readable format</span>
+                </div>
+                <div class="right-card">
+                    <strong>Right to Object</strong>
+                    <span>Object to processing for marketing or legitimate interests</span>
+                </div>
+            </div>
+            <p>To exercise any of these rights, contact our Privacy Officer (see Section 11).</p>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Section 8 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">8</span>
+                <h2>Cookies &amp; Tracking Technologies</h2>
+            </div>
+            <p>
+                Our web portal uses <strong>cookies and similar technologies</strong> to maintain sessions and analyse
+                usage patterns. You may control cookie preferences through your browser settings. Disabling cookies may
+                limit certain features of the platform.
+            </p>
+            <p>
+                Our mobile application uses device-level analytics (opt-in) and push notification tokens to deliver
+                booking alerts and service updates.
+            </p>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Section 9 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">9</span>
+                <h2>Data Security</h2>
+            </div>
+            <p>
+                Lushy implements industry-standard security measures to protect your personal data, including:
+            </p>
+            <ul>
+                <li><strong>TLS/SSL encryption</strong> for all data in transit</li>
+                <li><strong>Row-Level Security (RLS)</strong> policies on our database</li>
+                <li><strong>Secure authentication</strong> with token-based sessions</li>
+                <li>Regular security audits and vulnerability assessments</li>
+            </ul>
+            <p>
+                In the event of a data breach that affects your rights, we will notify affected users within <strong>72
+                    hours</strong> of discovery, in line with best-practice data governance standards.
+            </p>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Section 10 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">10</span>
+                <h2>Children's Privacy</h2>
+            </div>
+            <p>
+                Lushy is not intended for use by persons under the age of <strong>18 years</strong>. We do not knowingly
+                collect personal data from minors. If we become aware that a minor has provided us with personal data,
+                we will promptly delete it.
+            </p>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Section 11 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">11</span>
+                <h2>Contact &amp; Privacy Officer</h2>
+            </div>
+            <p>For any privacy-related questions, data requests, or concerns, please contact:</p>
+            <div class="contact-block">
+                <p><strong style="color:#c9a96e;">Lushy Privacy Officer</strong></p>
+                <p>Email: <a href="mailto:privacy@lushy.co.bw">privacy@lushy.co.bw</a></p>
+                <p>In-App: Settings → Help &amp; Support → Privacy Request</p>
+                <p>Operating Hours: Monday–Friday, 08:00–18:00 CAT</p>
+                <p style="margin-top:8px;font-size:9pt;color:#888;">We aim to respond to all privacy requests within 10
+                    business days.</p>
+            </div>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Section 12 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">12</span>
+                <h2>Changes to This Policy</h2>
+            </div>
+            <p>
+                We may update this Privacy Policy from time to time. We will notify you of material changes in-app and
+                by email at least <strong>14 days before</strong> any changes take effect. The latest version will
+                always be available within the Lushy app under Settings → Legal.
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <span class="footer-brand">LUSHY</span>
+            <span class="footer-text">© 2026 Lushy · Privacy Policy v1.0 · Effective 10 March 2026</span>
+            <span class="footer-text">Page 1 of 1</span>
+        </div>
+
+    </div>
+</body>
+
+</html>

@@ -4,6 +4,7 @@ import { MasonryGridFeed } from '@/components/organisms/MasonryGridFeed';
 import { Colors } from '@/constants/theme';
 import { useServices } from '@/context/ServiceContext';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useTheme } from '@/context/ThemeContext';
 import { useRouter } from 'expo-router';
 import { Filter, Search } from 'lucide-react-native';
 import { Skeleton } from 'moti/skeleton';
@@ -14,6 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ExploreScreen() {
     const router = useRouter();
+    const { theme, toggleTheme } = useTheme();
     const { colorScheme } = useColorScheme();
     const themeColors = Colors[colorScheme ?? 'light'];
     const { services, isLoading, error, refreshServices } = useServices();
@@ -109,7 +111,7 @@ export default function ExploreScreen() {
 
     if (isLoading) {
         return (
-            <View className="flex-1 bg-background pt-16 px-5">
+            <View className="flex-1 pt-16 px-5" style={{ backgroundColor: theme === 'dark' ? '#121212' : '#FFFFFF' }}>
                 <View className="mb-8">
                     <Skeleton width={180} height={40} radius={8} />
                     <View className="h-6" />
@@ -135,10 +137,10 @@ export default function ExploreScreen() {
     }
 
     return (
-        <View className="flex-1 bg-background">
+        <View className="flex-1" style={{ backgroundColor: theme === 'dark' ? '#121212' : '#FFFFFF' }}>
             <SafeAreaView className="flex-1" edges={['top']}>
                 {/* Header & Search */}
-                <View className="pb-1 z-10 bg-background">
+                <View className="pb-1 z-10" style={{ backgroundColor: theme === 'dark' ? '#121212' : '#FFFFFF' }}>
                     <View className="px-5">
                         <Text className="text-2xl font-bold font-heading text-primary mb-2 pt-0 tracking-wide">Discover</Text>
                         <View className="flex-row gap-3 items-center mb-4">
@@ -148,17 +150,25 @@ export default function ExploreScreen() {
                                     value={searchQuery}
                                     onChangeText={setSearchQuery}
                                     containerClassName="mb-0 shadow-sm"
-                                    className="rounded-full bg-muted border-border h-12 text-[15px] px-5"
-                                    leftIcon={<Search size={20} color={themeColors.icon} />}
+                                    className="rounded-full h-12 text-[15px] px-5"
+                                    style={{ backgroundColor: theme === 'dark' ? '#1E1E1E' : '#F3F4F6', borderColor: theme === 'dark' ? '#333' : '#E5E7EB' }}
+                                    leftIcon={<Search size={20} color={theme === 'dark' ? '#9CA3AF' : '#6B7280'} />}
                                 />
                             </View>
                             <TouchableOpacity
                                 onPress={() => setFilterModalVisible(true)}
-                                className="bg-primary h-12 w-12 items-center justify-center rounded-full shadow-sm shadow-pink-200"
+                                className="bg-primary h-12 w-12 items-center justify-center rounded-full"
+                                style={{
+                                    shadowColor: '#FF4081',
+                                    shadowOffset: { width: 0, height: 4 },
+                                    shadowOpacity: theme === 'dark' ? 0.3 : 0.4,
+                                    shadowRadius: 10,
+                                    elevation: 4
+                                }}
                             >
                                 <Filter size={20} color="white" />
                                 {hasActiveFilters && (
-                                    <View className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-teal-400 rounded-full border-2 border-white" />
+                                    <View className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-teal-400 rounded-full border-2 border-border" />
                                 )}
                             </TouchableOpacity>
                         </View>
@@ -167,7 +177,7 @@ export default function ExploreScreen() {
                 </View>
 
                 {/* Feed */}
-                <View className="flex-1 bg-muted/30">
+                <View className="flex-1" style={{ backgroundColor: theme === 'dark' ? '#121212' : '#F9FAFB' }}>
                     {error ? (
                         <View className="flex-1 items-center justify-center p-6">
                             <Text className="text-red-500 mb-4">{error}</Text>
@@ -206,6 +216,8 @@ export default function ExploreScreen() {
                             numColumns={2}
                             refreshing={isRefreshing}
                             onRefresh={handleRefresh}
+                            showTitle={false}
+                            showRating={false}
                         />
                     )}
                 </View>

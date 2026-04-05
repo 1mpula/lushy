@@ -65,8 +65,8 @@ export function DateTimePicker({ onDateSelect, onTimeSelect, blockedDates = [] }
     }, [selectedDate, blockedDates]);
 
     return (
-        <View className="bg-white rounded-xl overflow-hidden p-4 shadow-sm border border-gray-100">
-            <Text className="text-lg font-bold font-heading text-charcoal mb-1">Select Date</Text>
+        <View className="bg-background rounded-xl overflow-hidden p-4 shadow-sm border border-border">
+            <Text className="text-lg font-bold font-heading text-foreground mb-1">Select Date</Text>
             {blockedDates.length > 0 && (
                 <Text className="text-xs text-mediumGray font-inter mb-3">Greyed out dates are unavailable</Text>
             )}
@@ -101,7 +101,7 @@ export function DateTimePicker({ onDateSelect, onTimeSelect, blockedDates = [] }
 
             {selectedDate ? (
                 <View className="mt-6">
-                    <Text className="text-lg font-bold font-heading text-charcoal mb-3">Select Time</Text>
+                    <Text className="text-lg font-bold font-heading text-foreground mb-3">Select Time</Text>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 10 }}>
                         {TIME_SLOTS.map((time) => (
                             <TouchableOpacity
@@ -109,10 +109,10 @@ export function DateTimePicker({ onDateSelect, onTimeSelect, blockedDates = [] }
                                 onPress={() => handleTimePress(time)}
                                 className={`px-4 py-2 rounded-full border ${selectedTime === time
                                     ? 'bg-primary border-primary'
-                                    : 'bg-white border-gray-200'
+                                    : 'bg-background border-border'
                                     }`}
                             >
-                                <Text className={`font-bold text-sm ${selectedTime === time ? 'text-white' : 'text-charcoal'}`}>
+                                <Text className={`font-bold text-sm ${selectedTime === time ? 'text-white' : 'text-foreground'}`}>
                                     {time}
                                 </Text>
                             </TouchableOpacity>
@@ -122,7 +122,7 @@ export function DateTimePicker({ onDateSelect, onTimeSelect, blockedDates = [] }
             ) : null}
 
             {selectedDate && selectedTime && (
-                <View className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-100 items-center">
+                <View className="mt-6 p-4 bg-card rounded-lg border border-border items-center">
                     <Text className="text-mediumGray font-body">Selected Appointment:</Text>
                     <Text className="text-primary font-bold text-lg mt-1">{selectedDate} @ {selectedTime}</Text>
                 </View>

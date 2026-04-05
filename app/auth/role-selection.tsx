@@ -1,23 +1,26 @@
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Button } from '@/components/atoms/Button';
 import { useRouter } from 'expo-router';
 import { ArrowLeft } from 'lucide-react-native';
 import { Text, TouchableOpacity, View } from 'react-native';
+import { useTheme } from '@/context/ThemeContext';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function RoleSelection() {
     const router = useRouter();
+    const { theme } = useTheme();
     const insets = useSafeAreaInsets();
     const bottomPadding = insets.bottom;
 
     return (
-        <View className="flex-1 bg-white">
+        <View className="flex-1" style={{ backgroundColor: theme === 'dark' ? '#121212' : '#FFFFFF' }}>
             <SafeAreaView className="flex-1" edges={['top', 'left', 'right']}>
                 {/* Header */}
                 <View className="px-6 py-4">
                     <TouchableOpacity onPress={() => router.back()} className="w-10 h-10 items-center justify-center -ml-2 mb-2">
-                        <ArrowLeft color="#333" size={24} />
+                        <ArrowLeft color={theme === 'dark' ? '#FFF' : '#333'} size={24} />
                     </TouchableOpacity>
-                    <Text className="text-3xl font-bold font-heading text-charcoal mb-2">How will you use Lushy?</Text>
+                    <Text className="text-3xl font-bold font-heading text-foreground mb-2">How will you use Lushy?</Text>
                     <Text className="text-mediumGray font-body text-base">Select your account type to get started.</Text>
                 </View>
 
@@ -27,10 +30,10 @@ export default function RoleSelection() {
                     <TouchableOpacity
                         onPress={() => router.push('/auth/client-signup')}
                         className="flex-1 rounded-3xl overflow-hidden shadow-sm active:opacity-90"
-                        style={{ backgroundColor: '#FFF0F5' }}
+                        style={{ backgroundColor: theme === 'dark' ? '#2D1F24' : '#FFF0F5' }}
                     >
                         <View className="flex-1 justify-end p-6">
-                            <Text className="text-2xl font-bold font-heading text-charcoal mb-1">Book a Service</Text>
+                            <Text className="text-2xl font-bold font-heading text-foreground mb-1">Book a Service</Text>
                             <Text className="text-mediumGray font-body leading-tight">
                                 Find top-rated beauty professionals near you.
                             </Text>
@@ -41,10 +44,10 @@ export default function RoleSelection() {
                     <TouchableOpacity
                         onPress={() => router.push('/auth/pro-signup')}
                         className="flex-1 rounded-3xl overflow-hidden shadow-sm active:opacity-90"
-                        style={{ backgroundColor: '#F0FFF4' }}
+                        style={{ backgroundColor: theme === 'dark' ? '#1F2D24' : '#F0FFF4' }}
                     >
                         <View className="flex-1 justify-end p-6">
-                            <Text className="text-2xl font-bold font-heading text-charcoal mb-1">Offer Services</Text>
+                            <Text className="text-2xl font-bold font-heading text-foreground mb-1">Offer Services</Text>
                             <Text className="text-mediumGray font-body leading-tight">
                                 Manage appointments and grow your business.
                             </Text>

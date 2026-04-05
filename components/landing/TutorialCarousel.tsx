@@ -67,7 +67,7 @@ export function TutorialCarousel({ steps }: TutorialCarouselProps) {
                                 }}
                             >
                                 <View className="flex-row justify-between items-start">
-                                    <View className="w-16 h-16 bg-white/20 rounded-2xl items-center justify-center backdrop-blur-md border border-white/20">
+                                    <View className="w-16 h-16 bg-background/20 rounded-2xl items-center justify-center backdrop-blur-md border border-border/20">
                                         <Icon size={32} color="white" strokeWidth={2.5} />
                                     </View>
                                     <Text className="text-white/60 font-bold text-6xl opacity-20">0{step.id}</Text>
@@ -77,7 +77,7 @@ export function TutorialCarousel({ steps }: TutorialCarouselProps) {
                                     <Text className="text-white font-heading font-bold text-3xl mb-3 tracking-tight">
                                         {step.title}
                                     </Text>
-                                    <View className="h-1 w-12 bg-white/30 rounded-full mb-4" />
+                                    <View className="h-1 w-12 bg-background/30 rounded-full mb-4" />
                                     <Text className="text-white font-body font-medium text-lg leading-7 opacity-90">
                                         {step.description}
                                     </Text>

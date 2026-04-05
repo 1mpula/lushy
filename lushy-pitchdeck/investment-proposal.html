@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lushy – Investment Proposal</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&family=Inter:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .page {
+            width: 794px;
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+            padding: 40px 48px 36px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255, 64, 129, 0.15);
+            top: -100px;
+            right: -60px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 900;
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #FF4081, #ff8fab);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .doc-type {
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.45);
+            margin-top: 4px;
+        }
+
+        .date-badge {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: right;
+        }
+
+        .header-tagline {
+            margin-top: 28px;
+        }
+
+        .header-tagline h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.65rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.3;
+        }
+
+        .header-tagline p {
+            margin-top: 8px;
+            font-size: 0.88rem;
+            color: rgba(255, 255, 255, 0.55);
+            line-height: 1.6;
+            max-width: 480px;
+        }
+
+        /* BODY */
+        .body {
+            padding: 36px 48px;
+        }
+
+        /* SECTION */
+        .section {
+            margin-bottom: 28px;
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #FF4081;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        /* OPPORTUNITY */
+        .opp-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        .opp-box {
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .opp-box .num {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #1a1a2e;
+        }
+
+        .opp-box .lbl {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        /* HOW IT WORKS */
+        .steps {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .step {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF4081, #ff8fab);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .step p {
+            font-size: 0.82rem;
+            color: #444;
+            line-height: 1.5;
+        }
+
+        .step p strong {
+            color: #1a1a2e;
+        }
+
+        /* FUNDS TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #aaa;
+            padding: 8px 10px;
+            background: #fafafa;
+            border-bottom: 1px solid #eee;
+        }
+
+        td {
+            padding: 10px;
+            font-size: 0.83rem;
+            color: #444;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        td.item {
+            font-weight: 500;
+            color: #1a1a2e;
+        }
+
+        td.amt {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            color: #1a1a2e;
+            text-align: right;
+        }
+
+        tr.total td {
+            border-top: 2px solid #FF4081;
+            background: linear-gradient(90deg, rgba(255, 64, 129, 0.04), transparent);
+        }
+
+        tr.total td.item {
+            font-weight: 700;
+            color: #FF4081;
+        }
+
+        tr.total td.amt {
+            font-size: 1.05rem;
+            color: #FF4081;
+        }
+
+        /* THE ASK */
+        .ask-strip {
+            background: linear-gradient(135deg, #1a1a2e, #0f3460);
+            border-radius: 12px;
+            padding: 24px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ask-strip .left h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.95rem;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        .ask-strip .left span {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.45);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .ask-strip .right {
+            text-align: right;
+        }
+
+        .ask-strip .right p {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 4px;
+        }
+
+        .return-pill {
+            display: inline-block;
+            background: rgba(255, 64, 129, 0.2);
+            border: 1px solid rgba(255, 64, 129, 0.4);
+            color: #ff8fab;
+            border-radius: 100px;
+            padding: 5px 14px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* REVENUE */
+        .rev-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 0;
+        }
+
+        .rev-box {
+            border-left: 3px solid #FF4081;
+            padding: 10px 14px;
+            background: #fafafa;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .rev-box .period {
+            font-size: 0.7rem;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .rev-box .val {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #1a1a2e;
+            margin-top: 2px;
+        }
+
+        .rev-box .desc {
+            font-size: 0.73rem;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: #fafafa;
+            border-top: 1px solid #eee;
+            padding: 20px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer p {
+            font-size: 0.75rem;
+            color: #aaa;
+        }
+
+        .footer .contact {
+            font-size: 0.8rem;
+            color: #1a1a2e;
+            font-weight: 500;
+        }
+
+        .footer .logo-sm {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 900;
+            font-size: 1rem;
+            background: linear-gradient(135deg, #FF4081, #ff8fab);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* PRINT */
+        @media print {
+            body {
+                background: #fff;
+                padding: 0;
+            }
+
+            .page {
+                box-shadow: none;
+                border-radius: 0;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .page {
+                width: 100%;
+            }
+
+            .body {
+                padding: 24px 20px;
+            }
+
+            .header {
+                padding: 28px 20px;
+            }
+
+            .footer {
+                flex-direction: column;
+                gap: 8px;
+                padding: 16px 20px;
+            }
+
+            .opp-grid,
+            .rev-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .ask-strip {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-top">
+                <div>
+                    <div class="logo">Lushy</div>
+                    <div class="doc-type">Investment Proposal · Seed Round</div>
+                </div>
+                <div class="date-badge">
+                    March 2026<br />Gaborone, Botswana
+                </div>
+            </div>
+            <div class="header-tagline">
+                <h1>The local services marketplace<br />Botswana has been waiting for.</h1>
+                <p>Lushy connects customers with trusted local professionals — cleaners, plumbers, beauticians, and more
+                    — through a beautifully designed mobile app built entirely in Botswana.</p>
+            </div>
+        </div>
+
+        <!-- BODY -->
+        <div class="body">
+
+            <!-- OPPORTUNITY -->
+            <div class="section">
+                <div class="section-title">The Opportunity</div>
+                <div class="opp-grid">
+                    <div class="opp-box">
+                        <div class="num">2.6M+</div>
+                        <div class="lbl">People in Botswana</div>
+                    </div>
+                    <div class="opp-box">
+                        <div class="num">500K+</div>
+                        <div class="lbl">Informal service workers</div>
+                    </div>
+                    <div class="opp-box">
+                        <div class="num">0</div>
+                        <div class="lbl">Direct local competitors</div>
+                    </div>
+                </div>
+                <p style="font-size:0.83rem; color:#666; margin-top:12px; line-height:1.6;">Finding a reliable plumber,
+                    cleaner, or hairdresser in Botswana still relies entirely on word of mouth. There is no platform, no
+                    ratings system, and no price transparency. Lushy solves this — and we are already built.</p>
+            </div>
+
+            <!-- HOW IT WORKS -->
+            <div class="section">
+                <div class="section-title">How It Works</div>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <p><strong>Discover</strong> — Customers browse local professionals by category and location on
+                            a visual, Pinterest-style feed.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <p><strong>Quote</strong> — Professionals send transparent, itemised quotes before any
+                            commitment.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <p><strong>Book & Pay</strong> — Customers confirm and pay securely through the app via DPO
+                            Group.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">4</div>
+                        <p><strong>Complete</strong> — Jobs are marked done via a customer OTP code — protecting both
+                            parties.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REVENUE PROJECTIONS -->
+            <div class="section">
+                <div class="section-title">Revenue Model — Professional Monthly Subscriptions</div>
+                <div class="rev-row">
+                    <div class="rev-box">
+                        <div class="period">Launch (Month 6)</div>
+                        <div class="val">P12,250</div>
+                        <div class="desc">250 professionals × P49/mo</div>
+                    </div>
+                    <div class="rev-box">
+                        <div class="period">Year 1 (Month 12)</div>
+                        <div class="val">P49,000</div>
+                        <div class="desc">1,000 professionals × P49/mo</div>
+                    </div>
+                    <div class="rev-box">
+                        <div class="period">Year 2 Annual</div>
+                        <div class="val">P2.4M+</div>
+                        <div class="desc">Mixed tiers, 4,000 professionals</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- USE OF FUNDS -->
+            <div class="section">
+                <div class="section-title">Proposed Use of Funds</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Details</th>
+                            <th style="text-align:right;">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="item">🍎 Apple Developer Account</td>
+                            <td style="font-size:0.8rem; color:#888;">Annual fee to publish on iOS App Store</td>
+                            <td class="amt">P1,500</td>
+                        </tr>
+                        <tr>
+                            <td class="item">🤖 Google Play Developer Account</td>
+                            <td style="font-size:0.8rem; color:#888;">One-time fee to publish on Android</td>
+                            <td class="amt">P580</td>
+                        </tr>
+                        <tr>
+                            <td class="item">☁️ Supabase Pro (6 months)</td>
+                            <td style="font-size:0.8rem; color:#888;">Production-grade database & auth hosting</td>
+                            <td class="amt">P3,300</td>
+                        </tr>
+                        <tr>
+                            <td class="item">📣 Launch Marketing</td>
+                            <td style="font-size:0.8rem; color:#888;">Social media ads + WhatsApp + local outreach</td>
+                            <td class="amt">P4,620</td>
+                        </tr>
+                        <tr class="total">
+                            <td class="item">Total Seed Ask</td>
+                            <td></td>
+                            <td class="amt">P10,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- THE ASK -->
+            <div class="ask-strip">
+                <div class="left">
+                    <span>Investment Ask</span>
+                    <h2>P10,000</h2>
+                </div>
+                <div class="right">
+                    <div class="return-pill">Equity or Revenue Share — Negotiable</div>
+                    <p>App is already fully built.<br />Funds go directly to launch costs.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <div>
+                <div class="logo-sm">Lushy</div>
+                <p>© 2026 Lushy · Botswana</p>
+            </div>
+            <p class="contact">Confidential · For discussion purposes only</p>
+        </div>
+
+    </div>
+</body>
+
+</html>

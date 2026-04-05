@@ -1,5 +1,6 @@
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
+import { useTheme } from '@/context/ThemeContext';
 import { useProfessionals } from '@/context/ProfessionalContext';
 import { useServices } from '@/context/ServiceContext';
 import { useUser } from '@/context/UserContext';
@@ -14,6 +15,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 const CATEGORIES = ['Hair', 'Nails', 'Lashes', 'Wigs', 'Makeup'];
 
 export default function AddServiceScreen() {
+    const { theme } = useTheme();
     const router = useRouter();
     const { user } = useUser();
     const { getProfessionalByUserId } = useProfessionals();
@@ -32,7 +34,8 @@ export default function AddServiceScreen() {
     const [video, setVideo] = useState<ImageAsset | null>(null);
     const [title, setTitle] = useState('');
     const [price, setPrice] = useState('');
-    const [duration, setDuration] = useState('60');
+    const [durationHours, setDurationHours] = useState('1');
+    const [durationMinutes, setDurationMinutes] = useState('0');
     const [description, setDescription] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('Hair');
     const [isLoading, setIsLoading] = useState(false);
@@ -104,6 +107,12 @@ export default function AddServiceScreen() {
         }
         if (!professional) {
             Alert.alert('Not a Provider', 'You need to be registered as a provider to add services');
+            return;
+        }
+
+        const finalDuration = (parseInt(durationHours) || 0) * 60 + (parseInt(durationMinutes) || 0);
+        if (finalDuration <= 0) {
+            Alert.alert('Missing Info', 'Please enter a valid duration greater than 0 minutes.');
             return;
         }
 
@@ -185,7 +194,7 @@ export default function AddServiceScreen() {
                     name: title.trim(),
                     description: description.trim(),
                     price: parseFloat(price),
-                    duration_minutes: parseInt(duration) || 60,
+                    duration_minutes: finalDuration,
                     image_urls: uploadedUrls,
                     // Save dimensions of the FIRST image (primary)
                     image_width: images.length > 0 ? images[0].width : 800,
@@ -214,26 +223,26 @@ export default function AddServiceScreen() {
     };
 
     return (
-        <View className="flex-1 bg-white">
+        <View className="flex-1 bg-background">
             <SafeAreaView className="flex-1" edges={['top']}>
                 {/* Header */}
                 <View className="px-6 py-4 flex-row items-center justify-between border-b border-gray-50">
                     <TouchableOpacity onPress={() => router.back()} className="-ml-2 p-2">
-                        <ArrowLeft size={24} color="#333" />
+                        <ArrowLeft size={24} color={theme === 'dark' ? '#FFF' : '#333'} />
                     </TouchableOpacity>
-                    <Text className="text-lg font-bold font-heading text-charcoal">Add Service</Text>
+                    <Text className="text-lg font-bold font-heading text-foreground">Add Service</Text>
                     <View className="w-8" />
                 </View>
 
                 <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
-                    <ScrollView className="flex-1 bg-offWhite p-6">
+                    <ScrollView className="flex-1 p-6" style={{ backgroundColor: theme === 'dark' ? '#121212' : '#F9FAFB' }}>
 
                         {/* Image Upload */}
                         <View className="mb-6">
                             <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row">
                                 <TouchableOpacity
                                     onPress={pickImage}
-                                    className="w-24 h-24 bg-gray-100 rounded-xl items-center justify-center border-2 border-dashed border-gray-300 mr-3"
+                                    className="w-24 h-24 bg-card rounded-xl items-center justify-center border-2 border-dashed border-gray-300 mr-3"
                                 >
                                     <Camera size={24} color="#FF4081" />
                                     <Text className="text-xs text-gray-400 mt-1">Add</Text>
@@ -244,7 +253,7 @@ export default function AddServiceScreen() {
                                         <Image source={{ uri: img.uri }} className="w-24 h-24 rounded-xl" resizeMode="cover" />
                                         <TouchableOpacity
                                             onPress={() => removeImage(index)}
-                                            className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow-sm"
+                                            className="absolute -top-2 -right-2 bg-background rounded-full p-1 shadow-sm"
                                         >
                                             <Text className="text-xs font-bold text-red-500">✕</Text>
                                         </TouchableOpacity>
@@ -257,7 +266,7 @@ export default function AddServiceScreen() {
                                         <Text className="text-white text-xs mt-1 font-bold">Video</Text>
                                         <TouchableOpacity
                                             onPress={removeVideo}
-                                            className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow-sm"
+                                            className="absolute -top-2 -right-2 bg-background rounded-full p-1 shadow-sm"
                                         >
                                             <Text className="text-xs font-bold text-red-500">✕</Text>
                                         </TouchableOpacity>
@@ -269,7 +278,7 @@ export default function AddServiceScreen() {
                             </Text>
                         </View>
 
-                        <View className="bg-white p-6 rounded-2xl shadow-sm mb-6">
+                        <View className="bg-background p-6 rounded-2xl shadow-sm mb-6">
                             {/* Title */}
                             <Input
                                 label="Service Title"
@@ -279,24 +288,34 @@ export default function AddServiceScreen() {
                                 containerClassName="mb-6"
                             />
 
-                            {/* Price & Duration */}
+                            {/* Price */}
+                            <Input
+                                label="Price"
+                                placeholder="0.00"
+                                value={price}
+                                onChangeText={setPrice}
+                                keyboardType="numeric"
+                                leftIcon={<DollarSign size={16} color="#9CA3AF" />}
+                                containerClassName="mb-6"
+                            />
+
+                            {/* Duration */}
+                            <Text className="mb-2 text-sm font-bold text-foreground font-bodyMedium">Duration</Text>
                             <View className="flex-row gap-4 mb-6">
                                 <View className="flex-1">
                                     <Input
-                                        label="Price"
-                                        placeholder="0.00"
-                                        value={price}
-                                        onChangeText={setPrice}
+                                        placeholder="Hours"
+                                        value={durationHours}
+                                        onChangeText={setDurationHours}
                                         keyboardType="numeric"
-                                        leftIcon={<DollarSign size={16} color="#9CA3AF" />}
+                                        leftIcon={<Clock size={16} color="#9CA3AF" />}
                                     />
                                 </View>
                                 <View className="flex-1">
                                     <Input
-                                        label="Duration (min)"
-                                        placeholder="60"
-                                        value={duration}
-                                        onChangeText={setDuration}
+                                        placeholder="Minutes"
+                                        value={durationMinutes}
+                                        onChangeText={setDurationMinutes}
                                         keyboardType="numeric"
                                         leftIcon={<Clock size={16} color="#9CA3AF" />}
                                     />
@@ -305,15 +324,15 @@ export default function AddServiceScreen() {
 
                             {/* Category */}
                             <View className="mb-6">
-                                <Text className="mb-2 text-sm font-bold text-charcoal font-bodyMedium">Category</Text>
+                                <Text className="mb-2 text-sm font-bold text-foreground font-bodyMedium">Category</Text>
                                 <View className="flex-row flex-wrap gap-2">
                                     {CATEGORIES.map((cat) => (
                                         <TouchableOpacity
                                             key={cat}
                                             onPress={() => setSelectedCategory(cat)}
-                                            className={`px-4 py-2 rounded-full border ${selectedCategory === cat ? 'bg-primary border-primary' : 'bg-white border-gray-200'}`}
+                                            className={`px-4 py-2 rounded-full border ${selectedCategory === cat ? 'bg-primary border-primary' : 'bg-background border-border'}`}
                                         >
-                                            <Text className={`font-bold text-xs ${selectedCategory === cat ? 'text-white' : 'text-charcoal'}`}>
+                                            <Text className={`font-bold text-xs ${selectedCategory === cat ? 'text-white' : 'text-foreground'}`}>
                                                 {cat}
                                             </Text>
                                         </TouchableOpacity>
@@ -329,7 +348,7 @@ export default function AddServiceScreen() {
                                 onChangeText={setDescription}
                                 multiline
                                 numberOfLines={4}
-                                className="h-32 text-top"
+                                className="h-32"
                                 textAlignVertical="top"
                             />
                         </View>
@@ -338,14 +357,14 @@ export default function AddServiceScreen() {
                 </KeyboardAvoidingView>
 
                 {/* Footer */}
-                <View className="p-6 bg-white border-t border-gray-100">
+                <View className="p-6 bg-background border-t border-border">
                     <Button
                         title={isLoading ? "Publishing..." : "Publish Service"}
                         onPress={handlePublish}
                         loading={isLoading}
                         disabled={isLoading}
                         size="lg"
-                        className="shadow-lg shadow-pink-200"
+                        className=""
                     />
                 </View>
             </SafeAreaView>

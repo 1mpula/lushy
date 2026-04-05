@@ -1,6 +1,7 @@
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { Header } from '@/components/molecules/Header';
+import { useTheme } from '@/context/ThemeContext';
 import { useProfessionals } from '@/context/ProfessionalContext';
 import { useUser } from '@/context/UserContext';
 import { supabase } from '@/lib/supabase';
@@ -15,6 +16,7 @@ import { Alert, Image, ScrollView, Text, TextInput, TouchableOpacity, View } fro
 export default function BusinessProfileScreen() {
     const router = useRouter();
     const { user } = useUser();
+    const { theme } = useTheme();
     const { getProfessionalByUserId, refreshProfessionals } = useProfessionals();
 
     const [businessName, setBusinessName] = useState('');
@@ -116,7 +118,7 @@ export default function BusinessProfileScreen() {
     };
 
     return (
-        <View className="flex-1 bg-gray-50">
+        <View className="flex-1" style={{ backgroundColor: theme === 'dark' ? '#121212' : '#FFFFFF' }}>
             <Header title="Business Profile" />
 
             <ScrollView className="flex-1 p-6" contentContainerStyle={{ paddingBottom: 60 }}>
@@ -126,18 +128,22 @@ export default function BusinessProfileScreen() {
                     transition={{ type: 'timing', duration: 400 }}
                 >
                     <View className="mb-6 relative">
-                        <Text className="text-gray-700 font-bold mb-2">Profile Banner</Text>
+                        <Text className="font-bold mb-2" style={{ color: theme === 'dark' ? '#FFFFFF' : '#374151' }}>Profile Banner</Text>
                         <TouchableOpacity
                             onPress={handlePickBanner}
                             disabled={isUploadingBanner}
-                            className="w-full h-40 bg-gray-200 rounded-xl overflow-hidden justify-center items-center"
+                            className="w-full h-40 rounded-xl overflow-hidden justify-center items-center border border-dashed"
+                            style={{ 
+                                backgroundColor: theme === 'dark' ? '#1A1A1A' : '#F3F4F6',
+                                borderColor: theme === 'dark' ? '#4B5563' : '#D1D5DB'
+                            }}
                         >
                             {bannerUrl ? (
                                 <Image source={{ uri: bannerUrl }} className="w-full h-full" resizeMode="cover" />
                             ) : (
                                 <View className="items-center">
-                                    <ImageIcon size={32} color="#9E9E9E" />
-                                    <Text className="mt-2 text-mediumGray font-body text-sm">Add Banner Image (16:9)</Text>
+                                    <ImageIcon size={32} color={theme === 'dark' ? '#6B7280' : '#9E9E9E'} />
+                                    <Text className="mt-2 font-body text-sm" style={{ color: theme === 'dark' ? '#9CA3AF' : '#8E8E93' }}>Add Banner Image (16:9)</Text>
                                 </View>
                             )}
 
@@ -148,7 +154,7 @@ export default function BusinessProfileScreen() {
                             )}
                         </TouchableOpacity>
                         {isUploadingBanner && (
-                            <View className="absolute inset-0 bg-white/70 justify-center items-center rounded-xl mt-6">
+                            <View className="absolute inset-0 bg-background/70 justify-center items-center rounded-xl mt-6">
                                 <Text className="font-bold text-pink-500">Uploading...</Text>
                             </View>
                         )}
@@ -169,15 +175,20 @@ export default function BusinessProfileScreen() {
                     />
 
                     <View className="mb-4">
-                        <Text className="text-gray-700 font-bold mb-2">Bio</Text>
+                        <Text className="font-bold mb-2" style={{ color: theme === 'dark' ? '#FFFFFF' : '#374151' }}>Bio</Text>
                         <TextInput
-                            className="bg-white border border-gray-200 rounded-2xl p-4 text-base font-body text-charcoal min-h-[120px]"
+                            className="border border-border rounded-2xl p-4 text-base font-body min-h-[120px]"
                             value={bio}
                             onChangeText={setBio}
                             placeholder="Tell us about your business..."
+                            placeholderTextColor={theme === 'dark' ? '#6B7280' : '#9CA3AF'}
                             multiline
                             numberOfLines={4}
-                            style={{ textAlignVertical: 'top' }}
+                            style={{ 
+                                textAlignVertical: 'top',
+                                backgroundColor: theme === 'dark' ? '#1A1A1A' : '#FFFFFF',
+                                color: theme === 'dark' ? '#FFFFFF' : '#333333'
+                            }}
                         />
                     </View>
 

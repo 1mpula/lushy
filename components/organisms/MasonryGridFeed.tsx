@@ -24,6 +24,8 @@ interface MasonryGridFeedProps {
     onBookPress: (item: Item) => void;
     numColumns?: number;
     scrollEnabled?: boolean;
+    showTitle?: boolean;
+    showRating?: boolean;
 }
 
 export function MasonryGridFeed({
@@ -33,7 +35,9 @@ export function MasonryGridFeed({
     onItemPress,
     onBookPress,
     numColumns = 2,
-    scrollEnabled = true
+    scrollEnabled = true,
+    showTitle = true,
+    showRating = true
 }: MasonryGridFeedProps) {
 
     const columns = useMemo(() => {
@@ -71,6 +75,8 @@ export function MasonryGridFeed({
                                 providerId={item.providerId}
                                 price={item.price}
                                 rating={item.rating}
+                                showTitle={showTitle}
+                                showRating={showRating}
                                 onPress={() => onItemPress(item)}
                                 onBook={() => onBookPress(item)}
                                 style={{ height: undefined }}

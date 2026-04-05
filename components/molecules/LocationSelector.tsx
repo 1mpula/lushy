@@ -73,10 +73,10 @@ export function LocationSelector({ providerAddress = '123 Main Street, Cape Town
     };
 
     return (
-        <View className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+        <View className="bg-background rounded-xl p-4 shadow-sm border border-border">
             <View className="flex-row items-center mb-4">
                 <MapPin size={18} color="#FF4081" />
-                <Text className="ml-2 text-sm font-bold text-charcoal uppercase tracking-wider">Appointment Location</Text>
+                <Text className="ml-2 text-sm font-bold text-foreground uppercase tracking-wider">Appointment Location</Text>
             </View>
 
             {/* Location Type Options */}
@@ -86,15 +86,15 @@ export function LocationSelector({ providerAddress = '123 Main Street, Cape Town
                     onPress={() => handleTypeChange('house_call')}
                     className={`flex-row items-center p-4 rounded-xl border-2 ${locationType === 'house_call'
                         ? 'border-primary bg-pink-50'
-                        : 'border-gray-200 bg-white'
+                        : 'border-border bg-background'
                         }`}
                 >
-                    <View className={`w-10 h-10 rounded-full items-center justify-center ${locationType === 'house_call' ? 'bg-primary' : 'bg-gray-100'
+                    <View className={`w-10 h-10 rounded-full items-center justify-center ${locationType === 'house_call' ? 'bg-primary' : 'bg-card'
                         }`}>
                         <Home size={20} color={locationType === 'house_call' ? 'white' : '#757575'} />
                     </View>
                     <View className="ml-3 flex-1">
-                        <Text className={`text-base font-bold ${locationType === 'house_call' ? 'text-primary' : 'text-charcoal'
+                        <Text className={`text-base font-bold ${locationType === 'house_call' ? 'text-primary' : 'text-foreground'
                             }`}>House Call</Text>
                         <Text className="text-sm text-mediumGray">Provider comes to your location</Text>
                     </View>
@@ -103,7 +103,7 @@ export function LocationSelector({ providerAddress = '123 Main Street, Cape Town
                         : 'border-gray-300'
                         }`}>
                         {locationType === 'house_call' && (
-                            <View className="w-2 h-2 rounded-full bg-white" />
+                            <View className="w-2 h-2 rounded-full bg-background" />
                         )}
                     </View>
                 </TouchableOpacity>
@@ -113,15 +113,15 @@ export function LocationSelector({ providerAddress = '123 Main Street, Cape Town
                     onPress={() => handleTypeChange('salon_visit')}
                     className={`flex-row items-center p-4 rounded-xl border-2 ${locationType === 'salon_visit'
                         ? 'border-primary bg-pink-50'
-                        : 'border-gray-200 bg-white'
+                        : 'border-border bg-background'
                         }`}
                 >
-                    <View className={`w-10 h-10 rounded-full items-center justify-center ${locationType === 'salon_visit' ? 'bg-primary' : 'bg-gray-100'
+                    <View className={`w-10 h-10 rounded-full items-center justify-center ${locationType === 'salon_visit' ? 'bg-primary' : 'bg-card'
                         }`}>
                         <Store size={20} color={locationType === 'salon_visit' ? 'white' : '#757575'} />
                     </View>
                     <View className="ml-3 flex-1">
-                        <Text className={`text-base font-bold ${locationType === 'salon_visit' ? 'text-primary' : 'text-charcoal'
+                        <Text className={`text-base font-bold ${locationType === 'salon_visit' ? 'text-primary' : 'text-foreground'
                             }`}>Salon Visit</Text>
                         <Text className="text-sm text-mediumGray">Visit provider's location</Text>
                     </View>
@@ -130,7 +130,7 @@ export function LocationSelector({ providerAddress = '123 Main Street, Cape Town
                         : 'border-gray-300'
                         }`}>
                         {locationType === 'salon_visit' && (
-                            <View className="w-2 h-2 rounded-full bg-white" />
+                            <View className="w-2 h-2 rounded-full bg-background" />
                         )}
                     </View>
                 </TouchableOpacity>
@@ -139,12 +139,12 @@ export function LocationSelector({ providerAddress = '123 Main Street, Cape Town
             {/* Address Display/Input */}
             {locationType === 'house_call' ? (
                 <View>
-                    <Text className="text-xs font-bold text-charcoal uppercase tracking-wider mb-2">Your Address</Text>
+                    <Text className="text-xs font-bold text-foreground uppercase tracking-wider mb-2">Your Address</Text>
                     <TextInput
                         placeholder="Enter your address..."
                         value={clientAddress}
                         onChangeText={handleAddressChange}
-                        className="bg-gray-50 p-4 rounded-xl text-charcoal border border-gray-200"
+                        className="bg-card p-4 rounded-xl text-foreground border border-border"
                         placeholderTextColor="#9CA3AF"
                     />
 
@@ -165,8 +165,8 @@ export function LocationSelector({ providerAddress = '123 Main Street, Cape Town
                     </TouchableOpacity>
                 </View>
             ) : (
-                <View className="bg-gray-50 p-4 rounded-xl border border-gray-100">
-                    <Text className="text-xs font-bold text-charcoal uppercase tracking-wider mb-1">Provider's Location</Text>
+                <View className="bg-card p-4 rounded-xl border border-border">
+                    <Text className="text-xs font-bold text-foreground uppercase tracking-wider mb-1">Provider's Location</Text>
                     <View className="flex-row items-center">
                         <MapPin size={14} color="#FF4081" />
                         <Text className="ml-2 text-mediumGray">{providerAddress}</Text>

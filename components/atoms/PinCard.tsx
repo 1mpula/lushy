@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { useTheme } from '@/context/ThemeContext';
 
 // Screen width / 2 (columns) - padding
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -45,11 +46,13 @@ export const PinCard = ({ imageUrl, id, onPress }: PinCardProps) => {
         }
     };
 
+    const { theme } = useTheme();
+
     return (
         <TouchableOpacity
             onPress={handlePress}
             activeOpacity={0.9}
-            style={[styles.card, { height: calculatedHeight, width: '100%' }]}
+            style={[styles.card, { height: calculatedHeight, width: '100%', backgroundColor: theme === 'dark' ? '#1E1E1E' : '#f0f0f0' }]}
         >
             <Image
                 source={{ uri: imageUrl }}

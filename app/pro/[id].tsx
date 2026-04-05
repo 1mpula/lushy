@@ -1,4 +1,5 @@
 import { Button } from '@/components/atoms/Button';
+import { useTheme } from '@/context/ThemeContext';
 import { Skeleton } from '@/components/atoms/Skeleton';
 import { Header } from '@/components/molecules/Header';
 import { BookingModal } from '@/components/organisms/BookingModal';
@@ -19,6 +20,7 @@ export default function ProProfile() {
     const { id } = useLocalSearchParams();
     const router = useRouter();
     const { getProfessionalById, isLoading: proLoading } = useProfessionals();
+    const { theme } = useTheme();
     const { getServicesByProfessional, isLoading: servicesLoading } = useServices();
     const { getOrCreateConversation } = useChat();
 
@@ -77,8 +79,8 @@ export default function ProProfile() {
 
     if (proLoading || servicesLoading) {
         return (
-            <View className="flex-1 bg-white">
-                <View className="h-56 bg-gray-100" />
+            <View className="flex-1" style={{ backgroundColor: theme === 'dark' ? '#121212' : '#FFFFFF' }}>
+                <View className="h-56" style={{ backgroundColor: theme === 'dark' ? '#1A1A1A' : '#F9FAFB' }} />
                 <View className="px-6 -mt-12">
                     <Skeleton width={100} height={100} radius={50} />
                     <View className="mt-4 gap-2">
@@ -105,8 +107,8 @@ export default function ProProfile() {
 
     if (!pro) {
         return (
-            <View className="flex-1 bg-white items-center justify-center p-6">
-                <Text className="text-lg font-bold text-charcoal mb-2">Professional not found</Text>
+            <View className="flex-1 items-center justify-center p-6" style={{ backgroundColor: theme === 'dark' ? '#121212' : '#FFFFFF' }}>
+                <Text className="text-lg font-bold mb-2" style={{ color: theme === 'dark' ? '#FFFFFF' : '#2D2D2D' }}>Professional not found</Text>
                 <TouchableOpacity onPress={() => router.back()}>
                     <Text className="text-primary font-bold">Go back</Text>
                 </TouchableOpacity>
@@ -115,7 +117,7 @@ export default function ProProfile() {
     }
 
     return (
-        <View className="flex-1 bg-white">
+        <View className="flex-1" style={{ backgroundColor: theme === 'dark' ? '#121212' : '#FFFFFF' }}>
             {/* Header Background (Fixed) */}
             <View style={{ width: '100%', height: 224, position: 'absolute', top: 0, left: 0 }}>
                 <Image
@@ -144,8 +146,8 @@ export default function ProProfile() {
                 {/* Spacer for gradient header */}
                 <View className="h-40" />
 
-                {/* White Body Container */}
-                <View className="bg-slate-50 rounded-t-[48px] px-0 pt-16 pb-32 min-h-screen shadow-2xl">
+                {/* Body Container */}
+                <View className="rounded-t-[48px] px-0 pt-16 pb-32 min-h-screen shadow-2xl" style={{ backgroundColor: theme === 'dark' ? '#1A1A1A' : '#FFFFFF' }}>
                     {/* Avatar (Floating Overlap) */}
                     <MotiView
                         from={{ scale: 0.5, opacity: 0 }}
@@ -153,11 +155,18 @@ export default function ProProfile() {
                         transition={{ type: 'spring', damping: 14 }}
                         className="absolute -top-16 left-0 right-0 items-center"
                     >
-                        <View className="relative shadow-2xl shadow-pink-200">
-                            <View className="p-1 rounded-full bg-white/40 border border-white/50 backdrop-blur-md">
+                        <View className="relative" style={{
+                            shadowColor: '#FF4081',
+                            shadowOffset: { width: 0, height: 10 },
+                            shadowOpacity: theme === 'dark' ? 0.15 : 0.2,
+                            shadowRadius: 20,
+                            elevation: 10
+                        }}>
+                            <View className="p-1 rounded-full backdrop-blur-md" style={{ backgroundColor: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.4)', borderColor: theme === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.5)' }}>
                                 <Image
                                     source={{ uri: pro.avatarUrl }}
-                                    className="w-32 h-32 rounded-full border-[4px] border-white bg-slate-100"
+                                    className="w-32 h-32 rounded-full border-[4px]"
+                                    style={{ borderColor: theme === 'dark' ? '#2A2A2A' : '#FFFFFF', backgroundColor: theme === 'dark' ? '#1A1A1A' : '#F3F4F6' }}
                                     contentFit="cover"
                                 />
                             </View>
@@ -197,13 +206,21 @@ export default function ProProfile() {
                         from={{ opacity: 0, translateY: 10 }}
                         animate={{ opacity: 1, translateY: 0 }}
                         transition={{ delay: 300, type: 'timing', duration: 600 }}
-                        className="mx-6 mb-6 bg-white p-5 rounded-3xl shadow-xl shadow-pink-100/40 border border-white"
+                        className="mx-6 mb-6 p-5 rounded-3xl border border-border"
+                        style={{ 
+                            backgroundColor: theme === 'dark' ? '#1A1A1A' : '#FFFFFF',
+                            shadowColor: '#FF4081',
+                            shadowOffset: { width: 0, height: 10 },
+                            shadowOpacity: theme === 'dark' ? 0.05 : 0.08,
+                            shadowRadius: 20,
+                            elevation: 5
+                        }}
                     >
                         <View className="flex-row items-center mb-3">
                             <Briefcase size={16} color="#FF4081" />
-                            <Text className="text-base font-bold font-outfit text-deepCharcoal ml-2">About</Text>
+                            <Text className="text-base font-bold font-outfit ml-2" style={{ color: theme === 'dark' ? '#FFFFFF' : '#2D2D2D' }}>About</Text>
                         </View>
-                        <Text className="text-mediumGray font-inter leading-6">
+                        <Text className="font-inter leading-6" style={{ color: theme === 'dark' ? '#A0A0A0' : '#8E8E93' }}>
                             {pro.bio || 'No bio yet.'}
                         </Text>
                     </MotiView>
@@ -231,22 +248,30 @@ export default function ProProfile() {
                         from={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 500 }}
-                        className="bg-white pt-8 pb-32 min-h-[400px] rounded-t-[40px] shadow-lg shadow-gray-200/50"
+                        className="pt-8 pb-32 min-h-[400px] rounded-t-[40px] border-t border-border/50"
+                        style={{ 
+                            backgroundColor: theme === 'dark' ? '#121212' : '#FFFFFF',
+                            shadowColor: '#000',
+                            shadowOffset: { width: 0, height: -4 },
+                            shadowOpacity: theme === 'dark' ? 0.1 : 0.03,
+                            shadowRadius: 10,
+                            elevation: 2
+                        }}
                     >
                         <View className="px-6 flex-row items-center justify-between mb-6">
                             <View>
-                                <Text className="text-xl font-bold font-outfit text-deepCharcoal">Services</Text>
+                                <Text className="text-xl font-bold font-outfit" style={{ color: theme === 'dark' ? '#FFFFFF' : '#2D2D2D' }}>Services</Text>
                                 <Text className="text-gray-400 text-xs font-medium font-inter uppercase tracking-widest mt-0.5">Available Now</Text>
                             </View>
-                            <View className="flex-row items-center bg-white px-4 py-2 rounded-full shadow-sm border border-gray-100">
+                            <View className="flex-row items-center px-4 py-2 rounded-full shadow-sm border border-border" style={{ backgroundColor: theme === 'dark' ? '#1A1A1A' : '#FFFFFF' }}>
                                 <Grid size={14} color="#FF4081" />
-                                <Text className="text-xs font-bold text-deepCharcoal ml-2">{services.length}</Text>
+                                <Text className="text-xs font-bold ml-2" style={{ color: theme === 'dark' ? '#FFFFFF' : '#2D2D2D' }}>{services.length}</Text>
                             </View>
                         </View>
 
                         {services.length === 0 ? (
                             <View className="items-center justify-center p-12">
-                                <View className="w-20 h-20 bg-slate-50 border border-gray-100 rounded-full items-center justify-center mb-4 shadow-sm">
+                                <View className="w-20 h-20 bg-card border border-border rounded-full items-center justify-center mb-4 shadow-sm">
                                     <Grid size={32} color="#CBD5E1" />
                                 </View>
                                 <Text className="text-gray-400 font-bold font-inter">No services listed yet.</Text>
@@ -264,15 +289,15 @@ export default function ProProfile() {
             </ScrollView>
 
             {/* Bottom Floating Action Bar */}
-            <View className="absolute bottom-0 w-full px-6 py-4 bg-white/95 backdrop-blur-xl border-t border-gray-100 z-20">
+            <View className="absolute bottom-0 w-full px-6 py-4 backdrop-blur-xl border-t border-border z-20" style={{ backgroundColor: theme === 'dark' ? 'rgba(18, 18, 18, 0.95)' : 'rgba(255, 255, 255, 0.95)' }}>
                 <SafeAreaView edges={['bottom']}>
                     <View className="flex-row gap-3">
                         <Button
                             title={isStartingChat ? "Opening..." : "Message"}
                             variant="secondary"
                             onPress={handleMessage}
-                            className="flex-1 bg-gray-50 rounded-full"
-                            icon={<MessageCircle size={18} color="#333" />}
+                            className="flex-1 rounded-full"
+                            icon={<MessageCircle size={18} color={theme === 'dark' ? '#FFF' : '#333'} />}
                             disabled={isStartingChat}
                         />
                         <Button
@@ -284,7 +309,7 @@ export default function ProProfile() {
                                     // Handle no services case
                                 }
                             }}
-                            className="flex-[2] shadow-lg shadow-pink-200 rounded-full"
+                            className="flex-[2] rounded-full"
                         />
                     </View>
                 </SafeAreaView>

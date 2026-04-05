@@ -17,6 +17,8 @@ interface PinCardProps {
     providerId?: string;
     price?: string;
     rating?: number;
+    showTitle?: boolean;
+    showRating?: boolean;
     onBook?: () => void;
     onPress: () => void;
     style?: ViewStyle;
@@ -37,6 +39,8 @@ export function PinCard({
     providerId,
     price,
     rating,
+    showTitle = true,
+    showRating = true,
     onPress,
     style
 }: PinCardProps) {
@@ -108,7 +112,9 @@ export function PinCard({
             </View>
 
             <View className="mt-2">
-                <Text className="mb-1 text-sm font-bold font-heading text-foreground leading-tight" numberOfLines={2}>{title}</Text>
+                {showTitle && (
+                    <Text className="mb-1 text-sm font-bold font-heading text-foreground leading-tight" numberOfLines={2}>{title}</Text>
+                )}
                 <View className="flex-row items-center justify-between">
                     <View className="flex-row items-center flex-1">
                         <Image
@@ -119,7 +125,7 @@ export function PinCard({
                         <Text className="text-xs text-muted-foreground font-body flex-1" numberOfLines={1}>{providerName}</Text>
                     </View>
                     {/* Rating */}
-                    {rating !== undefined && rating > 0 && (
+                    {showRating && rating !== undefined && rating > 0 && (
                         <View className="flex-row items-center ml-2">
                             <Star size={12} color="#FFB800" fill="#FFB800" />
                             <Text className="text-xs text-foreground font-bold ml-0.5">{rating.toFixed(1)}</Text>

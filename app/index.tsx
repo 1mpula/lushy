@@ -1,4 +1,6 @@
+import { useTheme } from '@/context/ThemeContext';
 import { useUser } from '@/context/UserContext';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -12,6 +14,8 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function LandingPage() {
+    const { theme } = useTheme();
+    const isDark = theme === 'dark';
     const router = useRouter();
     const { isAuthenticated, isLoading, userRole } = useUser();
     const insets = useSafeAreaInsets();
@@ -26,13 +30,15 @@ export default function LandingPage() {
 
     return (
         <LinearGradient
-            colors={['#FFF0F5', '#FFDEE9', '#FFD1DC', '#FFC1CC']}
+            colors={isDark 
+                ? ['#121212', '#181818', '#1E1E1E', '#242424'] 
+                : ['#FFF0F5', '#FFDEE9', '#FFD1DC', '#FFC1CC']}
             locations={[0, 0.35, 0.7, 1]}
             start={{ x: 0.5, y: 0 }}
             end={{ x: 0.5, y: 1 }}
             style={{ flex: 1 }}
         >
-            <StatusBar style="dark" />
+            <StatusBar style={isDark ? "light" : "dark"} />
 
             <View
                 style={{
@@ -65,7 +71,7 @@ export default function LandingPage() {
                         style={{
                             fontFamily: 'Outfit_700Bold',
                             fontSize: 30,
-                            color: '#2D2D2D',
+                            color: isDark ? '#FFFFFF' : '#2D2D2D',
                             textAlign: 'center',
                             lineHeight: 38,
                             letterSpacing: -0.3,
@@ -78,7 +84,7 @@ export default function LandingPage() {
                         style={{
                             fontFamily: 'Inter_400Regular',
                             fontSize: 15,
-                            color: '#8E8E93',
+                            color: isDark ? '#A0A0A0' : '#8E8E93',
                             textAlign: 'center',
                             marginTop: 12,
                             lineHeight: 22,
@@ -125,20 +131,20 @@ export default function LandingPage() {
                         onPress={() => router.push('/auth/login')}
                         activeOpacity={0.85}
                         style={{
-                            backgroundColor: 'rgba(255, 255, 255, 0.65)',
+                            backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.65)',
                             paddingVertical: 18,
                             borderRadius: 50,
                             alignItems: 'center',
                             justifyContent: 'center',
                             borderWidth: 1,
-                            borderColor: 'rgba(255, 64, 129, 0.15)',
+                            borderColor: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 64, 129, 0.15)',
                         }}
                     >
                         <Text
                             style={{
                                 fontFamily: 'Outfit_700Bold',
                                 fontSize: 17,
-                                color: '#FF4081',
+                                color: isDark ? '#FFFFFF' : '#FF4081',
                                 letterSpacing: 0.3,
                             }}
                         >

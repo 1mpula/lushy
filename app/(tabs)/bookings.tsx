@@ -7,12 +7,12 @@ import { RateBookingModal } from '@/components/organisms/RateBookingModal';
 import { useBookings } from '@/context/BookingContext';
 import { useProfessionals } from '@/context/ProfessionalContext';
 import { useRatings } from '@/context/RatingContext';
-import { useSubscription } from '@/context/SubscriptionContext';
 import { useUser } from '@/context/UserContext';
 import { supabase } from '@/lib/supabase';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
+import { useTheme } from '@/context/ThemeContext';
 import { Calendar, Check, Clock, HelpCircle, MapPin, RefreshCw, Star } from 'lucide-react-native';
 import { MotiView } from 'moti';
 import { useEffect, useState } from 'react';
@@ -23,9 +23,9 @@ const DEFAULT_AVATAR = 'https://images.unsplash.com/photo-1494790108377-be9c29b2
 
 export default function BookingsScreen() {
     const router = useRouter();
+    const { theme } = useTheme();
     const { bookings, isLoading, error, refreshBookings, respondToBooking } = useBookings();
     const { userRole } = useUser();
-    const { isPro } = useSubscription();
     const { getRatingForBooking } = useRatings();
     const { getProfessionalById } = useProfessionals();
     const isProvider = userRole === 'provider';
@@ -59,23 +59,12 @@ export default function BookingsScreen() {
             case 'accepted': return { bg: 'bg-blue-100', text: 'text-blue-800' };
             case 'rejected': return { bg: 'bg-red-100', text: 'text-red-800' };
             case 'completed': return { bg: 'bg-emerald-100', text: 'text-emerald-800' };
-            case 'cancelled': return { bg: 'bg-gray-100', text: 'text-gray-800' };
-            default: return { bg: 'bg-gray-100', text: 'text-gray-800' };
+            case 'cancelled': return { bg: theme === 'dark' ? 'bg-slate-800' : 'bg-gray-100', text: theme === 'dark' ? 'text-slate-400' : 'text-gray-800' };
+            default: return { bg: theme === 'dark' ? 'bg-slate-800' : 'bg-gray-100', text: theme === 'dark' ? 'text-slate-400' : 'text-gray-800' };
         }
     };
 
     const handleAccept = async (bookingId: string) => {
-        if (isProvider && !isPro) {
-            Alert.alert(
-                'Subscription Required',
-                'You need an active Lushy Pro subscription to accept new bookings.',
-                [
-                    { text: 'Cancel', style: 'cancel' },
-                    { text: 'Subscribe', onPress: () => router.push('/pro/paywall') }
-                ]
-            );
-            return;
-        }
         await respondToBooking(bookingId, 'accepted');
     };
 
@@ -125,12 +114,12 @@ export default function BookingsScreen() {
 
     if (isLoading) {
         return (
-            <View className="flex-1 bg-slate-50">
+            <View className="flex-1" style={{ backgroundColor: theme === 'dark' ? '#121212' : '#FFFFFF' }}>
                 <LinearGradient
                     colors={['#FF4081', '#FF80AB', 'transparent']}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 0, y: 1 }}
-                    style={{ width: '100%', height: 280, position: 'absolute', top: 0, left: 0, opacity: 0.15 }}
+                    style={{ width: '100%', height: 280, position: 'absolute', top: 0, left: 0, opacity: theme === 'dark' ? 0.08 : 0.15 }}
                 />
                 <SafeAreaView className="flex-1" edges={['top']}>
                     <Header title={isProvider ? 'Requests' : 'My Bookings'} showBack={false} variant="overlay" />
@@ -145,12 +134,12 @@ export default function BookingsScreen() {
     }
 
     return (
-        <View className="flex-1 bg-slate-50">
+        <View className="flex-1" style={{ backgroundColor: theme === 'dark' ? '#121212' : '#FFFFFF' }}>
             <LinearGradient
                 colors={['#FF4081', '#FF80AB', 'transparent']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
-                style={{ width: '100%', height: 280, position: 'absolute', top: 0, left: 0, opacity: 0.15 }}
+                style={{ width: '100%', height: 280, position: 'absolute', top: 0, left: 0, opacity: theme === 'dark' ? 0.08 : 0.15 }}
             />
             <SafeAreaView className="flex-1" edges={['top']}>
                 <Header
@@ -158,7 +147,7 @@ export default function BookingsScreen() {
                     showBack={false}
                     variant="overlay"
                     rightElement={
-                        <TouchableOpacity onPress={refreshBookings} className="p-2 bg-white/80 backdrop-blur-md rounded-full border border-white shadow-sm">
+                        <TouchableOpacity onPress={refreshBookings} className="p-2 bg-background/80 backdrop-blur-md rounded-full border border-border shadow-sm">
                             <RefreshCw size={18} color="#757575" />
                         </TouchableOpacity>
                     }
@@ -186,11 +175,19 @@ export default function BookingsScreen() {
                                 from={{ scale: 0.8, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
                                 transition={{ type: 'spring', damping: 15 }}
-                                className="w-32 h-32 bg-white rounded-full items-center justify-center mb-6 shadow-xl shadow-pink-100/50 border border-pink-50"
+                                className="w-32 h-32 rounded-full items-center justify-center mb-6 border border-pink-50"
+                                style={{ 
+                                    backgroundColor: theme === 'dark' ? '#1A1A1A' : '#FFFFFF',
+                                    shadowColor: '#FF4081',
+                                    shadowOffset: { width: 0, height: 10 },
+                                    shadowOpacity: theme === 'dark' ? 0.05 : 0.1,
+                                    shadowRadius: 20,
+                                    elevation: 5
+                                }}
                             >
                                 <Calendar size={48} color="#FF4081" strokeWidth={1.5} />
                             </MotiView>
-                            <Text className="text-center text-2xl font-bold font-heading text-charcoal tracking-tight mb-2">
+                            <Text className="text-center text-2xl font-bold font-heading text-foreground tracking-tight mb-2">
                                 {isProvider ? 'No Requests Yet' : 'No Bookings Yet'}
                             </Text>
                             <Text className="text-center text-base font-body text-mediumGray leading-relaxed max-w-[280px]">
@@ -228,7 +225,15 @@ export default function BookingsScreen() {
                                 <TouchableOpacity
                                     activeOpacity={0.7}
                                     onPress={() => setDetailModalBooking(item)}
-                                    className="mb-4 bg-white border border-white rounded-[24px] shadow-sm shadow-pink-100/50 p-5"
+                                    className="mb-4 border border-border rounded-[24px] p-5"
+                                    style={{ 
+                                        backgroundColor: theme === 'dark' ? '#1A1A1A' : '#FFFFFF',
+                                        shadowColor: theme === 'dark' ? '#000' : '#FF4081',
+                                        shadowOffset: { width: 0, height: 2 },
+                                        shadowOpacity: theme === 'dark' ? 0.2 : 0.05,
+                                        shadowRadius: 8,
+                                        elevation: 2
+                                    }}
                                 >
                                     <View className="flex-row justify-between items-start mb-4">
                                         <View className="flex-row items-center flex-1 pr-2">
@@ -238,7 +243,7 @@ export default function BookingsScreen() {
                                                 contentFit="cover"
                                             />
                                             <View className="flex-1">
-                                                <Text className="font-bold text-lg text-charcoal font-heading leading-tight mb-0.5">
+                                                <Text className="font-bold text-lg text-foreground font-heading leading-tight mb-0.5">
                                                     {item.serviceName}
                                                 </Text>
                                                 <Text className="text-sm text-mediumGray font-body mb-1">
@@ -260,19 +265,19 @@ export default function BookingsScreen() {
                                         </View>
                                     </View>
 
-                                    <View className="bg-slate-50 p-4 rounded-2xl flex-row justify-between items-center mb-1">
+                                    <View className="p-4 rounded-2xl flex-row justify-between items-center mb-1" style={{ backgroundColor: theme === 'dark' ? '#252525' : '#F9FAFB' }}>
                                         <View className="flex-row items-center gap-5">
                                             <View className="flex-row items-center">
-                                                <View className="w-8 h-8 rounded-full bg-white items-center justify-center shadow-sm shadow-gray-200 mr-2">
+                                                <View className="w-8 h-8 rounded-full bg-background items-center justify-center shadow-sm shadow-gray-200 mr-2">
                                                     <Calendar size={14} color="#FF4081" strokeWidth={2.5} />
                                                 </View>
-                                                <Text className="text-[13px] text-charcoal font-bold">{item.date}</Text>
+                                                <Text className="text-[13px] text-foreground font-bold">{item.date}</Text>
                                             </View>
                                             <View className="flex-row items-center">
-                                                <View className="w-8 h-8 rounded-full bg-white items-center justify-center shadow-sm shadow-gray-200 mr-2">
+                                                <View className="w-8 h-8 rounded-full bg-background items-center justify-center shadow-sm shadow-gray-200 mr-2">
                                                     <Clock size={14} color="#0EA5E9" strokeWidth={2.5} />
                                                 </View>
-                                                <Text className="text-[13px] text-charcoal font-bold">{item.time}</Text>
+                                                <Text className="text-[13px] text-foreground font-bold">{item.time}</Text>
                                             </View>
                                         </View>
                                         <Text className="font-bold font-heading text-primary text-base tracking-tight">
@@ -289,15 +294,15 @@ export default function BookingsScreen() {
                                                     title="Accept"
                                                     variant="primary"
                                                     size="sm"
-                                                    className="flex-1 shadow-md shadow-pink-200"
+                                                    className="flex-1"
                                                     onPress={() => handleAccept(item.id)}
                                                 />
                                                 <Button
                                                     title="Decline"
                                                     variant="outline"
                                                     size="sm"
-                                                    className="flex-1 border-gray-200 bg-white"
-                                                    textClassName="text-charcoal"
+                                                    className="flex-1 border-border bg-background"
+                                                    textClassName="text-foreground"
                                                     onPress={() => handleReject(item.id)}
                                                 />
                                             </>
@@ -321,7 +326,7 @@ export default function BookingsScreen() {
                                                     title={completingId === item.id ? "Completing..." : "Complete"}
                                                     variant="primary"
                                                     size="sm"
-                                                    className="flex-1 shadow-md shadow-pink-200"
+                                                    className="flex-1"
                                                     icon={completingId !== item.id ? <Check size={16} color="white" /> : undefined}
                                                     loading={completingId === item.id}
                                                     onPress={() => handleMarkComplete(item.id)}
@@ -372,7 +377,7 @@ export default function BookingsScreen() {
                                                         title="Rate Experience"
                                                         variant="primary"
                                                         size="sm"
-                                                        className="flex-1 shadow-md shadow-pink-200"
+                                                        className="flex-1"
                                                         onPress={() => handleRate(item)}
                                                         icon={<Star size={14} color="white" fill="white" />}
                                                     />

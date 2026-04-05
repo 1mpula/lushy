@@ -1,6 +1,8 @@
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { signUp } from '@/lib/auth';
+import { useTheme } from '@/context/ThemeContext';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useRouter } from 'expo-router';
 import { ArrowLeft, Check } from 'lucide-react-native';
 import { useState } from 'react';
@@ -8,6 +10,7 @@ import { Alert, KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpaci
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function ClientSignup() {
+    const { theme } = useTheme();
     const insets = useSafeAreaInsets();
     const bottomPadding = insets.bottom;
     const router = useRouter();
@@ -54,10 +57,10 @@ export default function ClientSignup() {
     };
 
     return (
-        <SafeAreaView className="flex-1 bg-white" edges={['top', 'left', 'right']}>
-            <View className="px-6 py-4 border-b border-gray-50">
+        <SafeAreaView className="flex-1" edges={['top', 'left', 'right']} style={{ backgroundColor: theme === 'dark' ? '#121212' : '#FFFFFF' }}>
+            <View className="px-6 py-4 border-b border-border">
                 <TouchableOpacity onPress={() => router.back()} className="w-10 h-10 items-center justify-center -ml-2">
-                    <ArrowLeft color="#333" size={24} />
+                    <ArrowLeft color={theme === 'dark' ? '#FFF' : '#333'} size={24} />
                 </TouchableOpacity>
             </View>
 
@@ -67,7 +70,7 @@ export default function ClientSignup() {
             >
                 <ScrollView className="flex-1 px-6 pt-6" contentContainerStyle={{ paddingBottom: 40 + bottomPadding }}>
                     <View className="mb-8">
-                        <Text className="text-3xl font-bold font-heading text-charcoal mb-2">Create Account</Text>
+                        <Text className="text-3xl font-bold font-heading text-foreground mb-2">Create Account</Text>
                         <Text className="text-mediumGray font-body text-base">Enter your details to start booking.</Text>
                     </View>
 
@@ -100,10 +103,10 @@ export default function ClientSignup() {
 
                     {/* Terms Checkbox */}
                     <TouchableOpacity
-                        onPress={() => setTermsAccepted(!termsAccepted)}
+                        onPress={() => termsAccepted && setTermsAccepted(!termsAccepted)}
                         className="flex-row items-start mb-6"
                     >
-                        <View className={`w-6 h-6 rounded border-2 items-center justify-center mr-3 mt-0.5 ${termsAccepted ? 'bg-primary border-primary' : 'border-gray-300 bg-white'}`}>
+                        <View className={`w-6 h-6 rounded border-2 items-center justify-center mr-3 mt-0.5 ${termsAccepted ? 'bg-primary border-primary' : 'border-gray-300'}`} style={{ backgroundColor: termsAccepted ? '#FF4081' : (theme === 'dark' ? '#1A1A1A' : '#FFFFFF') }}>
                             {termsAccepted && <Check size={14} color="white" />}
                         </View>
                         <Text className="flex-1 text-sm text-mediumGray leading-relaxed">
@@ -130,22 +133,28 @@ export default function ClientSignup() {
                         loading={loading}
                         variant="primary"
                         size="lg"
-                        className="mb-6 shadow-lg shadow-pink-200"
+                        className="mb-6"
                     />
 
                     <View className="flex-row items-center justify-center gap-4 mb-6">
-                        <View className="h-px bg-gray-200 flex-1" />
+                        <View className="h-px flex-1" style={{ backgroundColor: theme === 'dark' ? '#333' : '#F3F4F6' }} />
                         <Text className="text-gray-400 font-body text-xs uppercase tracking-wider">Or continue with</Text>
-                        <View className="h-px bg-gray-200 flex-1" />
+                        <View className="h-px flex-1" style={{ backgroundColor: theme === 'dark' ? '#333' : '#F3F4F6' }} />
                     </View>
 
                     {/* Social Buttons */}
                     <View className="flex-row justify-center gap-4 mb-8">
-                        <TouchableOpacity className="w-14 h-14 rounded-full border border-gray-200 items-center justify-center bg-white">
-                            <Text className="font-bold text-lg text-charcoal">G</Text>
+                        <TouchableOpacity 
+                            className="w-14 h-14 rounded-full border border-border items-center justify-center"
+                            style={{ backgroundColor: theme === 'dark' ? '#1A1A1A' : '#FFFFFF' }}
+                        >
+                            <Text className="font-bold text-lg text-foreground">G</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity className="w-14 h-14 rounded-full border border-gray-200 items-center justify-center bg-white">
-                            <Text className="font-bold text-lg text-charcoal"></Text>
+                        <TouchableOpacity 
+                            className="w-14 h-14 rounded-full border border-border items-center justify-center"
+                            style={{ backgroundColor: theme === 'dark' ? '#1A1A1A' : '#FFFFFF' }}
+                        >
+                            <Text className="font-bold text-lg text-foreground"></Text>
                         </TouchableOpacity>
                     </View>
 

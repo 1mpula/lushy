@@ -5,11 +5,11 @@ import { ActivityIndicator, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useChat } from '@/context/ChatContext';
+import { useTheme } from '@/context/ThemeContext';
 import { useUser } from '@/context/UserContext';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const { theme } = useTheme();
   const { userRole, isAuthenticated, isLoading } = useUser();
   const { totalUnread } = useChat();
   const insets = useSafeAreaInsets();
@@ -20,7 +20,7 @@ export default function TabLayout() {
   // Show loading while checking auth
   if (isLoading) {
     return (
-      <View className="flex-1 bg-white items-center justify-center">
+      <View className="flex-1 items-center justify-center" style={{ backgroundColor: theme === 'dark' ? '#121212' : '#FFFFFF' }}>
         <ActivityIndicator size="large" color="#FF4081" />
       </View>
     );
@@ -35,7 +35,7 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: '#FF4081',
-        tabBarInactiveTintColor: '#757575',
+        tabBarInactiveTintColor: theme === 'dark' ? '#9BA1A6' : '#757575',
         headerShown: false,
         tabBarStyle: {
           borderTopWidth: 0,
@@ -46,7 +46,7 @@ export default function TabLayout() {
           height: 60 + bottomInset,
           paddingBottom: 10 + bottomInset,
           paddingTop: 10,
-          backgroundColor: '#ffffff',
+          backgroundColor: theme === 'dark' ? '#1A1A1A' : '#ffffff',
         }
       }}>
 

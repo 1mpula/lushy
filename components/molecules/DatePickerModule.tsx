@@ -8,7 +8,7 @@ interface DatePickerModuleProps {
 
 export function DatePickerModule({ onDateSelect, markedDates }: DatePickerModuleProps) {
     return (
-        <View className="p-4 bg-white rounded-lg shadow-sm">
+        <View className="p-4 bg-background rounded-lg shadow-sm">
             <Calendar
                 onDayPress={onDateSelect}
                 markedDates={markedDates}

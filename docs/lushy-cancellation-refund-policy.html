@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lushy – Cancellation & Refund Policy</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            font-size: 11pt;
+            line-height: 1.7;
+            color: #1a1a2e;
+            background: #ffffff;
+        }
+
+        .page {
+            max-width: 794px;
+            margin: 0 auto;
+            padding: 60px 72px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 24px;
+            border-bottom: 3px solid #c9a96e;
+            margin-bottom: 36px;
+        }
+
+        .logo-block .brand {
+            font-size: 28pt;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #1a1a2e;
+        }
+
+        .logo-block .tagline {
+            font-size: 9pt;
+            color: #7a7a9a;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        .doc-badge {
+            background: linear-gradient(135deg, #c9a96e 0%, #e8c98a 100%);
+            color: #1a1a2e;
+            font-size: 8pt;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: 20px;
+        }
+
+        /* Title Section */
+        .title-section {
+            margin-bottom: 32px;
+        }
+
+        .doc-title {
+            font-size: 20pt;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .meta-row {
+            display: flex;
+            gap: 24px;
+            font-size: 9pt;
+            color: #7a7a9a;
+        }
+
+        .meta-row span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Intro box */
+        .intro-box {
+            background: #f9f5ee;
+            border-left: 4px solid #c9a96e;
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 36px;
+            font-size: 10.5pt;
+            color: #3a3a5c;
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 28px;
+        }
+
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: #c9a96e;
+            color: #1a1a2e;
+            font-size: 9pt;
+            font-weight: 700;
+            border-radius: 50%;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-size: 13pt;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        p {
+            font-size: 10.5pt;
+            color: #3a3a5c;
+            margin-bottom: 10px;
+            padding-left: 34px;
+            line-height: 1.75;
+        }
+
+        ul {
+            padding-left: 54px;
+            margin-bottom: 10px;
+        }
+
+        li {
+            font-size: 10.5pt;
+            color: #3a3a5c;
+            margin-bottom: 6px;
+            line-height: 1.65;
+            position: relative;
+        }
+
+        li::marker {
+            color: #c9a96e;
+        }
+
+        .highlight-box {
+            background: #fff8e6;
+            border: 1px solid #e8c98a;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 12px 0 10px 34px;
+            font-size: 10pt;
+            color: #5a4a1a;
+        }
+
+        .highlight-box strong {
+            color: #1a1a2e;
+        }
+
+        table {
+            width: calc(100% - 34px);
+            margin-left: 34px;
+            border-collapse: collapse;
+            margin-bottom: 12px;
+            font-size: 10pt;
+        }
+
+        th {
+            background: #1a1a2e;
+            color: #c9a96e;
+            font-weight: 600;
+            text-align: left;
+            padding: 10px 14px;
+            font-size: 9.5pt;
+            letter-spacing: 0.3px;
+        }
+
+        td {
+            padding: 9px 14px;
+            border-bottom: 1px solid #ece8df;
+            color: #3a3a5c;
+            vertical-align: top;
+        }
+
+        tr:nth-child(even) td {
+            background: #fafaf5;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #ece8df;
+            margin: 28px 0;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 48px;
+            padding-top: 20px;
+            border-top: 2px solid #ece8df;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-brand {
+            font-size: 9pt;
+            font-weight: 700;
+            color: #c9a96e;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-text {
+            font-size: 8.5pt;
+            color: #aaaacc;
+        }
+
+        .contact-block {
+            background: #1a1a2e;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 12px 0 0 34px;
+            color: #ffffff;
+        }
+
+        .contact-block p {
+            padding-left: 0;
+            color: #ccc;
+            margin-bottom: 4px;
+        }
+
+        .contact-block a {
+            color: #c9a96e;
+            text-decoration: none;
+        }
+
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .page {
+                padding: 40px 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-block">
+                <div class="brand">Lushy</div>
+                <div class="tagline">Beauty &amp; Wellness Services Platform</div>
+            </div>
+            <div class="doc-badge">Legal Document</div>
+        </div>
+
+        <!-- Title -->
+        <div class="title-section">
+            <div class="doc-title">Cancellation &amp; Refund Policy</div>
+            <div class="meta-row">
+                <span><strong>Effective Date:</strong> 10 March 2026</span>
+                <span><strong>Version:</strong> 1.0</span>
+                <span><strong>Jurisdiction:</strong> Republic of Botswana</span>
+            </div>
+        </div>
+
+        <!-- Intro -->
+        <div class="intro-box">
+            This Cancellation &amp; Refund Policy governs all bookings made through the <strong>Lushy</strong> platform
+            (mobile application and web portal). By booking a service through Lushy, you agree to the terms outlined
+            below. We encourage you to read this policy carefully before making any booking.
+        </div>
+
+        <!-- Section 1 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">1</span>
+                <h2>Scope of This Policy</h2>
+            </div>
+            <p>
+                This policy applies to all users of the Lushy platform, including clients (service seekers) and
+                professionals (service providers). It covers bookings for beauty, wellness, and personal care services
+                facilitated through our app.
+            </p>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Section 2 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">2</span>
+                <h2>Client Cancellation Policy</h2>
+            </div>
+            <p><strong>Cancellations by Clients</strong> are subject to the following time-based rules:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cancellation Window</th>
+                        <th>Refund Entitlement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>More than 24 hours before appointment</td>
+                        <td>Full refund to original payment method</td>
+                    </tr>
+                    <tr>
+                        <td>12–24 hours before appointment</td>
+                        <td>50% refund; 50% retained as cancellation fee</td>
+                    </tr>
+                    <tr>
+                        <td>Less than 12 hours before appointment</td>
+                        <td>No refund (full cancellation fee applies)</td>
+                    </tr>
+                    <tr>
+                        <td>No-show (no cancellation made)</td>
+                        <td>No refund; professional retains full fee</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="highlight-box">
+                <strong>How to cancel:</strong> Cancellations must be made directly through the Lushy app via the
+                "Bookings" section. Cancellations requested via phone, WhatsApp, or other means are not recognised under
+                this policy.
+            </div>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Section 3 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">3</span>
+                <h2>Professional Cancellation Policy</h2>
+            </div>
+            <p>
+                We uphold high standards of reliability on the Lushy platform. If a <strong>professional cancels a
+                    confirmed booking</strong>:
+            </p>
+            <ul>
+                <li>The client will receive a <strong>full refund</strong> regardless of the cancellation time.</li>
+                <li>The professional may receive a <strong>reliability strike</strong> on their account.</li>
+                <li>Repeated cancellations may result in <strong>account suspension or removal</strong> from the
+                    platform.</li>
+                <li>Professionals must cancel with <strong>at least 4 hours' notice</strong> via the app to avoid
+                    penalties.</li>
+            </ul>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Section 4 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">4</span>
+                <h2>Refund Processing</h2>
+            </div>
+            <p>
+                Approved refunds are processed as follows:
+            </p>
+            <ul>
+                <li>Refunds are issued to the <strong>original payment method</strong> used at the time of booking.</li>
+                <li>Refunds may take <strong>5–10 business days</strong> to reflect, depending on the card issuer or
+                    mobile money provider.</li>
+                <li>Lushy will send a <strong>refund confirmation notification</strong> via the app and email once
+                    processed.</li>
+                <li>Refunds denominated in <strong>Botswana Pula (BWP)</strong> will not be subject to currency
+                    conversion fees by Lushy.</li>
+            </ul>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Section 5 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">5</span>
+                <h2>Service Quality Disputes</h2>
+            </div>
+            <p>
+                If a client is dissatisfied with a service received, Lushy operates a <strong>dispute resolution
+                    process</strong>:
+            </p>
+            <ul>
+                <li>A dispute must be raised <strong>within 24 hours</strong> of service completion via the app's
+                    "Report Issue" feature.</li>
+                <li>Lushy's support team will review the dispute within <strong>3 business days</strong>.</li>
+                <li>A partial or full refund may be issued at Lushy's sole discretion following the investigation.</li>
+                <li>Chargebacks initiated directly with a bank <strong>without first contacting Lushy</strong> may
+                    result in account suspension pending review.</li>
+            </ul>
+            <div class="highlight-box">
+                <strong>Please note:</strong> Lushy acts as a <em>marketplace facilitator</em>. We are not directly
+                liable for the quality of services delivered by independent professionals but we are committed to fair
+                resolution of genuine disputes.
+            </div>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Section 6 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">6</span>
+                <h2>Subscription Plans (Professionals)</h2>
+            </div>
+            <p>
+                For professionals on paid subscription tiers:
+            </p>
+            <ul>
+                <li>Subscription fees are <strong>non-refundable</strong> once a billing period has commenced.</li>
+                <li>Professionals may cancel their subscription at any time; access continues until the end of the
+                    current billing period.</li>
+                <li>Lushy reserves the right to modify subscription pricing with <strong>30 days' written
+                        notice</strong>.</li>
+            </ul>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Section 7 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">7</span>
+                <h2>Exceptions &amp; Force Majeure</h2>
+            </div>
+            <p>
+                In extraordinary circumstances (e.g., natural disasters, public health emergencies, government-mandated
+                closures), Lushy may extend full refunds or fee waivers on a case-by-case basis. These decisions rest
+                solely with Lushy management and will be communicated via official app notifications.
+            </p>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Section 8 -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">8</span>
+                <h2>Policy Updates</h2>
+            </div>
+            <p>
+                Lushy reserves the right to update this policy at any time. Changes will be communicated in-app and via
+                email at least <strong>14 days before</strong> taking effect. Continued use of the platform after
+                changes constitutes acceptance of the revised policy.
+            </p>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Contact -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">9</span>
+                <h2>Contact Us</h2>
+            </div>
+            <p>For cancellation requests, refund enquiries, or disputes, please reach out:</p>
+            <div class="contact-block">
+                <p><strong style="color:#c9a96e;">Lushy Support Team</strong></p>
+                <p>Email: <a href="mailto:support@lushy.co.bw">support@lushy.co.bw</a></p>
+                <p>In-App: Settings → Help &amp; Support → Contact Us</p>
+                <p>Operating Hours: Monday–Friday, 08:00–18:00 CAT</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <span class="footer-brand">LUSHY</span>
+            <span class="footer-text">© 2026 Lushy · Cancellation &amp; Refund Policy v1.0 · Effective 10 March
+                2026</span>
+            <span class="footer-text">Page 1 of 1</span>
+        </div>
+
+    </div>
+</body>
+
+</html>

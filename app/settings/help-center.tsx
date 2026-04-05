@@ -1,4 +1,5 @@
 import { Header } from '@/components/molecules/Header';
+import { useTheme } from '@/context/ThemeContext';
 import { useRouter } from 'expo-router';
 import { ChevronRight, FileText, Mail, MessageCircle } from 'lucide-react-native';
 import { Linking, ScrollView, Text, TouchableOpacity, View } from 'react-native';
@@ -24,6 +25,7 @@ const FAQ_ITEMS = [
 
 export default function HelpCenterScreen() {
     const router = useRouter();
+    const { theme } = useTheme();
 
     const handleContactEmail = () => {
         Linking.openURL('mailto:support@lushy.app?subject=Help Request');
@@ -39,13 +41,13 @@ export default function HelpCenterScreen() {
     };
 
     return (
-        <View className="flex-1 bg-gray-50">
+        <View className="flex-1 bg-card">
             <Header title="Help Center" />
 
             <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 40 }}>
                 {/* Contact Options */}
                 <Text className="px-6 py-4 text-sm font-bold text-mediumGray uppercase tracking-wider">Contact Us</Text>
-                <View className="bg-white border-y border-gray-100">
+                <View className="bg-background border-y border-border">
                     <TouchableOpacity
                         onPress={handleContactEmail}
                         className="flex-row items-center justify-between p-4 border-b border-gray-50"
@@ -53,7 +55,7 @@ export default function HelpCenterScreen() {
                         <View className="flex-row items-center gap-3">
                             <Mail size={22} color="#FF4081" />
                             <View>
-                                <Text className="text-base font-bold text-charcoal">Email Support</Text>
+                                <Text className="text-base font-bold text-foreground">Email Support</Text>
                                 <Text className="text-sm text-mediumGray">support@lushy.app</Text>
                             </View>
                         </View>
@@ -66,7 +68,7 @@ export default function HelpCenterScreen() {
                         <View className="flex-row items-center gap-3">
                             <MessageCircle size={22} color="#FF4081" />
                             <View>
-                                <Text className="text-base font-bold text-charcoal">Live Chat</Text>
+                                <Text className="text-base font-bold text-foreground">Live Chat</Text>
                                 <Text className="text-sm text-mediumGray">Available 9AM - 6PM</Text>
                             </View>
                         </View>
@@ -76,10 +78,10 @@ export default function HelpCenterScreen() {
 
                 {/* FAQs */}
                 <Text className="px-6 py-4 text-sm font-bold text-mediumGray uppercase tracking-wider">Frequently Asked Questions</Text>
-                <View className="bg-white border-y border-gray-100">
+                <View className="bg-background border-y border-border">
                     {FAQ_ITEMS.map((item, index) => (
                         <View key={index} className="p-4 border-b border-gray-50">
-                            <Text className="text-base font-bold text-charcoal mb-2">{item.question}</Text>
+                            <Text className="text-base font-bold text-foreground mb-2">{item.question}</Text>
                             <Text className="text-sm text-mediumGray leading-relaxed">{item.answer}</Text>
                         </View>
                     ))}
@@ -87,14 +89,14 @@ export default function HelpCenterScreen() {
 
                 {/* Legal */}
                 <Text className="px-6 py-4 text-sm font-bold text-mediumGray uppercase tracking-wider">Legal</Text>
-                <View className="bg-white border-y border-gray-100">
+                <View className="bg-background border-y border-border">
                     <TouchableOpacity
                         onPress={handleOpenTerms}
                         className="flex-row items-center justify-between p-4"
                     >
                         <View className="flex-row items-center gap-3">
-                            <FileText size={22} color="#333" />
-                            <Text className="text-base text-charcoal">Terms of Service & Privacy Policy</Text>
+                            <FileText size={22} color={theme === 'dark' ? '#FFF' : '#333'} />
+                            <Text className="text-base text-foreground">Terms of Service & Privacy Policy</Text>
                         </View>
                         <ChevronRight size={20} color="#CDCDE0" />
                     </TouchableOpacity>

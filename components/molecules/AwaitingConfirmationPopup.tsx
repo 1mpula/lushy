@@ -12,14 +12,14 @@ export function AwaitingConfirmationPopup({ visible, providerName, onDismiss }: 
     return (
         <Modal visible={visible} animationType="fade" transparent>
             <View className="flex-1 justify-center items-center bg-black/60 px-6">
-                <View className="bg-white w-full rounded-3xl p-8 items-center shadow-xl">
+                <View className="bg-background w-full rounded-3xl p-8 items-center shadow-xl">
                     {/* Icon */}
                     <View className="w-20 h-20 bg-yellow-100 rounded-full items-center justify-center mb-6">
                         <Clock size={40} color="#F59E0B" />
                     </View>
 
                     {/* Title */}
-                    <Text className="text-2xl font-bold font-heading text-charcoal text-center mb-2">
+                    <Text className="text-2xl font-bold font-heading text-foreground text-center mb-2">
                         Request Sent!
                     </Text>
 
@@ -29,8 +29,8 @@ export function AwaitingConfirmationPopup({ visible, providerName, onDismiss }: 
                     </Text>
 
                     {/* Info Box */}
-                    <View className="bg-gray-50 p-4 rounded-xl w-full mb-6">
-                        <Text className="text-sm text-charcoal text-center">
+                    <View className="bg-card p-4 rounded-xl w-full mb-6">
+                        <Text className="text-sm text-foreground text-center">
                             You'll receive a notification when the provider responds to your request.
                         </Text>
                     </View>

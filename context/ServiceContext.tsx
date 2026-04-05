@@ -30,7 +30,7 @@ interface ServiceContextType {
     getServiceById: (id: string) => Service | undefined;
     getServicesByCategory: (category: string) => Service[];
     getServicesByProfessional: (professionalId: string) => Service[];
-    deleteService: (id: string, imageUrls: string[]) => Promise<void>;
+    deleteService: (id: string, imageUrls: string[], videoUrl?: string) => Promise<void>;
     updateService: (id: string, updates: Partial<{
         name: string;
         description: string;
@@ -132,7 +132,7 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
         return services.filter(s => s.professionalId === professionalId);
     };
 
-    const deleteService = async (id: string, imageUrls: string[]) => {
+    const deleteService = async (id: string, imageUrls: string[], videoUrl?: string) => {
         try {
             setIsLoading(true);
 
@@ -144,18 +144,29 @@ export function ServiceProvider({ children }: { children: ReactNode }) {
 
             if (dbError) throw dbError;
 
-            // 2. Delete images from storage
-            if (imageUrls && imageUrls.length > 0) {
+            // 2. Delete media from storage
+            const allMedia = [...(imageUrls || [])];
+            if (videoUrl) {
+                allMedia.push(videoUrl);
+            }
+
+            if (allMedia.length > 0) {
                 // Extract paths from URLs
-                const filesToRemove = imageUrls.map(url => {
-                    // Url format: .../storage/v1/object/public/services/folder/file.jpg
-                    // We need: folder/file.jpg
+                const filesToRemove = allMedia.map(url => {
+                    // Safe regex to extract everything after /public/services/
+                    const match = url.match(/\/public\/services\/(.+)$/);
+                    if (match && match[1]) return match[1];
+
+                    // Fallback
                     const parts = url.split('/services/');
-                    return parts.length > 1 ? parts[1] : null;
+                    return parts.length > 1 ? parts.slice(1).join('/services/') : null;
                 }).filter(path => path !== null) as string[];
 
                 if (filesToRemove.length > 0) {
-                    await supabase.storage.from('services').remove(filesToRemove);
+                    const { error: storageError } = await supabase.storage.from('services').remove(filesToRemove);
+                    if (storageError) {
+                        console.error('Storage deletion error (files may be orphaned):', storageError);
+                    }
                 }
             }
 

@@ -3,6 +3,7 @@
 
 import { ChatInput } from '@/components/molecules/ChatInput';
 import { MessageBubble } from '@/components/molecules/MessageBubble';
+import { useTheme } from '@/context/ThemeContext';
 import { Message, useChat } from '@/context/ChatContext';
 import { useUser } from '@/context/UserContext';
 import { Ionicons } from '@expo/vector-icons';
@@ -26,6 +27,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 export default function ChatScreen() {
     const router = useRouter();
     const insets = useSafeAreaInsets();
+    const { theme } = useTheme();
     const { conversationId } = useLocalSearchParams<{ conversationId: string }>();
     const { user, userRole } = useUser();
     const { conversations, getMessages, sendMessage, markAsRead, subscribeToMessages } = useChat();
@@ -120,8 +122,8 @@ export default function ChatScreen() {
 
     if (!user) {
         return (
-            <SafeAreaView style={styles.container}>
-                <Text style={styles.errorText}>Please sign in to chat</Text>
+            <SafeAreaView style={[styles.container, { backgroundColor: theme === 'dark' ? '#121212' : '#FFFFFF' }]}>
+                <Text style={[styles.errorText, { color: theme === 'dark' ? '#FFF' : '#333' }]}>Please sign in to chat</Text>
             </SafeAreaView>
         );
     }
@@ -130,7 +132,9 @@ export default function ChatScreen() {
         <View style={styles.container}>
             {/* Light Gradient Background */}
             <LinearGradient
-                colors={['#FFF8FA', '#FFFFFF', '#FFF5F8']}
+                colors={theme === 'dark' 
+                    ? ['#121212', '#181818', '#121212'] 
+                    : ['#FFF8FA', '#FFFFFF', '#FFF5F8']}
                 style={StyleSheet.absoluteFill}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
@@ -138,15 +142,15 @@ export default function ChatScreen() {
 
             <SafeAreaView style={styles.safeArea} edges={['top']}>
                 {/* Premium Header */}
-                <BlurView intensity={80} tint="light" style={styles.headerBlur}>
+                <BlurView intensity={80} tint={theme === 'dark' ? 'dark' : 'light'} style={[styles.headerBlur, { borderBottomColor: theme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)' }]}>
                     <View style={styles.header}>
                         <Pressable
                             style={styles.backButton}
                             onPress={() => router.back()}
                             hitSlop={10}
                         >
-                            <View style={styles.backButtonInner}>
-                                <Ionicons name="chevron-back" size={22} color="#333333" />
+                            <View style={[styles.backButtonInner, { backgroundColor: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)' }]}>
+                                <Ionicons name="chevron-back" size={22} color={theme === 'dark' ? '#FFFFFF' : '#333333'} />
                             </View>
                         </Pressable>
 
@@ -161,7 +165,7 @@ export default function ChatScreen() {
                                 <Text style={styles.avatarText}>{getInitials(otherName || '')}</Text>
                             </LinearGradient>
                             <View style={styles.headerInfo}>
-                                <Text style={styles.headerName} numberOfLines={1}>{otherName || 'Chat'}</Text>
+                                <Text style={[styles.headerName, { color: theme === 'dark' ? '#FFFFFF' : '#333333' }]} numberOfLines={1}>{otherName || 'Chat'}</Text>
                                 <View style={styles.onlineStatus}>
                                     <View style={styles.onlineDot} />
                                     <Text style={styles.onlineText}>Active now</Text>
@@ -207,7 +211,7 @@ export default function ChatScreen() {
                                     <Ionicons name="chatbubbles" size={40} color="#FFFFFF" />
                                 </LinearGradient>
                             </MotiView>
-                            <Text style={styles.emptyText}>Start the conversation</Text>
+                            <Text style={[styles.emptyText, { color: theme === 'dark' ? '#FFFFFF' : '#333333' }]}>Start the conversation</Text>
                             <Text style={styles.emptySubtext}>
                                 Say hello to {otherName || 'them'} 👋
                             </Text>
@@ -233,7 +237,11 @@ export default function ChatScreen() {
                     )}
 
                     {/* Premium Input Area */}
-                    <View style={[styles.inputWrapper, { paddingBottom: insets.bottom || 16 }]}>
+                    <View style={[styles.inputWrapper, { 
+                        paddingBottom: insets.bottom || 16,
+                        backgroundColor: theme === 'dark' ? 'rgba(18, 18, 18, 0.98)' : 'rgba(255, 248, 250, 0.98)',
+                        borderTopColor: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.06)'
+                    }]}>
                         <ChatInput
                             onSend={handleSend}
                             disabled={isSending}
@@ -249,7 +257,6 @@ export default function ChatScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFFFFF',
     },
     safeArea: {
         flex: 1,

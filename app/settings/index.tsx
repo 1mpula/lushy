@@ -3,10 +3,11 @@ import { Header } from '@/components/molecules/Header';
 import { Colors } from '@/constants/theme';
 import { useProfessionals } from '@/context/ProfessionalContext';
 import { useUser } from '@/context/UserContext';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useTheme } from '@/context/ThemeContext';
+import { useColorScheme } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
-import { Bell, Briefcase, ChevronRight, FileText, HelpCircle, Moon, Shield, Star, User } from 'lucide-react-native';
+import { Bell, Briefcase, ChevronRight, FileText, HelpCircle, Moon, Shield, User } from 'lucide-react-native';
 import { MotiView } from 'moti';
 import { useState } from 'react';
 import { Alert, ScrollView, Switch, Text, TouchableOpacity, View } from 'react-native';
@@ -16,9 +17,9 @@ export default function SettingsScreen() {
     const router = useRouter();
     const { user, userRole, setUserRole, logout } = useUser();
     const { getProfessionalByUserId } = useProfessionals();
-    const { colorScheme, toggleColorScheme } = useColorScheme();
+    const { theme, toggleTheme } = useTheme();
     const [isLoggingOut, setIsLoggingOut] = useState(false);
-    const themeColors = Colors[colorScheme ?? 'light'];
+    const themeColors = Colors[theme];
     const [notificationsEnabled, setNotificationsEnabled] = useState(true);
     const insets = useSafeAreaInsets();
     const bottomPadding = insets.bottom;
@@ -58,6 +59,7 @@ export default function SettingsScreen() {
             from={{ opacity: 0, translateX: -20 }}
             animate={{ opacity: 1, translateX: 0 }}
             transition={{ delay: 100 + index * 50, type: 'timing', duration: 400 }}
+            style={{ backgroundColor: 'transparent' }}
         >
             <TouchableOpacity
                 onPress={onPress}
@@ -71,7 +73,7 @@ export default function SettingsScreen() {
                     >
                         {icon}
                     </View>
-                    <Text className={`text-base font-semibold ${isDestructive ? 'text-red-500' : 'text-charcoal'}`}>
+                    <Text className={`text-base font-semibold ${isDestructive ? 'text-red-500' : (theme === 'dark' ? 'text-white' : 'text-foreground')}`}>
                         {label}
                     </Text>
                 </View>
@@ -88,20 +90,22 @@ export default function SettingsScreen() {
     );
 
     return (
-        <View className="flex-1 bg-white">
+        <View className="flex-1" style={{ backgroundColor: theme === 'dark' ? '#121212' : '#FFFFFF' }}>
             <Header title="Settings" />
 
             <ScrollView
                 className="flex-1 px-6"
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: 40 + bottomPadding }}
+                contentContainerStyle={{ paddingBottom: 40 + bottomPadding, backgroundColor: 'transparent' }}
+                style={{ backgroundColor: 'transparent' }}
             >
                 {/* User Profile Card */}
                 <MotiView
                     from={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ type: 'timing', duration: 500 }}
-                    className="bg-gray-50 p-6 rounded-[32px] border border-gray-100 items-center flex-row mb-2"
+                    className="p-6 rounded-[32px] border border-border items-center flex-row mb-2"
+                    style={{ backgroundColor: theme === 'dark' ? '#1E1E1E' : '#FFFFFF' }}
                 >
                     <Image
                         source={{ uri: avatarUrl }}
@@ -109,10 +113,10 @@ export default function SettingsScreen() {
                         contentFit="cover"
                     />
                     <View className="flex-1">
-                        <Text className="text-xl font-bold text-charcoal leading-tight" numberOfLines={1}>
+                        <Text className={`text-xl font-bold leading-tight ${theme === 'dark' ? 'text-white' : 'text-foreground'}`} numberOfLines={1}>
                             {displayName || 'Your Name'}
                         </Text>
-                        <Text className="text-gray-500 font-medium text-sm" numberOfLines={1}>
+                        <Text className={`font-medium text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} numberOfLines={1}>
                             {displayEmail}
                         </Text>
                     </View>
@@ -120,24 +124,15 @@ export default function SettingsScreen() {
 
                 {/* Account Section */}
                 <SectionHeader title="Account" />
-                <View className="bg-white rounded-3xl overflow-hidden">
+                <View className="rounded-3xl overflow-hidden" style={{ backgroundColor: theme === 'dark' ? '#1E1E1E' : '#FFFFFF' }}>
                     {userRole === 'provider' && (
-                        <>
-                            <SettingItem
-                                index={0}
-                                icon={<Briefcase size={20} color="#FF4081" />}
-                                iconBg="#FFF0F6"
-                                label="Business Profile"
-                                onPress={() => router.push('/settings/business-profile')}
-                            />
-                            <SettingItem
-                                index={1}
-                                icon={<Star size={20} color="#F59E0B" />}
-                                iconBg="#FFFBEB"
-                                label="Subscription"
-                                onPress={() => router.push('/settings/subscription')}
-                            />
-                        </>
+                        <SettingItem
+                            index={0}
+                            icon={<Briefcase size={20} color="#FF4081" />}
+                            iconBg="#FFF0F6"
+                            label="Business Profile"
+                            onPress={() => router.push('/settings/business-profile')}
+                        />
                     )}
                     <SettingItem
                         index={2}
@@ -157,7 +152,7 @@ export default function SettingsScreen() {
 
                 {/* Preferences */}
                 <SectionHeader title="Preferences" />
-                <View className="bg-white rounded-3xl overflow-hidden">
+                <View className="rounded-3xl overflow-hidden" style={{ backgroundColor: theme === 'dark' ? '#1E1E1E' : '#FFFFFF' }}>
                     <MotiView
                         from={{ opacity: 0, translateX: -20 }}
                         animate={{ opacity: 1, translateX: 0 }}
@@ -165,10 +160,10 @@ export default function SettingsScreen() {
                         className="flex-row items-center justify-between py-4 px-2"
                     >
                         <View className="flex-row items-center gap-4">
-                            <View className="w-10 h-10 rounded-xl items-center justify-center bg-blue-50">
+                            <View className={`w-10 h-10 rounded-xl items-center justify-center ${theme === 'dark' ? 'bg-blue-900/20' : 'bg-blue-50'}`}>
                                 <Bell size={20} color="#3B82F6" />
                             </View>
-                            <Text className="text-base font-semibold text-charcoal">Notifications</Text>
+                            <Text className={`text-base font-semibold ${theme === 'dark' ? 'text-white' : 'text-foreground'}`}>Notifications</Text>
                         </View>
                         <Switch
                             value={notificationsEnabled}
@@ -185,34 +180,34 @@ export default function SettingsScreen() {
                         className="flex-row items-center justify-between py-4 px-2"
                     >
                         <View className="flex-row items-center gap-4">
-                            <View className="w-10 h-10 rounded-xl items-center justify-center bg-purple-50">
+                            <View className={`w-10 h-10 rounded-xl items-center justify-center ${theme === 'dark' ? 'bg-purple-900/20' : 'bg-purple-50'}`}>
                                 <Moon size={20} color="#8B5CF6" />
                             </View>
-                            <Text className="text-base font-semibold text-charcoal">Dark Mode</Text>
+                            <Text className={`text-base font-semibold ${theme === 'dark' ? 'text-white' : 'text-foreground'}`}>Dark Mode</Text>
                         </View>
                         <Switch
-                            value={colorScheme === 'dark'}
-                            onValueChange={toggleColorScheme}
+                            value={theme === 'dark'}
+                            onValueChange={toggleTheme}
                             trackColor={{ false: '#E5E7EB', true: '#FFB2CD' }}
-                            thumbColor={colorScheme === 'dark' ? '#FF4081' : '#F3F4F6'}
+                            thumbColor={theme === 'dark' ? '#FF4081' : '#F3F4F6'}
                         />
                     </MotiView>
                 </View>
 
                 {/* Support */}
                 <SectionHeader title="Support" />
-                <View className="bg-white rounded-3xl overflow-hidden">
+                <View className="rounded-3xl overflow-hidden" style={{ backgroundColor: theme === 'dark' ? '#1E1E1E' : '#FFFFFF' }}>
                     <SettingItem
                         index={6}
                         icon={<HelpCircle size={20} color="#F59E0B" />}
-                        iconBg="#FFFBEB"
+                        iconBg={theme === 'dark' ? '#F59E0B20' : '#FFFBEB'}
                         label="Help Center"
                         onPress={() => router.push('/settings/help-center')}
                     />
                     <SettingItem
                         index={7}
                         icon={<FileText size={20} color="#6B7280" />}
-                        iconBg="#F3F4F6"
+                        iconBg={theme === 'dark' ? '#6B728020' : '#F3F4F6'}
                         label="Terms & Privacy"
                         onPress={() => router.push('/settings/terms')}
                     />

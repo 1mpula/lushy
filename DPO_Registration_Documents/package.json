@@ -1,0 +1,15 @@
+{
+  "name": "dpo_registration_documents",
+  "version": "1.0.0",
+  "description": "",
+  "main": "create_pdfs.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pdfkit": "^0.17.2"
+  }
+}

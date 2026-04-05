@@ -109,12 +109,12 @@ export function BookingModal({ visible, onClose, serviceItem }: BookingModalProp
                     <View className="bg-offWhite h-[85%] rounded-t-3xl overflow-hidden">
 
                         {/* Header */}
-                        <View className="flex-row items-center justify-between p-6 bg-white border-b border-gray-100">
+                        <View className="flex-row items-center justify-between p-6 bg-background border-b border-border">
                             <View>
-                                <Text className="text-2xl font-bold font-heading text-charcoal">Confirm Booking</Text>
+                                <Text className="text-2xl font-bold font-heading text-foreground">Confirm Booking</Text>
                                 <Text className="text-mediumGray font-body">Complete your reservation</Text>
                             </View>
-                            <TouchableOpacity onPress={onClose} className="p-2 bg-gray-50 rounded-full">
+                            <TouchableOpacity onPress={onClose} className="p-2 bg-card rounded-full">
                                 <X size={24} color="#333" />
                             </TouchableOpacity>
                         </View>
@@ -122,7 +122,7 @@ export function BookingModal({ visible, onClose, serviceItem }: BookingModalProp
                         <ScrollView className="flex-1 p-6">
 
                             {/* Service Summary Card */}
-                            <View className="flex-row p-4 mb-6 bg-white shadow-sm rounded-2xl">
+                            <View className="flex-row p-4 mb-6 bg-background shadow-sm rounded-2xl">
                                 <Image
                                     source={{ uri: serviceItem.imageUrl }}
                                     className="w-20 h-24 rounded-xl"
@@ -130,7 +130,7 @@ export function BookingModal({ visible, onClose, serviceItem }: BookingModalProp
                                 />
                                 <View className="ml-4 justify-center flex-1">
                                     <Text className="text-xs font-bold text-secondary uppercase tracking-wider mb-1">Service</Text>
-                                    <Text className="text-lg font-bold text-charcoal font-heading leading-tight mb-1">{serviceItem.title}</Text>
+                                    <Text className="text-lg font-bold text-foreground font-heading leading-tight mb-1">{serviceItem.title}</Text>
                                     <Text className="text-mediumGray font-body text-sm mb-2">by {serviceItem.providerName}</Text>
                                     <Text className="text-xl font-bold text-primary">{serviceItem.price}</Text>
                                 </View>
@@ -139,7 +139,7 @@ export function BookingModal({ visible, onClose, serviceItem }: BookingModalProp
 
                             {/* Date & Time Selection */}
                             <View className="mb-6">
-                                <Text className="mb-3 text-sm font-bold text-charcoal uppercase tracking-wider">Date & Time</Text>
+                                <Text className="mb-3 text-sm font-bold text-foreground uppercase tracking-wider">Date & Time</Text>
                                 <DateTimePicker
                                     onDateSelect={setDate}
                                     onTimeSelect={setTime}
@@ -157,43 +157,43 @@ export function BookingModal({ visible, onClose, serviceItem }: BookingModalProp
 
                             {/* Notes */}
                             <View className="mb-4">
-                                <Text className="mb-3 text-sm font-bold text-charcoal uppercase tracking-wider">Notes</Text>
+                                <Text className="mb-3 text-sm font-bold text-foreground uppercase tracking-wider">Notes</Text>
                                 <Input
                                     placeholder="Any allergies or special requests?"
                                     multiline
                                     numberOfLines={3}
                                     containerClassName="mb-0"
-                                    className="h-24 bg-white border-0 shadow-sm"
+                                    className="h-24 bg-background border-0 shadow-sm"
                                     textAlignVertical="top"
                                 />
                             </View>
 
                             {/* Payment Method */}
                             <View className="mb-6">
-                                <Text className="mb-3 text-sm font-bold text-charcoal uppercase tracking-wider">Payment Method</Text>
+                                <Text className="mb-3 text-sm font-bold text-foreground uppercase tracking-wider">Payment Method</Text>
                                 <TouchableOpacity
                                     onPress={() => setPayWithCash(!payWithCash)}
-                                    className="flex-row items-center bg-white p-4 rounded-xl shadow-sm"
+                                    className="flex-row items-center bg-background p-4 rounded-xl shadow-sm"
                                 >
-                                    <View className={`w-6 h-6 rounded border-2 items-center justify-center mr-3 ${payWithCash ? 'bg-primary border-primary' : 'border-gray-300 bg-white'}`}>
+                                    <View className={`w-6 h-6 rounded border-2 items-center justify-center mr-3 ${payWithCash ? 'bg-primary border-primary' : 'border-gray-300 bg-background'}`}>
                                         {payWithCash && <Check size={14} color="white" />}
                                     </View>
                                     <View className="flex-1">
-                                        <Text className="text-base font-bold text-charcoal">Pay with Cash</Text>
+                                        <Text className="text-base font-bold text-foreground">Pay with Cash</Text>
                                         <Text className="text-sm text-mediumGray">Pay the provider directly after service</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
 
                             {/* Price Breakdown */}
-                            <View className="mb-8 p-4 bg-white rounded-xl shadow-sm">
+                            <View className="mb-8 p-4 bg-background rounded-xl shadow-sm">
                                 <View className="flex-row justify-between mb-2">
                                     <Text className="text-mediumGray">Service Total</Text>
-                                    <Text className="text-charcoal font-bold">{serviceItem.price}</Text>
+                                    <Text className="text-foreground font-bold">{serviceItem.price}</Text>
                                 </View>
-                                <View className="h-px bg-gray-100 my-2" />
+                                <View className="h-px bg-card my-2" />
                                 <View className="flex-row justify-between">
-                                    <Text className="text-lg font-bold text-charcoal">Total Due (Cash)</Text>
+                                    <Text className="text-lg font-bold text-foreground">Total Due (Cash)</Text>
                                     <Text className="text-lg font-bold text-primary">{serviceItem.price}</Text>
                                 </View>
                             </View>
@@ -201,7 +201,7 @@ export function BookingModal({ visible, onClose, serviceItem }: BookingModalProp
                         </ScrollView>
 
                         {/* Footer */}
-                        <View className="p-6 bg-white border-t border-gray-100 safe-bottom">
+                        <View className="p-6 bg-background border-t border-border safe-bottom">
                             <Button
                                 title={isLoading ? "Booking..." : "Request Booking"}
                                 onPress={handleRequestBooking}

@@ -85,11 +85,11 @@ export default function SecurityScreen() {
     };
 
     return (
-        <View className="flex-1 bg-gray-50">
+        <View className="flex-1 bg-card">
             <Header title="Security & Privacy" />
 
             <ScrollView className="flex-1 p-6" contentContainerStyle={{ paddingBottom: 40 }}>
-                <Text className="text-lg font-bold font-heading text-charcoal mb-4">Change Password</Text>
+                <Text className="text-lg font-bold font-heading text-foreground mb-4">Change Password</Text>
 
                 <View className="relative">
                     <Input
@@ -139,7 +139,7 @@ export default function SecurityScreen() {
                 />
 
                 {/* Danger Zone */}
-                <View className="mt-10 pt-6 border-t border-gray-200">
+                <View className="mt-10 pt-6 border-t border-border">
                     <Text className="text-lg font-bold text-red-500 mb-2">Danger Zone</Text>
                     <Text className="text-sm text-mediumGray mb-4">
                         Once you delete your account, there is no going back. Please be certain.

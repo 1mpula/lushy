@@ -1,3 +1,4 @@
+import { useTheme } from '@/context/ThemeContext';
 import { Skeleton as MotiSkeleton } from 'moti/skeleton';
 import React from 'react';
 import { View } from 'react-native';
@@ -14,10 +15,12 @@ export const Skeleton = ({
     width,
     height,
     radius = 12,
-    colorMode = 'light',
+    colorMode: providedColorMode,
     className = "",
     style = {}
 }: SkeletonProps & { style?: any }) => {
+    const { theme } = useTheme();
+    const colorMode = providedColorMode || theme;
     // Convert percentage strings to numbers if needed, or pass directly if Moti supports it
     // Most MotiSkeleton props for size expect numbers or specific "Size" types.
     return (

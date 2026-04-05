@@ -51,13 +51,13 @@ export function RateBookingModal({
     return (
         <Modal visible={visible} animationType="slide" transparent>
             <View className="flex-1 justify-end bg-black/60">
-                <View className="bg-white rounded-t-3xl p-6">
+                <View className="bg-background rounded-t-3xl p-6">
                     {/* Header */}
                     <View className="items-center mb-6">
                         <View className="w-16 h-16 bg-secondary/10 rounded-full items-center justify-center mb-4">
                             <Star size={32} color="#FF4081" fill="#FF4081" />
                         </View>
-                        <Text className="text-2xl font-bold font-heading text-charcoal mb-2">
+                        <Text className="text-2xl font-bold font-heading text-foreground mb-2">
                             Rate Your Experience
                         </Text>
                         <Text className="text-mediumGray text-center">
@@ -85,7 +85,7 @@ export function RateBookingModal({
 
                     {/* Rating Label */}
                     <View className="items-center mb-6">
-                        <Text className="text-lg font-bold text-charcoal">
+                        <Text className="text-lg font-bold text-foreground">
                             {selectedRating === 0 && 'Tap to rate'}
                             {selectedRating === 1 && 'Poor'}
                             {selectedRating === 2 && 'Fair'}

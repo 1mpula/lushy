@@ -1,4 +1,5 @@
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
+import { useTheme } from '@/context/ThemeContext';
 import { twMerge } from 'tailwind-merge';
 
 interface ButtonProps {
@@ -24,12 +25,13 @@ export function Button({
     textClassName,
     icon
 }: ButtonProps) {
+    const { theme } = useTheme();
 
-    const baseStyles = "flex-row items-center justify-center rounded-full active:opacity-80";
+    const baseStyles = "flex-row items-center justify-center rounded-full";
 
     const variants = {
-        primary: "bg-primary shadow-md shadow-pink-200",
-        secondary: "bg-offWhite border border-gray-200",
+        primary: "bg-primary",
+        secondary: theme === 'dark' ? "bg-[#1E1E1E] border border-border" : "bg-offWhite border border-border",
         outline: "bg-transparent border border-primary",
     };
 
@@ -43,7 +45,7 @@ export function Button({
 
     const textVariants = {
         primary: "text-white",
-        secondary: "text-charcoal",
+        secondary: "text-foreground",
         outline: "text-primary",
     };
 
@@ -55,6 +57,7 @@ export function Button({
 
     return (
         <TouchableOpacity
+            activeOpacity={0.8}
             onPress={onPress}
             disabled={disabled || loading}
             className={twMerge(
@@ -64,9 +67,19 @@ export function Button({
                 disabled && "opacity-50",
                 className
             )}
+            style={[
+                variant === 'primary' && {
+                    shadowColor: '#FF4081',
+                    shadowOffset: { width: 0, height: 4 },
+                    shadowOpacity: theme === 'dark' ? 0.2 : 0.15,
+                    shadowRadius: 8,
+                    elevation: 3,
+                },
+                typeof className === 'object' ? className : {}
+            ]}
         >
             {loading ? (
-                <ActivityIndicator color={variant === 'primary' ? 'white' : '#FF4081'} />
+                <ActivityIndicator color={variant === 'primary' ? 'white' : (theme === 'dark' ? '#FFF' : '#FF4081')} />
             ) : (
                 <>
                     {icon && <View className="mr-2">{icon}</View>}

@@ -51,7 +51,7 @@ export default function ProductDetail() {
                         if (!service) return;
                         try {
                             setIsDeleting(true);
-                            await deleteService(service.id, service.imageUrls);
+                            await deleteService(service.id, service.imageUrls, service.videoUrl);
                             Alert.alert('Deleted', 'Service removed successfully', [
                                 { text: 'OK', onPress: () => router.back() }
                             ]);
@@ -74,8 +74,8 @@ export default function ProductDetail() {
 
     if (isLoading || isDeleting) {
         return (
-            <View className="flex-1 bg-white">
-                <View style={{ width: screenWidth, aspectRatio: 4 / 3 }}>
+            <View className="flex-1 bg-background">
+                <View style={{ width: screenWidth, aspectRatio: 1 }}>
                     <Skeleton width="100%" height="100%" radius={0} />
                 </View>
                 <View className="p-6 gap-4">
@@ -91,8 +91,8 @@ export default function ProductDetail() {
 
     if (!service) {
         return (
-            <View className="flex-1 bg-white items-center justify-center p-6">
-                <Text className="text-lg font-bold text-charcoal mb-2">Service not found</Text>
+            <View className="flex-1 bg-background items-center justify-center p-6">
+                <Text className="text-lg font-bold text-foreground mb-2">Service not found</Text>
                 <TouchableOpacity onPress={() => router.back()}>
                     <Text className="text-primary font-bold">Go back</Text>
                 </TouchableOpacity>
@@ -110,7 +110,7 @@ export default function ProductDetail() {
     };
 
     return (
-        <View className="flex-1 bg-white">
+        <View className="flex-1 bg-background">
             <Header
                 variant="overlay"
                 className="bg-transparent"
@@ -118,7 +118,7 @@ export default function ProductDetail() {
                     <MotiView from={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring' }}>
                         <TouchableOpacity
                             onPress={handleDelete}
-                            className="w-10 h-10 items-center justify-center bg-white/20 backdrop-blur-md rounded-full border border-white/30"
+                            className="w-10 h-10 items-center justify-center bg-background/20 backdrop-blur-md rounded-full border border-border/30"
                         >
                             <Trash2 color="white" size={20} />
                         </TouchableOpacity>
@@ -129,7 +129,7 @@ export default function ProductDetail() {
 
             <ScrollView className="flex-1">
                 {/* Main Image Gallery */}
-                <View style={{ width: screenWidth, aspectRatio: 4 / 3, backgroundColor: '#f3f4f6' }}>
+                <View style={{ width: screenWidth, aspectRatio: 1, backgroundColor: '#f3f4f6' }}>
                     {service.imageUrls && service.imageUrls.length > 1 ? (
                         <>
                             <ScrollView
@@ -149,7 +149,7 @@ export default function ProductDetail() {
                                     >
                                         <Image
                                             source={{ uri: url }}
-                                            style={{ width: screenWidth, aspectRatio: 4 / 3 }}
+                                            style={{ width: screenWidth, aspectRatio: 1 }}
                                             contentFit="cover"
                                             placeholder={blurhash}
                                             transition={200}
@@ -196,7 +196,7 @@ export default function ProductDetail() {
                     </View>
 
                     {/* Title & Price */}
-                    <Text className="text-2xl font-bold font-heading text-charcoal mb-2">
+                    <Text className="text-2xl font-bold font-heading text-foreground mb-2">
                         {service.name}
                     </Text>
                     <Text className="text-3xl font-bold text-primary mb-4">
@@ -218,7 +218,7 @@ export default function ProductDetail() {
                     </View>
 
                     {/* Description */}
-                    <Text className="text-lg font-bold text-charcoal mb-2">Description</Text>
+                    <Text className="text-lg font-bold text-foreground mb-2">Description</Text>
                     <Text className="text-mediumGray leading-6 mb-6">
                         {service.description || 'No description provided.'}
                     </Text>
@@ -226,14 +226,14 @@ export default function ProductDetail() {
                     {/* Provider Card */}
                     <TouchableOpacity
                         onPress={() => router.push(`/pro/${service.professionalId}`)}
-                        className="flex-row items-center p-4 bg-gray-50 rounded-xl mb-6"
+                        className="flex-row items-center p-4 bg-card rounded-xl mb-6"
                     >
                         <Image
                             source={{ uri: service.professionalAvatar }}
                             className="w-12 h-12 rounded-full mr-3"
                         />
                         <View className="flex-1">
-                            <Text className="font-bold text-charcoal">{service.professionalName}</Text>
+                            <Text className="font-bold text-foreground">{service.professionalName}</Text>
                             <Text className="text-mediumGray text-sm">View profile →</Text>
                         </View>
                     </TouchableOpacity>
@@ -241,7 +241,7 @@ export default function ProductDetail() {
             </ScrollView>
 
             {/* Footer */}
-            <SafeAreaView edges={['bottom']} className="bg-white border-t border-gray-100">
+            <SafeAreaView edges={['bottom']} className="bg-background border-t border-border">
                 <View className="p-6">
                     <Button
                         title={isOwner ? "Edit Service" : "Book Now"}
@@ -253,7 +253,7 @@ export default function ProductDetail() {
                             }
                         }}
                         size="lg"
-                        className="w-full shadow-lg shadow-pink-200"
+                        className="w-full"
                     />
                 </View>
             </SafeAreaView>

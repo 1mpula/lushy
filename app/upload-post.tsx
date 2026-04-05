@@ -2,6 +2,7 @@ import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { useProfessionals } from '@/context/ProfessionalContext';
 import { useUser } from '@/context/UserContext';
+import { useTheme } from '@/context/ThemeContext';
 import { supabase } from '@/lib/supabase';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
@@ -13,6 +14,7 @@ export default function UploadPostScreen() {
     const router = useRouter();
     const { user } = useUser();
     const { getProfessionalByUserId } = useProfessionals();
+    const { theme } = useTheme();
 
     const [image, setImage] = useState<string | null>(null);
     const [description, setDescription] = useState('');
@@ -121,18 +123,18 @@ export default function UploadPostScreen() {
     };
 
     return (
-        <SafeAreaView className="flex-1 bg-white">
-            <View className="flex-row items-center justify-between p-4 border-b border-gray-100">
-                <Text className="text-xl font-bold font-heading text-charcoal">New Post</Text>
+        <SafeAreaView className="flex-1 bg-background">
+            <View className="flex-row items-center justify-between p-4 border-b border-border">
+                <Text className="text-xl font-bold font-heading text-foreground">New Post</Text>
                 <TouchableOpacity onPress={() => router.back()} disabled={isUploading}>
-                    <X size={24} color="#333" />
+                    <X size={24} color={theme === 'dark' ? '#FFF' : '#333'} />
                 </TouchableOpacity>
             </View>
 
             <ScrollView className="p-4">
                 <TouchableOpacity
                     onPress={handlePickImage}
-                    className="items-center justify-center w-full h-64 mb-6 bg-gray-100 rounded-xl"
+                    className="items-center justify-center w-full h-64 mb-6 bg-card rounded-xl"
                     disabled={isUploading}
                 >
                     {image ? (
