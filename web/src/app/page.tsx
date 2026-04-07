@@ -47,7 +47,10 @@ export default function LandingPage() {
         <Link href="/" className="text-primary font-outfit text-2xl font-black tracking-widest uppercase">
           Lushy
         </Link>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4 sm:gap-6">
+          <Link href="/join" className="hidden md:block text-primary hover:text-primary-light transition-colors text-xs font-bold uppercase tracking-widest border border-primary/30 px-4 py-2.5 rounded-full">
+            Post Your First Service
+          </Link>
           <Link href="/login" className="text-text-secondary hover:text-white transition-colors text-sm font-bold uppercase tracking-widest">
             Pro Login
           </Link>
@@ -161,10 +164,10 @@ export default function LandingPage() {
                 ))}
               </ul>
               <Link
-                href="/login"
+                href="/join"
                 className="btn-primary px-10 py-5 rounded-2xl inline-flex items-center gap-3 text-lg"
               >
-                Join as a Pro <ChevronRight className="w-5 h-5" />
+                Post Your First Service <ChevronRight className="w-5 h-5" />
               </Link>
             </div>
             
