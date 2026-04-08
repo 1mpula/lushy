@@ -37,8 +37,8 @@ export default function JoinAsPro() {
   });
 
   const [services, setServices] = useState([
-    { name: "", price: "", image: null as string | null },
-    { name: "", price: "", image: null as string | null },
+    { name: "", price: "", category: "Hair", image: null as string | null, file: null as File | null },
+    { name: "", price: "", category: "Hair", image: null as string | null, file: null as File | null },
   ]);
 
   const updateField = (field: string, value: string) => {
@@ -46,14 +46,19 @@ export default function JoinAsPro() {
   };
 
   const updateService = (id: number, field: string, value: any) => {
-    const newServices = [...services];
-    newServices[id] = { ...newServices[id], [field]: value };
-    setServices(newServices);
+    setServices(prev => {
+      const next = [...prev];
+      if (next[id]) {
+        next[id] = { ...next[id], [field]: value };
+      }
+      return next;
+    });
   };
 
   const handleImageUpload = (id: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      updateService(id, "file", file); // Store the actual file for upload
       const reader = new FileReader();
       reader.onload = (prev) => {
         updateService(id, "image", prev.target?.result as string);
@@ -83,44 +88,72 @@ export default function JoinAsPro() {
         options: {
           data: {
             full_name: formData.salonName,
-            role: 'provider'
+            role: 'provider',
+            business_name: formData.salonName,
+            category: formData.category,
+            location: formData.location
           }
         }
       });
 
       if (authError) throw authError;
 
-      // Note: The 'profiles' and 'professionals' records are handled by database triggers 
-      // but 'professionals' needs extra info like business_name and location.
-      // We wait a moment for the profile trigger to populate or update manually.
-      
       const userId = authData.user?.id;
       if (!userId) throw new Error("No user ID returned");
 
-      // 2. Update Professional Record
-      const { data: proData, error: proError } = await supabase
-        .from('professionals')
-        .update({
-          business_name: formData.salonName,
-          expertise: [formData.category],
-          location: formData.location
-        })
-        .eq('user_id', userId)
-        .select()
-        .single();
+      // Check if session exists (i.e., email confirmation is disabled)
+      if (!authData.session) {
+        alert("Account created! Please check your email to confirm your account, then you can add your services.");
+        window.location.href = "/";
+        return;
+      }
 
-      if (proError) throw proError;
+      // 2. Fetch Professional Record (created by trigger)
+      // We retry a few times in case the trigger is slightly delayed
+      let proData = null;
+      let retries = 5;
+      while (retries > 0 && !proData) {
+        const { data, error } = await supabase
+          .from('professionals')
+          .select()
+          .eq('user_id', userId)
+          .maybeSingle();
+        
+        if (data) proData = data;
+        else {
+          await new Promise(r => setTimeout(r, 1000));
+          retries--;
+        }
+      }
 
-      // 3. Upload Services
+      if (!proData) {
+        throw new Error("Could not retrieve professional profile. Please try logging in.");
+      }
+
+      // 3. Upload Services & Images
       for (const service of services) {
-        if (service.image && service.name && service.price) {
-           // Here we would typically upload the file to Supabase Storage
-           // For this demo, we'll assume the URL creation logic
+        if (service.file && service.name && service.price) {
+           const fileExt = service.file.name.split('.').pop();
+           const bucketName = (service.category || 'Hair').toLowerCase();
+           const fileName = `${userId}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+           
+           const { error: storageError } = await supabase.storage
+             .from(bucketName)
+             .upload(fileName, service.file, { contentType: service.file.type });
+
+           if (storageError) throw storageError;
+
+           const { data: { publicUrl } } = supabase.storage
+             .from(bucketName)
+             .getPublicUrl(fileName);
+
            await supabase.from('services').insert({
              professional_id: proData.id,
              name: service.name,
              price: parseFloat(service.price),
-             image_urls: [service.image] // In production, replace with real storage URL
+             category: service.category,
+             image_url: publicUrl,
+             image_urls: [publicUrl]
            });
         }
       }
@@ -298,6 +331,17 @@ export default function JoinAsPro() {
                             onChange={(e) => updateService(i, 'price', e.target.value)}
                           />
                         </div>
+                        <select
+                          className="input-field w-full p-3 rounded-lg text-sm appearance-none"
+                          value={service.category}
+                          onChange={(e) => updateService(i, 'category', e.target.value)}
+                        >
+                          <option value="Hair">Hair</option>
+                          <option value="Nails">Nails</option>
+                          <option value="Lashes">Lashes</option>
+                          <option value="Wigs">Wigs</option>
+                          <option value="Makeup">Makeup</option>
+                        </select>
                       </div>
                     </div>
                   ))}
