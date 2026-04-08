@@ -134,7 +134,7 @@ export default function JoinAsPro() {
       for (const service of services) {
         if (service.file && service.name && service.price) {
            const fileExt = service.file.name.split('.').pop();
-           const bucketName = (service.category || 'Hair').toLowerCase();
+           const bucketName = 'services';
            const fileName = `${userId}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
            
            const { error: storageError } = await supabase.storage
